@@ -1,23 +1,181 @@
-import React from 'react';
-import { Route, Switch, Redirect  } from 'react-router-dom';
-import Home from "./views/Home/Home"
-import NotFound from "./views/NotFound"
-import Header from "./components/Header/Header"
+import React, {Component} from 'react';
+import * as THREE from 'three';
+import Dropzone from 'react-dropzone'
+import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
+class App extends Component {
+  onDrop = (files) => {
+    var file = files[0];
+    this.openFile(file);
+  }
 
-const App = () => {
-  return (
-    <div>
-      <Header />
-      <Switch>
-        <Route exact path="/Home" component={Home} />
-        <Route exact path="/">
-          <Redirect to="/Home" />
-        </Route>
-        <Route component={NotFound}/>
-      </Switch>
-    </div>
-  );
+  componentWillUnmount() {
+    this.mesh = null;
+    this.renderer = null;
+    this.scene = null;
+    this.camera = null;
+    this.controls = null;
+  }
+
+  componentDidMount() {
+    var mesh, renderer, scene, camera, controls, bb, rect;
+
+    this.openFile = (file) => {
+      const tempURL = URL.createObjectURL(file);
+      if (!mesh) {
+        init();
+        load(tempURL, true);
+      }
+      else {
+        update();
+        load(tempURL, false);
+      }
+      URL.revokeObjectURL(tempURL);
+    }
+
+    function update() {
+      scene.remove(mesh);
+      mesh.geometry.dispose();
+      mesh.material.dispose();
+    }
+
+    function load(tempURL, doAnimate) {
+      const vs = `
+      varying vec3 e;
+      varying vec3 n;
+      
+      void main() {
+      
+        e = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
+        n = normalize( normalMatrix * normal );
+      
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1. );
+      
+      }
+      `;
+
+      const fs = `
+      uniform sampler2D tMatCap;
+
+      varying vec3 e;
+      varying vec3 n;
+      
+      void main() {
+      
+        vec3 r = reflect( e, n );
+        float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
+        vec2 vN = r.xy / m + .5;
+      
+        vec3 base = texture2D( tMatCap, vN ).rgb;
+      
+        gl_FragColor = vec4( base, 1. );
+      
+      }
+      `;
+
+      var loader = new STLLoader();
+      loader.load(tempURL, function(geometry) {
+        //geometry = new THREE.TorusKnotGeometry( 10, 3, 200, 50, 1, 3 );
+        geometry.center();
+        var material = new THREE.ShaderMaterial({
+          uniforms: {
+            tMatCap: {
+              type: 't',
+              value: THREE.ImageUtils.loadTexture(process.env.PUBLIC_URL + '/materials/whoa.png')
+            },
+          },
+          vertexShader: vs,
+          fragmentShader: fs,
+          flatShading: THREE.SmoothShading
+        });
+        material.uniforms.tMatCap.value.wrapS = material.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+        var boundingBox = new THREE.Box3().setFromObject(mesh);
+        var sizeHouse = bb.getSize();
+        var sizeObject = boundingBox.getSize();
+        var ratio = sizeObject.divide(sizeHouse);
+        var maxRatio = Math.max(ratio.x, ratio.y, ratio.z);
+        var invertRatio = 1/maxRatio;
+        mesh.scale.set(invertRatio, invertRatio, invertRatio);
+        mesh.position.set(0, 0.25, 0);
+        if (doAnimate) {
+          animate();
+        }
+      });
+    }
+    
+    function init() {
+        var container = document.getElementById("container");
+        rect = container.getBoundingClientRect();
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(rect.width, rect.height);
+
+        container.appendChild( renderer.domElement );
+    
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xF2F2F2);
+        camera = new THREE.PerspectiveCamera(1, rect.width / rect.height, 1, 1000);
+        controls = new OrbitControls(camera, container);
+        controls.enablePan = false;
+
+        var axes = new THREE.AxesHelper(1);
+        axes.position.set(0, -0.25, 0);
+        scene.add(axes);
+
+        var gridHelper = new THREE.GridHelper(1, 5);
+        gridHelper.position.set(0, -0.25, 0);
+        scene.add( gridHelper );
+
+        var boxGeometry =  new THREE.BoxGeometry(1, 1, 1);
+        var	boxMaterial = new THREE.MeshNormalMaterial();
+        var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+        bb = new THREE.Box3().setFromObject(boxMesh);
+        var height = bb.getSize().y;
+        var dist = height / 2 / Math.tan(Math.PI * 1 / 360);
+        camera.position.set(dist + 25, dist + 25, dist + 25);
+        camera.lookAt(boxMesh.position);
+        camera.updateProjectionMatrix();
+
+        window.addEventListener( 'resize', onWindowResize, false );
+    }
+
+    function onWindowResize() {
+      camera.aspect = (rect.width) / (rect.height);
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height);
+    }
+    
+    function animate() {
+      mesh.rotation.y += 0.01;
+      requestAnimationFrame( animate );
+      renderer.render( scene, camera );
+    }
+  }
+
+  render() {
+    return (
+      <div className = "dragDrop">
+        <Dropzone onDrop={this.onDrop}>
+          {({getRootProps, getInputProps, isDragActive}) => (
+            <div style = {{height : "100vh", width: "50%", float : "right", backgroundColor : "powderblue"}}
+            {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}
+            </div>
+          )}
+        </Dropzone>
+        <div style = {{height : "100vh", width: "50%", display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <div
+            id = "container"
+            style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height : "85%", width : "85%", backgroundColor : "#F2F2F2"}}>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
