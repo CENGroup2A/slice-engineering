@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Quote from "./Quote"
+
 
 class Material extends React.Component {
 
@@ -11,7 +13,6 @@ class Material extends React.Component {
             materialsList: ['', 'Lime', 'Mango'],
             serviceList: ['', 'Apple', 'Pear']
         };
-        
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeService = this.handleChangeService.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,12 +29,12 @@ class Material extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.serviceUpdate(this.state.service, this.state.material)
     }
 
 	render() {
 		return (
 			<div>
+                <Quote material = {this.state.material} service = {this.state.service}/>
 				<form onSubmit={this.handleSubmit}>
                     <label>
                         Type of Printing Service: 

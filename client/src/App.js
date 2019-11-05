@@ -6,32 +6,11 @@ import Header from "./components/Header/Header"
 import Material from "./components/Quote/Material"
 
 
-class App extends React.Component {
-
-  constructor(props){
-    super(props);
-    this.state={
-      serivce: '',
-      material: ''
-    };
-  }
-
-  serviceUpdate(service, material){
-    this.setState({
-      service: service,
-      material: material
-    })
-    console.log('Service: ', this.state.service)
-    console.log('Material: ', this.state.material)
-  }
-
-  render(){
+const App = () => {
     return (
       <div>
         <Header />
-        <Material
-          serviceUpdate={this.serviceUpdate.bind(this)}
-        />
+        <Material />
         <Switch>
           <Route exact path="/Home" component={Home} />
           <Route exact path="/">
@@ -41,7 +20,6 @@ class App extends React.Component {
         </Switch>
       </div>
     );
-  }
 }
 
 export default App;

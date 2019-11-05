@@ -6,12 +6,16 @@ class Quote extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-        };
+            service: this.props.service
+        }
     }
 
 	render() {
-
-	}
+        return(
+            <div>
+            </div>
+        );
+    }
 }
 
 export default Quote;
