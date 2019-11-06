@@ -8,23 +8,25 @@ class Material extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            service: '',
+            finish: '',
             material: '',
             materialsList: ['', 'Lime', 'Mango'],
-            serviceList: ['', 'Apple', 'Pear']
+            finishList: ['', 'Apple', 'Pear']
         };
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
-        this.handleChangeService = this.handleChangeService.bind(this);
+        this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+
+    //Goto localhost:3000/Home/api/materials, it returns the array of materials and finishes
 
     handleChangeMaterial(event) {
         this.setState({material: event.target.value})
     }
 
-    handleChangeService(event) {
-        this.setState({service: event.target.value})
+    handleChangeFinish(event) {
+        this.setState({finish: event.target.value})
     }
 
     handleSubmit(event) {
@@ -34,12 +36,12 @@ class Material extends React.Component {
 	render() {
 		return (
 			<div>
-                <Quote material = {this.state.material} service = {this.state.service}/>
+                <Quote material = {this.state.material} service = {this.state.finish}/>
 				<form onSubmit={this.handleSubmit}>
                     <label>
-                        Type of Printing Service: 
-                        <select onChange={this.handleChangeService}>
-                            {this.state.serviceList.map((x,y) => <option key={y}>{x}</option>)}
+                        Type of Printing Finish: 
+                        <select onChange={this.handleChangeFinish}>
+                            {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
                         </select>
                         <p></p>
                         Material:
