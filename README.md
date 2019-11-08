@@ -1,3 +1,23 @@
+#### _**HOW TO USE THIS BRANCH**_ - 
+Modify your .config file to look like the following:
+    db: {
+        uri: 'MONGO DB URL'
+    },
+    key: {
+        keyID: 'AWS KEY ID',
+        secretKey: 'AWS SECRET KEY'
+    },
+    bucket: {
+        bucketName: 'BUCKET NAME'
+    }
+
+Send me (Justin LoMonaco) a message on slack for the AWS credentials and bucket name.
+
+Run the server using npm start and then run the client using npm start.
+
+Install 'Allow CORS' for chrome and load the front end. You should be able to upload to S3.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 This project contains an example project board meant to showcase how one can be used. The issues posted to it are not real issues.
 
