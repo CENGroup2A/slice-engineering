@@ -1,43 +1,20 @@
 var express = require('express');
     request = require('request');
-    parseString = require('xml2js');
     router = express.Router();
-    
-request('https://i.materialise.com/web-api/materials?user=lysaght.m@ufl.edu', function (error, response, body) {
+
+exports.material = function(req, res)
+{
+  request('https://imatsandbox.materialise.net/web-api/materials?user=lysaght.m@ufl.edu', function (error, response, body) {
   if (!error && response.statusCode == 200) {
-    xml2js.parseStringPromise(body).then(function (result) {
-      console.dir(result);
-      console.log('Done');
-    })
-    .catch(function (err) {
-      console.log("Failed");
-    });
+    var data = JSON.parse(body)
+    // console.log(data);
 
-}})
+    // data.materials.forEach(function(element){
+    //   console.log(element)
+    // });
 
-
-
-
-//  request({
-//     url: 'https://i.materialise.com/web-api/materials?user=lysaght.m@ufl.edu', 
-    
-//     }, function(error, response, body) {
-    
-//       if (error){
-//         console.log(error);
-//       }
-//       else{
-      
-//       var data = response;
-//       console.log(data);
-//       }
-//       next();
-//   });
-
-
-
-// exports.MAT = function(req, res) {
-//     res.send(req)
-//     console(req)
-// };
-// module.exports = router;
+    res.json(data.materials)
+    res.end()
+  }
+})
+}
