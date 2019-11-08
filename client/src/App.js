@@ -10,15 +10,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filesToUpload: []
+      cadFile: {},
+      fileUploaded: false
     };
   }
 
-  addFile(fileName) {
+  changeFile(file) {
     this.setState({
-      filesToUpload: this.state.filesToUpload.concat(fileName)
+      cadFile: file
     })
-    console.log(this.state.filesToUpload);
+  }
+
+  changeUploadStatus(status) {
+    this.setState({
+      fileUploaded: status
+    })
   }
 
   updateFiles
@@ -35,7 +41,12 @@ class App extends React.Component {
           <Route component={NotFound}/>
         </Switch>
   
-        <S3Upload files={this.state.filesToUpload} addFile={this.addFile.bind(this)}/>
+        <S3Upload 
+          file={this.state.cadFile} 
+          changeFile={this.changeFile.bind(this)} 
+          changeUploadStatus={this.changeUploadStatus.bind(this)}
+        />
+
       </div>
     );
   }
