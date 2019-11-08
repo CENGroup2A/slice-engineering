@@ -1,12 +1,22 @@
 var express = require('express');
     request = require('request');
+    parseString = require('xml2js');
     router = express.Router();
-
+    
 request('https://i.materialise.com/web-api/materials?user=lysaght.m@ufl.edu', function (error, response, body) {
   if (!error && response.statusCode == 200) {
-    console.dirxml(body); // Print the google web page.
-  }else{console.log(error)}
-});
+    xml2js.parseStringPromise(body).then(function (result) {
+      console.dir(result);
+      console.log('Done');
+    })
+    .catch(function (err) {
+      console.log("Failed");
+    });
+
+}})
+
+
+
 
 //  request({
 //     url: 'https://i.materialise.com/web-api/materials?user=lysaght.m@ufl.edu', 
