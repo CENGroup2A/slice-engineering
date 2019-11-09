@@ -34,10 +34,8 @@
     "should": "^13.2.3",
     "stack": "^0.1.0",
     "supertest": "^4.0.2",
-    "window": "^4.2.6",
-    "xml-js": "^1.6.11",
-    "xml2js": "0.4.22",
-    "xmldom": "^0.1.27"
+    "window": "^4.2.6"
+    
   },
   "homepage": "https://github.com/UFWebApps/React_Template_Repo#readme",
   "bugs": {

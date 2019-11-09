@@ -1,6 +1,6 @@
 
 /* Dependencies */
-var getMatrerials = require('../controllers/Materials.server.controller.js'), 
+const getMatrerials = require('../controllers/Materials.server.controller.js'), 
     express = require('express'), //refers to Express the middleware helper for Node.js
     router = express.Router(); //refers to the Router() function in Express the middleware helper for Node.js
 
@@ -11,9 +11,9 @@ var getMatrerials = require('../controllers/Materials.server.controller.js'),
   
  */
 
-router.route('/mat')
-  .get(getMatrerials.material)
- // .post(getMatrerials.MAT)
+// router.route('/mat')
+//   .get(getMatrerials.material);
+//  // .post(getMatrerials.MAT)
   
   
 
