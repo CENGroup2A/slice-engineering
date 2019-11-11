@@ -2,29 +2,60 @@ import React from 'react'
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
-import { useFormik } from 'formik'
+import { ErrorMessage, Formik } from 'formik'
+import * as Yup from 'yup';
 
 var axios = require('axios')
+
+const SignupSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Your name is too short.')
+      .max(70, 'Your name is too long')
+      .required('Required'),
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Required'),
+    username: Yup.string()
+      .max(70, "Your email is too long")
+      .required('Required'),
+    password: Yup.string()
+      .max(70, "Your passowrd is too long")
+      .required('Required'),
+    passwordConfirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+  });
 
 
 const SignUp = () =>
 {
-    const formik = useFormik({
-        initialValues: {      
-          name: '',
-          confirmPassword: '',
-          password: '',
-          username: ''
-        },
-        onSubmit: values =>
-        {
-            axios.post('/api/signup', values)
-        }
-      });
-
     return (
         <Container className="p-3">
-            <Form onSubmit={formik.handleSubmit}>
+
+<Formik
+      initialValues={{      
+        name: '',
+        passwordConfirm: '',
+        password: '',
+        username: ''
+      }}
+      validationSchema={SignupSchema}
+      onSubmit={(values, obj) =>
+      {
+          console.log(obj)
+          axios.post('/api/signup', values)
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isSubmitting
+      }) => (
+
+            <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
@@ -32,19 +63,39 @@ const SignUp = () =>
                         placeholder="Enter your Name"
                         id="name"
                         name="name"
-                        onChange={formik.handleChange}
-                        value={formik.values.name} />
+                        onChange={handleChange}
+                        value={values.name} />
+                    
+                    <ErrorMessage name="name" />
+
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Username</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="Enter your Name"
+                        placeholder="Enter your Username"
                         id="username"
                         name="username"
-                        onChange={formik.handleChange}
-                        value={formik.values.username} />
+                        onChange={handleChange}
+                        value={values.username} />
+
+                    <ErrorMessage name="username" />
+
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter your Email"
+                        id="email"
+                        name="email"
+                        onChange={handleChange}
+                        value={values.email} />
+
+                    <ErrorMessage name="email" />
+
                 </Form.Group>
 
                 <Form.Group>
@@ -54,8 +105,11 @@ const SignUp = () =>
                         placeholder="Password"
                         id="password"
                         name="password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password} />
+                        onChange={handleChange}
+                        value={values.password} />
+                    
+                    <ErrorMessage name="password" />
+
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
@@ -63,14 +117,19 @@ const SignUp = () =>
                     <Form.Control
                         type="password"
                         placeholder="Confirm Password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        onChange={formik.handleChange}
-                        value={formik.values.passwordName} />
+                        id="passwordConfirm"
+                        name="passwordConfirm"
+                        onChange={handleChange}
+                        value={values.passwordConfirm} />
+                    
+                    <ErrorMessage name="passwordConfirm" />
+
                 </Form.Group>
                 
                 <Button variant="primary" type="submit">Sign Up</Button>
             </Form>
+            )}
+            </Formik>
         </Container>
     )
 }
