@@ -16,7 +16,7 @@ request('https://imatsandbox.materialise.net/web-api/materials?user=lysaght.m@uf
     data.materials.forEach(function(element){
       
       //listOfMats = listOfMats + element.name;
-      listOfMats.push(element.name)
+      listOfMats.push(element)
     });
     // module.exports=listOfMats;
     // console.log(listOfMats)

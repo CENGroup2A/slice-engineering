@@ -4,6 +4,14 @@ import Quote from "./Quote";
 import { throws } from 'should';
 var axios = require('axios')
 
+var listOfMats = [];
+var listOfFinishes = [];
+
+
+function isMaterial(material) { 
+    return "ABS";
+}
+
 
 class Material extends React.Component {
 
@@ -12,8 +20,9 @@ class Material extends React.Component {
         this.state = {
             finish: '',
             material: '',
-            materialsList: ['', 'Lime', 'Mango'],
-            finishList: ['', 'Apple', 'Pear']
+            materialsList: [''],
+            finishList: [''],
+            mats: []
         };
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
@@ -26,16 +35,22 @@ class Material extends React.Component {
         axios.get("/api/mat")
         .then((mat) =>
         {
+            mat.data.forEach(function(element){
+                listOfMats.push(element.name)
+            });
             console.log(mat.data)
-            this.setState({ materialsList: mat.data })
+            this.setState({ materialsList: listOfMats })
+            this.setState({mats: mat.data})
         })
     }
 
-
-    //Goto localhost:3000/Home/api/materials, it returns the array of materials and finishes
-
     handleChangeMaterial(event) {
         this.setState({material: event.target.value})
+        var material = this.state.mats.find(isMaterial);
+        material.finishes.forEach(function(element){
+            listOfFinishes.push(element.name);
+        });
+        console.log(listOfFinishes)
     }
 
     handleChangeFinish(event) {
