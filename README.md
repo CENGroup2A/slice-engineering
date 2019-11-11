@@ -9,9 +9,9 @@ Note: react and npm.js must be updated!
 4. npm install
 5. npm start
 
-You should see the app running at localhost:3000.\n
-Click or drag one of the STL files from the directory: slice-engineering/client/public/models.\n
-Hopefully it works :)
+You should see the app running at localhost:3000__
+Click or drag one of the STL files from the directory: slice-engineering/client/public/models__
+Hopefully it works :)__
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 
