@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
+import {
+  Redirect
+} from "react-router-dom";
 
 var axios = require('axios')
 
@@ -26,8 +29,20 @@ const SignupSchema = Yup.object().shape({
   });
 
 
-const SignUp = () =>
+class SignUp extends React.Component
 {
+  state = 
+  {
+    continue : false
+  }
+  render()
+  {
+    var page = this
+    if (this.state.continue)
+      return (
+        <Redirect to="/login" />
+      )
+
     return (
         <Container className="p-3">
           <Formik
@@ -46,8 +61,8 @@ const SignUp = () =>
                       var message = response.data.message
                       
                       if (message.name == "success")
-                        this.props.history.push("/help")
-
+                        page.setState({"continue": true})
+                      console.log(message)
                       
                     })
                 }}
@@ -138,6 +153,7 @@ const SignUp = () =>
             </Formik>
         </Container>
     )
+  }
 }
 
 export default SignUp

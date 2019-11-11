@@ -3,7 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import {
-    Redirect
+    Redirect,
+    Link
   } from "react-router-dom";
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
@@ -50,7 +51,7 @@ class Login extends React.Component
                       if (message.name == "success")
                         page.setState({continue: true})
 
-                      
+                      window.location.reload();
                     })
                 }}
               >
@@ -84,6 +85,7 @@ class Login extends React.Component
                             value={values.password} />
                     </Form.Group>
                     <Button variant="primary" type="submit">Submit</Button>
+                    <p>Don't have an account? <Link to="/sign-up"><a>Sign up</a></Link></p>
                 </Form>
                 )}
             </Formik>
