@@ -1,4 +1,11 @@
 ## UPDATE
+
+Edited on 11/11/2019
+
+Added OBJ Loader.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
 Edited on 11/4/2019 by Kevin Nguyen
 
 Note: react and npm.js must be updated!
