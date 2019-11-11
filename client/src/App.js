@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import * as THREE from 'three';
 import Dropzone from 'react-dropzone'
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 
 class App extends Component {
   onDrop = (files) => {
@@ -22,16 +23,14 @@ class App extends Component {
     var mesh, renderer, scene, camera, controls, bb, rect;
 
     this.openFile = (file) => {
-      const tempURL = URL.createObjectURL(file);
       if (!mesh) {
         init();
-        load(tempURL, true);
+        load(file, true);
       }
       else {
         update();
-        load(tempURL, false);
+        load(file, false);
       }
-      URL.revokeObjectURL(tempURL);
     }
 
     function update() {
@@ -40,7 +39,9 @@ class App extends Component {
       mesh.material.dispose();
     }
 
-    function load(tempURL, doAnimate) {
+    function load(file, doAnimate) {
+      const tempURL = URL.createObjectURL(file);
+
       const vs = `
       varying vec3 e;
       varying vec3 n;
@@ -74,36 +75,55 @@ class App extends Component {
       }
       `;
 
-      var loader = new STLLoader();
-      loader.load(tempURL, function(geometry) {
-        //geometry = new THREE.TorusKnotGeometry( 10, 3, 200, 50, 1, 3 );
-        geometry.center();
-        var material = new THREE.ShaderMaterial({
-          uniforms: {
-            tMatCap: {
-              type: 't',
-              value: THREE.ImageUtils.loadTexture(process.env.PUBLIC_URL + '/materials/whoa.png')
+      var ext = file.name.split('.').pop();
+      var loader;
+
+      if (ext === 'stl') {
+        loader = new STLLoader();
+        loader.load(tempURL, function(geometry) {
+          geometry.center();
+          /*var material = new THREE.ShaderMaterial({
+            uniforms: {
+              tMatCap: {
+                type: 't',
+                value: THREE.ImageUtils.loadTexture(process.env.PUBLIC_URL + '/materials/matte.jpg')
+              },
             },
-          },
-          vertexShader: vs,
-          fragmentShader: fs,
-          flatShading: THREE.SmoothShading
+            vertexShader: vs,
+            fragmentShader: fs,
+            flatShading: THREE.SmoothShading
+          });
+          material.uniforms.tMatCap.value.wrapS = material.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;*/
+          make(geometry, doAnimate);
         });
-        material.uniforms.tMatCap.value.wrapS = material.uniforms.tMatCap.value.wrapT = THREE.ClampToEdgeWrapping;
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-        var boundingBox = new THREE.Box3().setFromObject(mesh);
-        var sizeHouse = bb.getSize();
-        var sizeObject = boundingBox.getSize();
-        var ratio = sizeObject.divide(sizeHouse);
-        var maxRatio = Math.max(ratio.x, ratio.y, ratio.z);
-        var invertRatio = 1/maxRatio;
-        mesh.scale.set(invertRatio, invertRatio, invertRatio);
-        mesh.position.set(0, 0.25, 0);
-        if (doAnimate) {
-          animate();
-        }
-      });
+      }
+      else if (ext === 'obj') {
+        loader = new OBJLoader();
+        loader.load(tempURL, function(object) {
+          var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
+          g.center();
+          make(g, doAnimate);
+        });
+      }
+
+      URL.revokeObjectURL(tempURL);
+    }
+
+    function make(geometry, doAnimate) {
+      var material = new THREE.MeshNormalMaterial();
+      mesh = new THREE.Mesh(geometry, material);
+      var boundingBox = new THREE.Box3().setFromObject(mesh);
+      var sizeHouse = bb.getSize();
+      var sizeObject = boundingBox.getSize();
+      var ratio = sizeObject.divide(sizeHouse);
+      var maxRatio = Math.max(ratio.x, ratio.y, ratio.z);
+      var invertRatio = 1/maxRatio;
+      mesh.scale.set(invertRatio, invertRatio, invertRatio);
+      mesh.position.set(0, 0.25, 0);
+      scene.add(mesh);
+      if (doAnimate) {
+        animate();
+      }
     }
     
     function init() {
