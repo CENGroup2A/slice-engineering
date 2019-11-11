@@ -41,8 +41,11 @@ const SignUp = () =>
       validationSchema={SignupSchema}
       onSubmit={(values, obj) =>
       {
-          console.log(obj)
           axios.post('/api/signup', values)
+          .then((response) =>
+          {
+            console.log(response)
+          })
       }}
     >
       {({

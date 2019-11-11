@@ -10,12 +10,15 @@ router.route('/login')
 );
 
 router.route('/logout')
-  .post(isAuth, account.logout)
+  .post(isAuth, account.logout);
+
+router.route('/verify-email')
+  .post(account.verifyEmail);
 
 router.route('/signup')
   .post(account.signup);
 
 router.route('/auth')
-  .get(isAuth, account.auth)
+  .get(isAuth, account.auth);
 
 module.exports = router;
