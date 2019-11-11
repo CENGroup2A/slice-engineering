@@ -11,9 +11,9 @@ const getMatrerials = require('../controllers/Materials.server.controller.js'),
   
  */
 
-// router.route('/mat')
-//   .get(getMatrerials.material);
-//  // .post(getMatrerials.MAT)
+router.route('/mat')
+  .get(getMatrerials.material);
+ // .post(getMatrerials.MAT)
   
   
 

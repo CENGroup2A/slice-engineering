@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Quote from "./Quote";
-
+import { throws } from 'should';
+var axios = require('axios')
 
 
 class Material extends React.Component {
@@ -17,6 +18,17 @@ class Material extends React.Component {
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.getMats()
+    }
+
+    getMats = () =>
+    {
+        axios.get("/api/mat")
+        .then((mat) =>
+        {
+            console.log(mat.data)
+            this.setState({ materialsList: mat.data })
+        })
     }
 
 
