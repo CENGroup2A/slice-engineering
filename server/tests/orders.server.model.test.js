@@ -18,7 +18,7 @@ describe('Order Schema Unit Tests', () => {
 		done();
 	});
 
-	describe('Saving to database', () => {
+	describe('Saving to database', function() {
 
 		this.timeout(10000);
 		
@@ -26,7 +26,7 @@ describe('Order Schema Unit Tests', () => {
 			new Order({
 				order_number: order.order_number,
 				status: order.status
-			}).save((err, order) {
+			}).save((err, order) => {
 				should.not.exist(err);
 				id = order._id;
 				done();
