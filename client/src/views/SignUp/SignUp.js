@@ -47,7 +47,7 @@ const SignUp = () =>
                       
                       if (message.name == "success")
                         this.props.history.push("/help")
-                      
+
                       
                     })
                 }}
