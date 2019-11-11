@@ -30,34 +30,37 @@ const SignUp = () =>
 {
     return (
         <Container className="p-3">
-
-<Formik
-      initialValues={{      
-        name: '',
-        passwordConfirm: '',
-        password: '',
-        username: ''
-      }}
-      validationSchema={SignupSchema}
-      onSubmit={(values, obj) =>
-      {
-          axios.post('/api/signup', values)
-          .then((response) =>
-          {
-            console.log(response)
-          })
-      }}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting
-      }) => (
-
+          <Formik
+                initialValues={{      
+                  name: '',
+                  passwordConfirm: '',
+                  password: '',
+                  username: ''
+                }}
+                validationSchema={SignupSchema}
+                onSubmit={(values, obj) =>
+                {
+                    axios.post('/api/signup', values)
+                    .then((response) =>
+                    {
+                      var message = response.data.message
+                      
+                      if (message.name == "success")
+                        this.props.history.push("/help")
+                      
+                      
+                    })
+                }}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting
+                }) => (
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
