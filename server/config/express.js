@@ -4,6 +4,7 @@ const path = require('path'),
     morgan = require('morgan'),
     bodyParser = require('body-parser'),
     materialsRouter = require('../routes/Materials.server.routes');
+    PriceRouter = require('../routes/Price.server.routes');
 
 module.exports.init = () => {
     /* 
@@ -27,6 +28,7 @@ module.exports.init = () => {
 
     // add a router
     app.use('/api', materialsRouter);
+    app.use('/api', PriceRouter);
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
