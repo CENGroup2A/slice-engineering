@@ -16,7 +16,7 @@ var orderSchema = new Schema({
 	updated_at: Date
 });
 
-orderSchema.pre('save', next => {
+orderSchema.pre('save', function(next) {
 
 	var currentDate = new Date();
 	this.updated_at = currentDate;

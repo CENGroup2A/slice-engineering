@@ -11,9 +11,9 @@ exports.create = (req, res) => {
 
 	order.save(err => {
 		if (err) {
-			res.status(500).send(err)
+			res.status(500).send(err);
 		} else {
-			res.json(listing)
+			res.json(order);
 		}
 	});
 
