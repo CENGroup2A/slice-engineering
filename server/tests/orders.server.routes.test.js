@@ -39,7 +39,15 @@ describe('Orders CRUD tests', function() {
 			.end((err, res) => {
 				should.not.exist(err);
 				should.exist(res);
-				// TODO: verify correct response body
+
+				res.body.should.be.an.instanceOf(Object);
+				Object.keys(res.body).length.should.be.above(0);
+				res.body[0].should.have.property('_id');
+				res.body[0].should.have.property('order_number');
+				res.body[0].should.have.property('status');
+				res.body[0].should.have.property('created_at');
+				res.body[0].should.have.property('updated_at');
+
 				done();
 			});
 	});
