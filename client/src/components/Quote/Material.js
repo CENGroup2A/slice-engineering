@@ -6,10 +6,10 @@ var axios = require('axios')
 
 var listOfMats = [];
 var listOfFinishes = [];
+var materialz;
 
-
-function isMaterial(material) { 
-    return "ABS";
+function isMaterial(materialPassedIn) { 
+    return materialPassedIn.name === materialz;
 }
 
 
@@ -19,7 +19,6 @@ class Material extends React.Component {
         super(props)
         this.state = {
             finish: '',
-            material: '',
             materialsList: [''],
             finishList: [''],
             mats: []
@@ -27,6 +26,7 @@ class Material extends React.Component {
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        
         this.getMats()
     }
 
@@ -38,19 +38,21 @@ class Material extends React.Component {
             mat.data.forEach(function(element){
                 listOfMats.push(element.name)
             });
-            console.log(mat.data)
             this.setState({ materialsList: listOfMats })
             this.setState({mats: mat.data})
         })
     }
 
     handleChangeMaterial(event) {
+        listOfFinishes = [];
         this.setState({material: event.target.value})
-        var material = this.state.mats.find(isMaterial);
-        material.finishes.forEach(function(element){
+        materialz = event.target.value;
+        var materialChosen = this.state.mats.find(isMaterial);
+        
+        materialChosen.finishes.forEach(function(element){
             listOfFinishes.push(element.name);
         });
-        console.log(listOfFinishes)
+        this.setState({finishList: listOfFinishes})
     }
 
     handleChangeFinish(event) {
