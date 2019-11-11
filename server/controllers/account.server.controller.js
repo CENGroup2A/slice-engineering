@@ -38,7 +38,7 @@ exports.signup = function(req, res)
             "code" : randomatic('Aa0', 10)
         }
 
-        sendVerificationEmail(codeData)
+        //sendVerificationEmail(codeData)
 
         var code = new EmailCode(codeData)
         return code.save()
