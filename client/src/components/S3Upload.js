@@ -22,7 +22,7 @@ class S3Upload extends React.Component {
         })
         .then(function (result) {
             if(result.statusText === "OK") {
-                console.log('hey')
+                console.log('File uploaded')
                 //this.props.changeFile(file)
                 //this.props.changeUploadStatus(true)
             }
