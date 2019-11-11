@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Quote from "./Quote"
+import Quote from "./Quote";
+
 
 
 class Material extends React.Component {
