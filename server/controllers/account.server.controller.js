@@ -1,6 +1,7 @@
 const User = require('../models/user.server.model')
 const EmailCode = require('../models/emailcode.server.model')
-
+const config = require('../config/config')
+const sgMail = require('@sendgrid/mail');
 
 function goodRequest(res)
 {
@@ -10,6 +11,19 @@ function goodRequest(res)
 function errorRequest(res, type, message)
 {
     return res.json({"message": {"name": type, "message": message}})
+}
+
+function sendVerificationEmail(codeData)
+{
+    console.log("hello")
+    sgMail.setApiKey(config.sendGrid.APIKey);
+    const msg = {
+        to: codeData.email,
+        from: 'noreply@slice-engineering.com',
+        subject: 'Welcome to Slice Engineering! Confirm your Email',
+        text: 'Code: ' + codeData.code + "\nhttps://localhost:5000/verify-email?code=" + codeData.code
+    };
+    sgMail.send(msg);
 }
 
 exports.signup = function(req, res)
@@ -23,6 +37,8 @@ exports.signup = function(req, res)
             "email": user.email,
             "code" : randomatic('Aa0', 10)
         }
+
+        sendVerificationEmail(codeData)
 
         var code = new EmailCode(codeData)
         return code.save()
