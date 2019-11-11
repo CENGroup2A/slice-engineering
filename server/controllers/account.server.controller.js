@@ -21,7 +21,7 @@ function sendVerificationEmail(codeData)
         to: codeData.email,
         from: 'noreply@slice-engineering.com',
         subject: 'Welcome to Slice Engineering! Confirm your Email',
-        text: 'Code: ' + codeData.code + "\nhttps://localhost:5000/verify-email?code=" + codeData.code
+        text: 'Code: ' + codeData.code + "\nhttp://localhost:3000/verify-email?code=" + codeData.code + "&username=" + codeData.username
     };
     sgMail.send(msg);
 }
@@ -76,11 +76,11 @@ exports.auth = (req, res) =>
 
 exports.verifyEmail = (req, res) =>
 {
-    EmailCode.findOne({code: req.query.code})
+    EmailCode.findOne({code: req.body.code, username: req.body.username})
     .then((code) =>
     {
         if (code == null)
-            return errorRequest(res, "MissingCode", "The requested code does not exist.")
+            return errorRequest(res, "MissingCode", "The requested code does not exist for this user.")
         
         User.findOne({username: code.username})
         .then((user) =>
