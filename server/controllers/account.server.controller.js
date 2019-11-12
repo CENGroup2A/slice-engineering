@@ -1,7 +1,10 @@
 const User = require('../models/user.server.model')
-const EmailCode = require('../models/emailcode.server.model')
-const config = require('../config/config')
-const sgMail = require('@sendgrid/mail');
+    EmailCode = require('../models/emailcode.server.model'),
+    config = require('../config/config'),
+    sgMail = require('@sendgrid/mail'),
+    passport = require('passport')
+
+
 
 function goodRequest(res)
 {
@@ -53,9 +56,29 @@ exports.signup = function(req, res)
     });
 };
 
-exports.login = function(req, res)
+exports.login = function(req, res, next)
 {
-    goodRequest(res)
+    passport.authenticate('local', function(err, user, info)
+    {
+        if (err)
+            return errorRequest(res, "InternalError", "Internal error")
+
+        if (info)
+        {
+            if (info.name == "IncorrectUsernameError")
+                return errorRequest(res, info.name, "Incorrect username.")
+            else if (info.name == "IncorrectPasswordError")
+                return errorRequest(res, info.name, "Incorrect password.")
+            else
+                return errorRequest(res, "Invalid", "Invalid response.")
+        }
+
+        req.login(user, (err) =>
+        {
+            goodRequest(res)
+        });
+    })(req, res, next);
+    
 };
 
 exports.logout = (req, res) =>

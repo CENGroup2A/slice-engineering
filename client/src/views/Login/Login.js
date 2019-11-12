@@ -49,9 +49,18 @@ class Login extends React.Component
                       var message = response.data.message
                       
                       if (message.name == "success")
+                      {
                         page.setState({continue: true})
-
-                      window.location.reload();
+                        window.location.reload();
+                      }
+                      else
+                      {
+                        actions.setSubmitting(false);
+                        if (message.name == "IncorrectPasswordError")
+                          actions.setFieldError("password", "Incorrect password.")
+                        else if (message.name == "IncorrectUsernameError")
+                          actions.setFieldError("username", "Incorrect username.")
+                      }
                     })
                 }}
               >
@@ -73,6 +82,8 @@ class Login extends React.Component
                             placeholder="Enter username"
                             onChange={handleChange}
                             value={values.username} />
+                        
+                        <ErrorMessage name="username" />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
@@ -83,6 +94,8 @@ class Login extends React.Component
                             placeholder="Password"
                             onChange={handleChange}
                             value={values.password} />
+
+                        <ErrorMessage name="password" />
                     </Form.Group>
                     <Button variant="primary" type="submit">Submit</Button>
                     <p>Don't have an account? <Link to="/sign-up"><a>Sign up</a></Link></p>
