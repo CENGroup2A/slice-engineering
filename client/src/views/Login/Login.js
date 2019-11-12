@@ -41,7 +41,7 @@ class Login extends React.Component
                   password: ''
                 }}
                 validationSchema={LoginSchema}
-                onSubmit={(values, obj) =>
+                onSubmit={(values, actions) =>
                 {
                     axios.post('/api/login', values)
                     .then((response) =>
