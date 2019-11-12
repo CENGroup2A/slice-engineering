@@ -1,4 +1,4 @@
-### Order
+### Order Endpoints
 
 User orders consist of Order number and status. These properties can be modified by the user via Post and Delete requests.
 
@@ -10,4 +10,10 @@ User orders consist of Order number and status. These properties can be modified
 | PUT       | `/api/orders/:id`                 | Update order ID number            |
 | DELETE    | `/api/orders/:id`                 | Delete ID number for an order     |
 
+### Order Schemas
+
+{
+	"order_number": Integer,
+	"status": String
+}
 
