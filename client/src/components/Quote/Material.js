@@ -5,8 +5,9 @@ import { throws } from 'should';
 var axios = require('axios')
 
 var listOfMats = [];
-var listOfFinishes = [];
+var listOfFinishes = ['please choose a material'];
 var materialz;
+var uploadedFile;
 
 function isMaterial(materialPassedIn) { 
     return materialPassedIn.name === materialz;
@@ -20,12 +21,13 @@ class Material extends React.Component {
         this.state = {
             finish: '',
             materialsList: [''],
-            finishList: [''],
+            finishList: ['please choose a material'],
             mats: []
         };
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChangeHandler = this.onChangeHandler.bind(this)
         
         this.getMats()
     }
@@ -52,7 +54,8 @@ class Material extends React.Component {
         materialChosen.finishes.forEach(function(element){
             listOfFinishes.push(element.name);
         });
-        this.setState({finishList: listOfFinishes})
+        this.setState({finishList: listOfFinishes, finish: this.state.finishList[0]})
+        //this.setState({finish: this.state.finishList[0]})
     }
 
     handleChangeFinish(event) {
@@ -61,11 +64,19 @@ class Material extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log(uploadedFile)
+        console.log(materialz)
+        console.log(this.state.finish)
+    }
+
+    onChangeHandler=event=>{
+        uploadedFile = event.target.files[0]
     }
 
 	render() {
 		return (
 			<div>
+                <div>
                 <Quote material = {this.state.material} service = {this.state.finish}/>
 				<form onSubmit={this.handleSubmit}>
                     <label>
@@ -80,7 +91,11 @@ class Material extends React.Component {
                         </select>
                     </label>
                 <input type="submit" value="Submit" />
-            </form>
+                </form>
+                </div>
+                <div>
+                    <input type="file" name="file" onChange={this.onChangeHandler}/>
+                </div>
 			</div>
 		);
 	}

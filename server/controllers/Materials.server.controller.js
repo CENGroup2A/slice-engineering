@@ -12,8 +12,6 @@ request('https://imatsandbox.materialise.net/web-api/materials?user=lysaght.m@uf
     var data = JSON.parse(body)
     
     data.materials.forEach(function(element){
-      
-      
       listOfMats.push(element)
     });
     
