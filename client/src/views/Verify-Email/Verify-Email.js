@@ -1,9 +1,9 @@
 import React from 'react'
 import axios from 'axios';
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
 import qs from "query-string"
+import {
+    Redirect
+  } from "react-router-dom";
 
 class VerifyEmail extends React.Component
 {
@@ -12,19 +12,17 @@ class VerifyEmail extends React.Component
         this.state = {
           verified: false
         };
+
+        this.verify()
     }
 
     verify = () => {
         var urlCode = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).code
         var urlUsername = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).username
         let success = false;
-        axios.post("http://localhost:5000/api/verify-email", {
+        axios.post("/api/verify-email", {
             code: urlCode,
             username: urlUsername
-        })
-        .then(function (result) {
-            success = true;
-            console.log('hello')
         })
         this.setState({
             verified: success
@@ -33,11 +31,22 @@ class VerifyEmail extends React.Component
 
     render()
     {
-        this.verify()
-        //console.log(this.state.verified)
-        return(
-            <p>Hello</p>
-        )
+        
+        if (this.state.verified)
+        {
+            return(
+                <p>Hello</p>
+            )
+        }
+
+        else
+        {
+            return(
+                <Redirect to="/" />
+            )
+        }
+        
+        
     }
 }
 
