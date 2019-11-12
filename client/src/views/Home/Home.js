@@ -1,11 +1,10 @@
 import React from 'react';
 
 
-
 function Home() {
     return (
         <div>
-            <p>Welcome to slice engineering</p>
+            <p>Welcom to slice engineering</p>
         </div>
     );
 }

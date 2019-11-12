@@ -9,17 +9,12 @@ import SignUp from './views/SignUp/SignUp'
 import Login from './views/Login/Login'
 import Home from './views/Home/Home'
 import VerifyEmail from './views/Verify-Email/Verify-Email'
+import Quote from './views/Quote/Quote'
 import NavBar from './components/Navbar'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PrivateRoute from './components/PrivateRoute';
 
-function Auth()
-{
-  return (
-    <p>Authenticated</p>
-  )
-}
 
 const App = () => {
   return (
@@ -30,7 +25,7 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/verify-email" component={VerifyEmail} />
         <Route exact path="/" component={Home} />
-        <PrivateRoute exact path = "/protected" component={Auth} />
+        <PrivateRoute exact path = "/protected" component={Quote} />
         <Route path="*">
           <p>djkhsajds</p>
         </Route>
