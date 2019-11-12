@@ -15,7 +15,6 @@ function errorRequest(res, type, message)
 
 function sendVerificationEmail(codeData)
 {
-    console.log("hello")
     sgMail.setApiKey(config.sendGrid.APIKey);
     const msg = {
         to: codeData.email,
@@ -56,12 +55,17 @@ exports.signup = function(req, res)
 exports.login = function(req, res)
 {
     goodRequest(res)
-};
+}
 
 exports.logout = (req, res) =>
 {
     req.logout()
     goodRequest(res)
+}
+
+exports.resetPassword = (req, res) =>
+{
+
 }
 
 exports.auth = (req, res) =>

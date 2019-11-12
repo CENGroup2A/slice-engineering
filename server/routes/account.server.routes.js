@@ -18,7 +18,11 @@ router.route('/verify-email')
 router.route('/signup')
   .post(account.signup);
 
+router.route('/reset-password')
+  .get(account.resetPassword);
+
 router.route('/auth')
   .get(isAuth, account.auth);
+
 
 module.exports = router;
