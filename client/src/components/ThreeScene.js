@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import * as THREE from 'three';
 import Dropzone from 'react-dropzone'
-import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
+import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
 
 class ThreeScene extends Component {
     onDrop = (files) => {
@@ -42,7 +43,7 @@ class ThreeScene extends Component {
         function load(file, doAnimate) {
             const tempURL = URL.createObjectURL(file);
 
-            const vs = `
+            /*const vs = `
           varying vec3 e;
           varying vec3 n;
           
@@ -73,9 +74,10 @@ class ThreeScene extends Component {
             gl_FragColor = vec4( base, 1. );
           
           }
-          `;
+          `;*/
 
-            var ext = file.name.split('.').pop();
+            var str = file.name.split('.').pop();
+            var ext = str.toLowerCase();
             var loader;
 
             if (ext === 'stl') {
@@ -100,6 +102,14 @@ class ThreeScene extends Component {
             else if (ext === 'obj') {
                 loader = new OBJLoader();
                 loader.load(tempURL, function (object) {
+                    var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
+                    g.center();
+                    make(g, doAnimate);
+                });
+            }
+            else if (ext === 'fbx') {
+                loader = new FBXLoader();
+                loader.load(tempURL, function(object) {
                     var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
                     g.center();
                     make(g, doAnimate);
