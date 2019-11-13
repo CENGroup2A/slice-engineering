@@ -18,8 +18,7 @@ const LoginSchema = Yup.object().shape({
       .required('Required'),
   });
 
-class Login extends React.Component
-{
+class Login extends React.Component {
     state = {
         continue: false
     }
@@ -28,15 +27,14 @@ class Login extends React.Component
     {
         var page = this
 
-        if (this.state.continue)
-        {
+        if (this.state.continue) {
             return <Redirect to='/protected' />
         }
 
         return (
             <Container className="p-3">
                 <Formik
-                initialValues={{      
+                initialValues={{
                   username: '',
                   password: ''
                 }}
@@ -47,7 +45,7 @@ class Login extends React.Component
                     .then((response) =>
                     {
                       var message = response.data.message
-                      
+
                       if (message.name == "success")
                         page.setState({continue: true})
 

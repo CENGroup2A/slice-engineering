@@ -10,27 +10,33 @@ const path = require('path'),
 const session = require('express-session');
 
 module.exports.init = () => {
-    /* 
+    /*
         connect to database
         - reference README for db uri
     */
-    mongoose.connect(process.env.DB_URI || require('./config').db.uri, {
-        useNewUrlParser: true
-    });
+    mongoose.connect(process.env.DB_URI || require('./config').db.uri,
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+
     mongoose.set('useCreateIndex', true);
     mongoose.set('useFindAndModify', false);
 
     // initialize app
     const app = express();
 
-    app.use(session({secret:'ntk7'}));
+    app.use(session({secret:'ntk7',
+                     resave: true,
+                     saveUninitialized: true}));
     app.use(passport.initialize());
     app.use(passport.session());
 
- 
+
+
     // CHANGE: USE "createStrategy" INSTEAD OF "authenticate"
     passport.use(User.createStrategy());
-    
+
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
 
@@ -58,4 +64,3 @@ module.exports.init = () => {
 
     return app
 }
-

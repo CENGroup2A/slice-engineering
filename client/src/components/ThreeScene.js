@@ -7,8 +7,14 @@ import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
 
 class ThreeScene extends Component {
+
+    state = {
+        fileRendered: false
+    }
+
     onDrop = (files) => {
         var file = files[0];
+        this.setState({fileRendered : true});
         this.openFile(file);
     }
 
@@ -46,33 +52,33 @@ class ThreeScene extends Component {
             /*const vs = `
           varying vec3 e;
           varying vec3 n;
-          
+
           void main() {
-          
+
             e = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
             n = normalize( normalMatrix * normal );
-          
+
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1. );
-          
+
           }
           `;
 
             const fs = `
           uniform sampler2D tMatCap;
-    
+
           varying vec3 e;
           varying vec3 n;
-          
+
           void main() {
-          
+
             vec3 r = reflect( e, n );
             float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
             vec2 vN = r.xy / m + .5;
-          
+
             vec3 base = texture2D( tMatCap, vN ).rgb;
-          
+
             gl_FragColor = vec4( base, 1. );
-          
+
           }
           `;*/
 
@@ -185,24 +191,41 @@ class ThreeScene extends Component {
         }
     }
 
+
+
+    renderInstruction(isDragActive) {
+        if (this.state.fileRendered) {
+            return <br/>;
+        }
+        return isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'
+    }
+
+    renderImage(isDragActive) {
+        if (this.state.fileRendered) {
+            return <br/>;
+        }
+        return <div><center><img src="download.svg" alt="Drop Icon" width="100" height="100"/></center></div>
+      }
+
     render() {
         return (
             <div className="dragDrop">
+                <div style={{ height: "100vh", width: "50%", float: "right", backgroundColor: "powderblue" }}/>
+
                 <Dropzone onDrop={this.onDrop}>
                     {({ getRootProps, getInputProps, isDragActive }) => (
-                        <div style={{ height: "100vh", width: "50%", float: "right", backgroundColor: "powderblue" }}
-                            {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            {isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}
-                        </div>
-                    )}
-                </Dropzone>
                 <div style={{ height: "100vh", width: "50%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <div
                         id="container"
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#F2F2F2" }}>
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#F2F2F2" }}
+                        {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        { this.renderImage(isDragActive) }
+                        { this.renderInstruction(isDragActive) }
                     </div>
                 </div>
+                )}
+                </Dropzone>
             </div>
         );
     }

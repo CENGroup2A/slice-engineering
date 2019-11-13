@@ -27,7 +27,7 @@ const App = () => {
         <Route exact path="/" component={Home} />
         <PrivateRoute exact path = "/protected" component={Quote} />
         <Route path="*">
-          <p>djkhsajds</p>
+          <p>well this is awkward, huh?</p>
         </Route>
       </Switch>
     </Router>

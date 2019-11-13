@@ -4,7 +4,7 @@ import React from 'react';
 function Home() {
     return (
         <div>
-            <p>Welcom to slice engineering</p>
+            <p>Welcome to Slice Engineering</p>
         </div>
     );
 }
