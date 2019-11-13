@@ -25,7 +25,8 @@ const SignupSchema = Yup.object().shape({
       .max(70, "Your passowrd is too long")
       .required('Required'),
     passwordConfirm: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Required')
+      .oneOf([Yup.ref('password')], 'Passwords must match')
   });
 
 
@@ -53,18 +54,24 @@ class SignUp extends React.Component
                   username: ''
                 }}
                 validationSchema={SignupSchema}
-                onSubmit={(values, obj) =>
+                onSubmit={(values, actions) =>
                 {
-                    axios.post('/api/signup', values)
-                    .then((response) =>
+                  axios.post('/api/signup', values)
+                  .then((response) =>
+                  {
+                    var message = response.data.message
+                    
+                    if (message.name == "success")
+                      page.setState({"continue": true})
+                    else
                     {
-                      var message = response.data.message
-                      
-                      if (message.name == "success")
-                        page.setState({"continue": true})
-                      console.log(message)
-                      
-                    })
+                      actions.setSubmitting(false);
+                      if (message.name == "UserExistsError")
+                        actions.setFieldError('username', "This username already exists.");
+                      else
+                        actions.setFieldError('general', "There has been an error submitting this form. Please refresh and try again.");
+                    }
+                  })
                 }}
               >
                 {({
@@ -77,6 +84,7 @@ class SignUp extends React.Component
                   isSubmitting
                 }) => (
             <Form onSubmit={handleSubmit}>
+                <ErrorMessage name="general" />
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
