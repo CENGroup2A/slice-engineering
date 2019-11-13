@@ -64,13 +64,16 @@ class Material extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log(uploadedFile)
-        console.log(materialz)
-        console.log(this.state.finish)
+        console.log('uploadedFile', uploadedFile)
+
+        const reactData = {uploadedFile: uploadedFile, material: materialz, finish: this.state.finish}
+        axios.post("/api/price", reactData)
+            .then(res => console.log('Data sent'))
+            .catch(err => console.log('error', err.data))
     }
 
     onChangeHandler=event=>{
-        uploadedFile = event.target.files[0]
+        uploadedFile = event.target.files[0];
     }
 
 	render() {

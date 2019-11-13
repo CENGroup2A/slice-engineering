@@ -2,6 +2,7 @@ var express = require('express');
 axios = require('axios');
  router = express.Router();
  config = require('../config/config');
+
                   
 //Setup your request using URL and options - see ? for format
 axios.post('https://imatsandbox.materialise.net/web-api/pricing/model', 
@@ -33,10 +34,22 @@ axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
   })
   .then((response) => console.log('response.data.models', response.data.models))
   .catch((error) => console.error(error))
-  
+
 
 //ALL I DID WAS SWT UP THE ROUTER /api/price 
 exports.Price = (req, res)=>
 {
-  res.send("hello")
+  //req.body is the information after we hit "Submit" on the form
+  var mat = req.body.material
+  var finish = req.body.finish
+  var file = req.body.uploadedFile
+
+  //axios.post("url", {mat, ....})
+  console.log(req.body)
+  console.log('mat:', mat)
+  console.log('finish:', finish)
+  console.log('file:', file)
+  
+  
+  res.send('data')
 }
