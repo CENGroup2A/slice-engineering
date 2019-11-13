@@ -19,7 +19,10 @@ router.route('/signup')
   .post(account.signup);
 
 router.route('/reset-password')
-  .get(account.resetPassword);
+  .post(account.requestPasswordChange);
+
+router.route('/change-password')
+  .post(account.changePassword)
 
 router.route('/auth')
   .get(isAuth, account.auth);

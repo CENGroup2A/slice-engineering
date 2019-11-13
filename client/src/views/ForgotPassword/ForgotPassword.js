@@ -1,55 +1,49 @@
 import React from 'react'
+import axios from 'axios';
+import qs from "query-string"
+
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import {
-    Redirect,
-    Link
-  } from "react-router-dom";
 import { ErrorMessage, Formik } from 'formik'
-import * as Yup from 'yup';
 
-var axios = require('axios')
-
-const LoginSchema = Yup.object().shape({
-    username: Yup.string()
-      .required('Required'),
-    password: Yup.string()
-      .required('Required'),
-  });
-
-class Login extends React.Component
+class ForgotPassword extends React.Component
 {
-    state = {
-        continue: false
+    verify = () => {
+        var urlCode = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).code
+        var urlUsername = qs.parse(this.props.location.search, { ignoreQueryPrefix: true }).username
+        let success = false;
+        axios.post("http://localhost:5000/api/verify-email", {
+            code: urlCode,
+            username: urlUsername
+        })
+        .then(function (result) {
+            success = true;
+            console.log('hello')
+        })
+        this.setState({
+            verified: success
+        })
     }
 
-    render()
-    {
-        var page = this
-
-        if (this.state.continue)
-        {
-            return <Redirect to='/protected' />
-        }
-
+    render() {
         return (
             <Container className="p-3">
                 <Formik
                 initialValues={{      
                   username: '',
-                  password: ''
+                  email: ''
                 }}
-                validationSchema={LoginSchema}
+                //validationSchema={LoginSchema}
                 onSubmit={(values, obj) =>
                 {
-                    axios.post('/api/login', values)
+                    axios.post('/api/reset-password', values)
                     .then((response) =>
                     {
                       var message = response.data.message
                       
                       if (message.name == "success")
-                        page.setState({continue: true})
+                        //success code
 
                       window.location.reload();
                     })
@@ -57,12 +51,8 @@ class Login extends React.Component
               >
                 {({
                   values,
-                  errors,
-                  touched,
                   handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting
+                  handleSubmit
                 }) => (
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
@@ -76,17 +66,15 @@ class Login extends React.Component
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Email</Form.Label>
                         <Form.Control
-                            type="password"
-                            name="password"
-                            placeholder="Password"
+                            type="email"
+                            name="email"
+                            placeholder="Email"
                             onChange={handleChange}
-                            value={values.password} />
+                            value={values.email} />
                     </Form.Group>
                     <Button variant="primary" type="submit">Submit</Button>
-                    <p>Don't have an account? <Link to="/sign-up"><a>Sign up</a></Link></p>
-                    <p>Forgot password? <Link to="/forgot-password"><a>Reset Password</a></Link></p>
                 </Form>
                 )}
             </Formik>
@@ -94,6 +82,4 @@ class Login extends React.Component
         )
     }
 }
-
-
-export default Login
+export default ForgotPassword

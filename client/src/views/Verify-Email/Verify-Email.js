@@ -23,12 +23,12 @@ class VerifyEmail extends React.Component
             username: urlUsername
         })
         .then(function (result) {
-            success = true;
+            //success = true;
             console.log('hello')
         })
-        this.setState({
+        /*this.setState({
             verified: success
-        })
+        })*/
     }
 
     render()
