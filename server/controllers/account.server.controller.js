@@ -31,11 +31,12 @@ function sendVerificationEmail(codeData)
 
 exports.signup = function(req, res)
 {
-    User.register(new User({username: req.body.username, email: req.body.email, emailVerified : false}), req.body.password)
+    User.register(new User({name: req.body.name, username: req.body.username, email: req.body.email, emailVerified : false}), req.body.password)
     .then((user) =>
     {
         var randomatic = require('randomatic')
         var codeData = {
+            "name" : user.name,
             "username": user.username,
             "email": user.email,
             "code" : randomatic('Aa0', 10)
