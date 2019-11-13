@@ -36,6 +36,7 @@ class SignUp extends React.Component
   {
     continue : false
   }
+  
   render()
   {
     var page = this
@@ -62,7 +63,9 @@ class SignUp extends React.Component
                     var message = response.data.message
                     
                     if (message.name == "success")
+                    {
                       page.setState({"continue": true})
+                    }
                     else
                     {
                       actions.setSubmitting(false);

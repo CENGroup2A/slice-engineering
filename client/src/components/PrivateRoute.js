@@ -8,37 +8,18 @@ import {
     Link
   } from "react-router-dom";
 
+import AuthContext from '../context/AuthContext'
+
 class PrivateRoute extends React.Component
 {
-    constructor(props)
-    {
-        super(props)
-        this.state = {
-            isAuthenticated : true
-        }
-
-        this.checkAuthentication()
-    }
-
-    checkAuthentication = () =>
-    {
-        var comp = this
-        axios.get("/api/auth")
-        .then((response) =>
-        {
-            console.log(response.data.auth)
-            comp.setState({ isAuthenticated: response.data.auth})
-        })
-    }
-
+    static contextType = AuthContext;
     render()
     {
         var comp = this
-        console.log(comp.state.isAuthenticated)
         var { component: Component, ...rest } = this.props
         return (
             <Route {...rest} render={(props) => (
-                comp.state.isAuthenticated ?
+                comp.context.auth ?
                 <Component {...props} />
                   :
                 <Redirect to='/login' />

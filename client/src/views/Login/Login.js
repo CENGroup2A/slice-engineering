@@ -8,7 +8,7 @@ import {
   } from "react-router-dom";
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
-
+import AuthContext from '../../context/AuthContext'
 var axios = require('axios')
 
 const LoginSchema = Yup.object().shape({
@@ -20,7 +20,8 @@ const LoginSchema = Yup.object().shape({
 
 class Login extends React.Component
 {
-    state = {
+  static contextType = AuthContext;
+  state = {
         continue: false
     }
 
@@ -50,8 +51,11 @@ class Login extends React.Component
                       
                       if (message.name == "success")
                       {
-                        page.setState({continue: true})
-                        window.location.reload();
+                        this.context.reloadAuth()
+                        .then(() =>
+                        {
+                          page.setState({continue: true})
+                        })
                       }
                       else
                       {
