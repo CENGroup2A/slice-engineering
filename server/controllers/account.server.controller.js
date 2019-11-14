@@ -4,8 +4,6 @@ const User = require('../models/user.server.model')
     sgMail = require('@sendgrid/mail'),
     passport = require('passport')
 
-
-
 function goodRequest(res)
 {
     return res.json({message: {"name": "success"}})

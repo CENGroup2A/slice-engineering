@@ -13,7 +13,7 @@ var axios = require('axios')
 const SignupSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'Your name is too short.')
-      .max(70, 'Your name is too long')
+      .max(70, 'Your name is too long.')
       .required('Required'),
     email: Yup.string()
       .email('Invalid email')
@@ -23,6 +23,9 @@ const SignupSchema = Yup.object().shape({
       .required('Required'),
     password: Yup.string()
       .max(70, "Your passowrd is too long")
+      .matches(/[a-z]/, 'At least one lowercase character')
+      .matches(/[A-Z]/, 'At least one uppercase character')
+      .matches(/[0-9]/, 'At least one number character')
       .required('Required'),
     passwordConfirm: Yup.string()
       .required('Required')
