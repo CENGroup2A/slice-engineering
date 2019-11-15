@@ -9,7 +9,7 @@ axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
 {
   models: [
     {
-      "modelID":"28ba016b-68a6-4511-a518-2cd4dafd43b7",
+      "modelID":"22750b22-fca3-43e0-8803-4acb829d1a30",
       "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
       "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
       "quantity":"1",
@@ -49,7 +49,15 @@ exports.Price = (req, res)=>
   console.log('mat:', mat)
   console.log('finish:', finish)
   console.log('file:', file)
-  
+
+  axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
+  {
+    //file: ,
+    fileUrl: "",
+    fileUnits:"mm",
+  })
+    .then((response) => console.log('response.data', response.data))
+    .catch((error) => console.error(error))
   
   res.send('data')
 }

@@ -67,6 +67,7 @@ class Material extends React.Component {
         console.log('uploadedFile', uploadedFile)
 
         const reactData = {uploadedFile: uploadedFile, material: materialz, finish: this.state.finish}
+
         axios.post("/api/price", reactData)
             .then(res => console.log('Data sent'))
             .catch(err => console.log('error', err.data))
