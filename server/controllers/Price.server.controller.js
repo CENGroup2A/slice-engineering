@@ -52,8 +52,18 @@ exports.Price = (req, res)=>
 
   axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
   {
-    //file: ,
-    fileUrl: "",
+    // Request should consist of two parts:
+    // • File (Content-Disposition: form-data; name=“file”; filename=“12.csv” Content-Type: application/octet-stream)
+    // • File units (Content-Disposition: form-data; name=“fileUnits”) 
+
+
+    File: [
+      {
+        name:"file",
+        filename: file.name,
+        Content-Type: "application/octet-stream"
+      } 
+    ],
     fileUnits:"mm",
   })
     .then((response) => console.log('response.data', response.data))
