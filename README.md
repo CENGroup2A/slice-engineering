@@ -1,3 +1,28 @@
+## UPDATE
+
+Edited on 11/11/2019 by Kevin Nguyen
+
+Added OBJ Loader.
+Added FBX loader.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Edited on 11/4/2019 by Kevin Nguyen
+
+Note: react and npm.js must be updated!
+
+1. In terminal: cd into desktop or wherever
+2. git clone -b cad-render https://github.com/CENGroup2A/slice-engineering.git
+3. cd slice-engineering/client
+4. npm install
+5. npm start
+
+You should see the app running at localhost:3000 <br />
+Click or drag one of the STL files from the directory: slice-engineering/client/public/models <br />
+Hopefully it works :) <br />
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 This project contains an example project board meant to showcase how one can be used. The issues posted to it are not real issues.
 
