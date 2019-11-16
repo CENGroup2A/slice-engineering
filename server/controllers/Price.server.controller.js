@@ -7,7 +7,8 @@ axios = require('axios');
 
 
 //Upload model via URL
-axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
+async function FetchmodelID(){
+let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
   {
     // Request should consist of two parts:
     // • File (Content-Disposition: form-data; name=“file”; filename=“12.csv” Content-Type: application/octet-stream)
@@ -29,11 +30,8 @@ axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-
       }
       
   })
-    .then((response) => {console.log('response.data', response.data)
-    
-  })
-    .catch((error) => console.error(error));
-    
+   console.log(data);
+}
     //console.log("md",MODELID)
 
 
@@ -42,7 +40,7 @@ axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
 {
   models: [
     {
-      "modelID": "",
+      "modelID": FetchmodelID(),
       "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
       "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
       "quantity":"1",
