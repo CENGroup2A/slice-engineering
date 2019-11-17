@@ -22,7 +22,11 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
     //     Content-Type: "application/octet-stream"
     //   } 
     // ],
-    fileUrl:"https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip",
+
+    //LINKS TO TRY
+    // https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar     CAT
+    //https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip    BOAT
+    fileUrl:"https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar",
     fileUnits:"mm",
     
       headers: {
@@ -30,42 +34,46 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
       }
       
   })
-   console.log(data);
+   console.log("ModelID",data.data.modelID);
+   return(data.data.modelID)
 }
     //console.log("md",MODELID)
 
 
     //get price
-axios.post('https://imatsandbox.materialise.net/web-api/pricing/model', 
-{
-  models: [
+async function fetchPrice(){
+  let data = await axios.post('https://imatsandbox.materialise.net/web-api/pricing/model', 
+  {
+    models: [
+      {
+        "modelID": await FetchmodelID(),
+        "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
+        "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
+        "quantity":"1",
+        "scale":"0.5"
+      }
+    ],
+    shippingInfo: 
     {
-      "modelID": FetchmodelID(),
-      "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
-      "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
-      "quantity":"1",
-      "scale":"1.0"
+      countryCode: "US",
+      stateCode: "FL",
+      city : "Gainesville",
+      zipCode : "32603",
+      
+    },
+    "currency": "USD"
+    }, 
+    {
+      headers: {
+        "accept": "application/json",
+        "APICode": config.imaterialize.API
+      }
+    })
+    console.log("api request",data.data);
+    console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
     }
-  ],
-  shippingInfo: 
-  {
-    countryCode: "US",
-    stateCode: "FL",
-    city : "Gainesville",
-    zipCode : "32603",
     
-  },
-  "currency": "USD"
-  }, 
-  {
-    headers: {
-      "accept": "application/json",
-      "APICode": config.imaterialize.API
-    }
-  })
-  .then((response) => console.log('response.data.models', response.data.models))
-  .catch((error) => console.error(error))
-
+    fetchPrice();
 exports.Price = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
