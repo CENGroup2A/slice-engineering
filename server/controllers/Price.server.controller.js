@@ -41,16 +41,16 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
 
 
     //get price
-async function fetchPrice(){
+async function fetchPrice(material,finish){
   let data = await axios.post('https://imatsandbox.materialise.net/web-api/pricing/model', 
   {
     models: [
       {
         "modelID": await FetchmodelID(),
-        "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
-        "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
+        "materialID":material,
+        "finishID":finish,
         "quantity":"1",
-        "scale":"0.5"
+        "scale":"0.5 "
       }
     ],
     shippingInfo: 
@@ -73,7 +73,7 @@ async function fetchPrice(){
     console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
     }
     
-    fetchPrice();
+    
 exports.Price = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
@@ -81,6 +81,10 @@ exports.Price = (req, res)=>
   var finish = req.body.finish
   var file = req.body.uploadedFile
 
+  //Note to Jason: Your are better with front end can you get the req on this export.price function
+  //above to return the modelid and finishID instead of the english name?
+  
+  fetchPrice("3f0b5d1d-1398-440c-b10a-842d465cdd7a","900eb1fa-80b0-4861-ba8c-847f30154ba1");//abs, white
   //axios.post("url", {mat, ....})
   console.log(req.body)
   console.log('mat:', mat)
