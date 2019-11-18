@@ -15,6 +15,8 @@ import NavBar from './components/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PrivateRoute from './components/PrivateRoute';
 
+import styles from './assets/theme.scss.css';
+
 
 const App = () => {
   return (

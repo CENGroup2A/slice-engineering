@@ -1,0 +1,130 @@
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+};
+
+if (typeof Shopify != "undefined") {
+    if (typeof Shopify.checkout != "undefined") {
+        if (typeof Shopify.checkout.order_id != "undefined") {
+                recordOrder();
+        }
+    }
+}
+
+function recordOrder() {
+    var emailStr;
+    if (Shopify.checkout.email == null) {
+        emailStr = 0;
+    } else {
+        emailStr = Shopify.checkout.email;
+    }
+
+    var varStr = "";
+    var shopName = Shopify.shop;
+    var wooCommercePos = shopName.indexOf("woocommerce");
+    var partnerID;
+    if (wooCommercePos != -1) {
+        partnerID=getCookie('aff');
+    } else {
+        partnerID=getCookie('p');
+    };
+
+    var shippingRate = 0;
+    if (Shopify.checkout.shipping_rate != null) {
+        shippingRate = Shopify.checkout.shipping_rate.price;
+    };
+
+    var totalTax = 0;
+    if (Shopify.checkout.total_tax != null) {
+        totalTax = Shopify.checkout.total_tax;
+    };
+
+    var shippingFirstName = '';
+    if (Shopify.checkout.shipping_address != null) {
+        shippingFirstName = Shopify.checkout.shipping_address.first_name;
+    } else if (Shopify.checkout.billing_address != null) {
+        shippingFirstName = Shopify.checkout.billing_address.first_name;
+    } else {
+        shippingFirstName = '';
+    };
+    
+    var shippingLastName = '';
+    if (Shopify.checkout.shipping_address != null) {
+        shippingLastName = Shopify.checkout.shipping_address.last_name;
+    } else if (Shopify.checkout.billing_address != null) {
+        shippingLastName = Shopify.checkout.billing_address.last_name;
+    } else if (Shopify.checkout.email != null) {
+        shippingLastName = Shopify.checkout.email;
+    } else {
+        shippingLastName = 'Name/Email Not Provided';
+    };
+
+    if (Shopify.checkout.discount == null) {
+        varStr = "order_id=" + Shopify.checkout.order_id + "&shop=" + Shopify.shop + "&first_name=" + shippingFirstName + "&last_name=" + shippingLastName + "&total_price=" + Shopify.checkout.total_price + "&currency=" + Shopify.checkout.currency + "&partnerID=" + partnerID + "&email=" + emailStr + "&coupon=0&shipping=" + shippingRate + "&total_tax=" + totalTax;
+    } else {
+        varStr = "order_id=" + Shopify.checkout.order_id + "&shop=" + Shopify.shop + "&first_name=" + shippingFirstName + "&last_name=" + shippingLastName + "&total_price=" + Shopify.checkout.total_price + "&currency=" + Shopify.checkout.currency + "&partnerID=" + partnerID + "&email=" + emailStr + "&coupon=" + Shopify.checkout.discount.code + "&shipping=" + shippingRate + "&total_tax=" + totalTax;
+    }
+
+    //console.log('varStr=' + varStr);
+    var url = "https://www.shoutout.global/recordOrder";
+    makeCorsRequest(url, varStr);
+};
+
+
+function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+        // XHR for Chrome/Firefox/Opera/Safari.
+        xhr.open(method, url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    } else if (typeof XDomainRequest != "undefined") {
+        // XDomainRequest for IE.
+        xhr = new XDomainRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    } else {
+        // CORS not supported.
+        xhr = null;
+    }
+    return xhr;
+}
+
+// Make the actual CORS request.
+function makeCorsRequest(url, params) {
+    var xhr = createCORSRequest('POST', url);
+    if (!xhr) {
+        //alert('CORS not supported');
+        return;
+    }
+
+    // Response handlers.
+    xhr.onload = function () {
+        var text = xhr.responseText;
+        //console.log('Data sent');
+    };
+
+    xhr.onerror = function () {
+        //console.log('Error!');
+    };
+
+    xhr.send(params);
+}
+
+
+
+
+
+
+
+
