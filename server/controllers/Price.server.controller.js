@@ -26,7 +26,8 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
     //LINKS TO TRY
     // https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar     CAT
     //https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip    BOAT
-    fileUrl:"https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar",
+    //https://slice-engineering-file-test-open.s3.us-east-2.amazonaws.com/3DBenchy.stl"  BOAT FROM OUR AWS
+    fileUrl:"https://slice-engineering-file-test-open.s3.us-east-2.amazonaws.com/3DBenchy.stl",
     fileUnits:"mm",
     
       headers: {
