@@ -1,0 +1,188 @@
+
+function recordHit(value, shopName) {
+    getCORS('https://www.shoutout.global/recordHit?shop=' + shopName + '&ref=' + value, function (request) {
+        //var response = request.currentTarget.response || request.target.responseText;
+        //console.log(response);
+    });
+}
+
+function recordStandardHit(shopName) {
+    getCORS('https://www.shoutout.global/recordstandardhit?shop=' + shopName, function (request) {
+        //var response = request.currentTarget.response || request.target.responseText;
+        //console.log(response);
+    });
+}
+
+function getCookieExpiry(shopName, callback) {
+    getCORS('https://www.shoutout.global/getcookieexpiry?shop=' + shopName, function (request) {
+        var response = request.currentTarget.response || request.target.responseText;  
+        callback(JSON.parse(response));
+    });
+}
+
+(function () {
+
+    var shopName = '';
+    var wooCommercePos = 0;
+    if (typeof Shopify != "undefined") {
+        shopName = Shopify.shop;
+        wooCommercePos = shopName.indexOf("woocommerce");
+    };
+    //console.log('shopName=' + shopName);
+
+    var cookieValue;
+    if (wooCommercePos != -1) {
+        cookieValue = checkCookie("aff");
+    } else {
+        cookieValue = checkCookie("p");
+    };
+    //console.log('cookieValue=' + cookieValue);
+    if (cookieValue == false) {
+        //no cookie set so check if url contains querystring
+        var name;
+        if (wooCommercePos != -1) {
+            name = "aff";
+        } else {
+            name = "p";
+        };
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS, "gi");
+        var results = regex.exec(window.location.href);
+        if (typeof results === 'undefined' || results === null) {
+            //no affiliate value in query string so write general hit cookie
+            //console.log('p1=1');
+            if (wooCommercePos != -1) {
+                setShortCookie('aff', '1', shopName);
+            } else {
+                setShortCookie('p', '1', shopName);
+            };
+        } else {
+            //coming from affiliate so set cookie for 90 days
+            //console.log('p2=' + results[1]);
+            if (wooCommercePos != -1) {
+                setLongCookie('aff', results[1], shopName);
+            } else {
+                setLongCookie('p', results[1], shopName);
+            };
+        }
+
+    } else {
+        // Do nothing as cookie already set
+        if (checkCookieValue("p") == "1" || checkCookieValue("aff") == "1") {
+            //check if url contains a new p from affiliate, and if so overwrite cookie
+            var name;
+            if (wooCommercePos != -1) {
+                name = "aff";
+            } else {
+                name = "p";
+            };
+
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS, "gi");
+            var results = regex.exec(window.location.href);
+
+            if (typeof results === 'undefined' || results === null) {
+                //console.log('p3=' + checkCookieValue("p"));
+                //do nothing
+            } else {
+                //now coming from affiliate so set cookie for 90 days
+                //console.log('p4=' + checkCookieValue("p"));
+                if (wooCommercePos != -1) {
+                    setLongCookie('aff', results[1], shopName);
+                } else {
+                    setLongCookie('p', results[1], shopName);
+                };
+            }
+        } else {
+            //returning user with an affiliate tracking cookie looking at page again, may place order
+            var name;
+            if (wooCommercePos != -1) {
+                name = "aff";
+            } else {
+                name = "p";
+            };
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS, "gi");
+            var results = regex.exec(window.location.href);
+
+            if (typeof results === 'undefined' || results === null) {
+                //do nothing
+                //console.log('p5=' + checkCookieValue("p"));
+            } else {
+                //might be a newer affid so overwrite existing one if newer
+                var name;
+                if (wooCommercePos != -1) {
+                    if (results[1] != checkCookieValue("aff")) {
+                        //console.log('p6=' + results[1]);
+                        setLongCookie('aff', results[1], shopName);
+                    }
+                } else {
+                    if (results[1] != checkCookieValue("p")) {
+                        //console.log('p6=' + results[1]);
+                        setLongCookie('p', results[1], shopName);
+                    }
+                };
+            }
+        }
+    };
+})();
+
+//Helper Functions
+function setLongCookie(cname, cvalue, shopName) {
+    recordHit(cvalue, shopName);
+    getCookieExpiry(shopName, function (exdays) {       
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    })
+}
+
+function setShortCookie(cname, cvalue, shopName) {
+    document.cookie = cname + "=" + cvalue + ";path=/";
+    recordStandardHit(shopName);
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie(cookieName) {
+    var cname = getCookie(cookieName);
+    if (cname != "") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkCookieValue(cookieName) {
+    var cname = getCookie(cookieName);
+    if (cname != "") {
+        return cname;
+    } else {
+        return cname;
+    }
+}
+
+function getCORS(url, success) {
+    var xhr = new XMLHttpRequest();
+    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+    xhr.open('GET', url);
+    xhr.onload = success;
+    xhr.send();
+    return xhr;
+}
+
