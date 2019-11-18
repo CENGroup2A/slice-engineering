@@ -139,6 +139,15 @@ class ThreeScene extends Component {
                 else if (material === 'rose') {
                     materialPath = '/materials/rose.jpg';
                 }
+                else if (material === 'bronze') {
+                    materialPath = '/materials/bronze.png';
+                }
+                else if (material === 'magenta') {
+                    materialPath = '/materials/magenta.jpg';
+                }
+                else if (material === 'gold') {
+                    materialPath = '/materials/gold.png';
+                }
 
                 const vs = `
                 varying vec3 e;
@@ -362,6 +371,9 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="aluminum">Aluminum</Dropdown.Item>
                                 <Dropdown.Item eventKey="pearl">Pearl</Dropdown.Item>
                                 <Dropdown.Item eventKey="rose">Rose</Dropdown.Item>
+                                <Dropdown.Item eventKey="bronze">Bronze</Dropdown.Item>
+                                <Dropdown.Item eventKey="magenta">Magenta</Dropdown.Item>
+                                <Dropdown.Item eventKey="gold">Gold</Dropdown.Item>
                             </DropdownButton>
                             <Button id="ui-submit" type="submit">Request Quote</Button>
                         </div>
