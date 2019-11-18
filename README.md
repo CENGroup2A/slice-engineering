@@ -1,5 +1,12 @@
 ## UPDATE
 
+Edited on 11/17/2019
+
+Imported Dan's HTML/CSS. <br />
+Added buttons for upload, orientation, rotation, printing service, and material. <br />
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
 Edited on 11/11/2019 by Kevin Nguyen
 
 Added OBJ Loader.
