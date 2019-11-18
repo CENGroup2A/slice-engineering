@@ -3,7 +3,7 @@ const getPrice = require("../controllers/Price.server.controller.js"),
     router = express.Router()
 
 router.route('/price')
-  //.get(getPrice.Price);
+  .get(getPrice.Price)
   .post(getPrice.Price)
   
 module.exports = router;

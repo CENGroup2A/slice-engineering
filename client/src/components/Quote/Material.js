@@ -5,11 +5,18 @@ import { throws } from 'should';
 var axios = require('axios')
 
 var listOfMats = [];
+var materialsArray = [];
 var listOfFinishes = ['please choose a material'];
 var materialz;
+var materialzID;
 var uploadedFile;
+var finishID;
+var finishes = [];
 
-function isMaterial(materialPassedIn) { 
+
+//materialz = event.target.value; value -> name string
+//var materialChosen = this.state.mats.find(isMaterial);
+function isMaterial(materialPassedIn) {
     return materialPassedIn.name === materialz;
 }
 
@@ -38,7 +45,9 @@ class Material extends React.Component {
         .then((mat) =>
         {
             mat.data.forEach(function(element){
+                materialsArray.push(element)
                 listOfMats.push(element.name)
+                console.log(element.name, element.materialID)
             });
             this.setState({ materialsList: listOfMats })
             this.setState({mats: mat.data})
@@ -46,19 +55,35 @@ class Material extends React.Component {
     }
 
     handleChangeMaterial(event) {
+        var index = event.target.selectedIndex
+        console.log('index', index)
+        console.log('materialID', materialsArray[index].materialID)
+
+        materialzID = materialsArray[index].materialID;
+        
         listOfFinishes = [];
         this.setState({material: event.target.value})
         materialz = event.target.value;
         var materialChosen = this.state.mats.find(isMaterial);
         
         materialChosen.finishes.forEach(function(element){
+            finishes.push(element)
+            console.log('element', element)
             listOfFinishes.push(element.name);
         });
         this.setState({finishList: listOfFinishes, finish: this.state.finishList[0]})
         //this.setState({finish: this.state.finishList[0]})
+
+        //Need to set the default finsih
     }
 
     handleChangeFinish(event) {
+        var index = event.target.selectedIndex
+        console.log('index', index)
+        console.log('finishID', finishes[index].finishID)
+
+        finishID = finishes[index].finishID;
+
         this.setState({finish: event.target.value})
     }
 
@@ -66,11 +91,20 @@ class Material extends React.Component {
         event.preventDefault();
         console.log('uploadedFile', uploadedFile)
 
-        const reactData = {uploadedFile: uploadedFile, material: materialz, finish: this.state.finish}
+        const reactData = {material: materialzID, finish: finishID}
 
         axios.post("/api/price", reactData)
             .then(res => console.log('Data sent'))
             .catch(err => console.log('error', err.data))
+    }
+
+    getPrice = () =>
+    {
+        axios.get("/api/price")
+        .then((price) =>
+        {
+            console.log('price', price)
+        })
     }
 
     onChangeHandler=event=>{
