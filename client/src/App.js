@@ -16,7 +16,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PrivateRoute from './components/PrivateRoute';
 
 import styles from './assets/theme.scss.css';
-
+import Accepted from './components/Accepted';
+import Status from './components/Status';
 
 const App = () => {
   return (
@@ -27,7 +28,9 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/verify-email" component={VerifyEmail} />
         <Route exact path="/" component={Home} />
-        <PrivateRoute exact path = "/protected" component={Quote} />
+        <PrivateRoute exact path="/protected" component={Quote} />
+        <PrivateRoute exact path="/accepted" component={Accepted} />
+        <PrivateRoute exact path="/status" component={Status} />
         <Route path="*">
           <p>well this is awkward, huh?</p>
         </Route>
