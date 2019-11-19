@@ -58,6 +58,7 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
       })
       console.log("api request",data.data);
       console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
+      console.log('Error: ', data.data.models[0].pricingError)
       PRICE=data.data.models[0].totalPrice;
       
     }
@@ -65,14 +66,19 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
 exports.sendMatFIN = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
+  console.log('sendMatFIN')
   mat = req.body.material
   finish = req.body.finish  
-}
-exports.getPrice= (req, res)=>
-{
+
   fetchPrice(mat,finish)
   .then(() =>
   {
     res.json(PRICE)
   })
+}
+
+exports.getPrice= (req, res)=>
+{
+  res.json(PRICE)
+  console.log('getPrice')
 }
