@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
+	user_id: {
+		type: Number,
+		required: true
+	},
 	order_number: {
 		type: Number,
 		required: true,

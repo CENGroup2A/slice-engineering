@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 exports.create = (req, res) => {
 
 	var order = new Order({
+		user_id: req.body.user_id,
 		order_number: req.body.order_number,
 		status: req.body.status
 	});
@@ -29,6 +30,7 @@ exports.update = (req, res) => {
 	
 	var order = req.order;
 
+	order.user_id = req.body.user_id;
 	order.order_number = req.body.order_number;
 	order.status = req.body.status;
 
