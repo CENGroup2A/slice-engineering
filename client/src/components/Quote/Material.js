@@ -103,7 +103,7 @@ class Material extends React.Component {
             .then((price) =>
             {
                 this.setState({price: price.data})
-                console.log('price', Price)
+                console.log('price', this.state.price)
             })
             .catch(err => console.log('error', err.data))
     }
@@ -127,7 +127,7 @@ class Material extends React.Component {
                             <select onChange={this.handleChangeMaterial}>
                                 {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
                             </select>
-                            Price: 
+                            <p>Price: </p> 
                         </label>
                         <input type="submit" value="Submit" />
                     </form>
