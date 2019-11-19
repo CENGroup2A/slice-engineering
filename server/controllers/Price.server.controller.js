@@ -12,6 +12,7 @@ axios = require('axios');
  var city;
  var zipcode;
  var currency
+ var scale
 
   //Upload model via URL
   async function FetchmodelID(){
@@ -43,7 +44,7 @@ axios = require('axios');
           "materialID":material,
           "finishID":finish,
           "quantity":"1",
-          "scale":"0.5"
+          "scale":scale
         }
       ],
       shippingInfo: 
@@ -79,6 +80,7 @@ exports.sendMatFIN = (req, res)=>
   city = req.body.city;
   zipcode = req.body.zipcode;
   currency = req.body.currency
+  scale = req.body.scale
 
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>

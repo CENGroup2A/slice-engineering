@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { throws } from 'should';
-import { Button } from 'semantic-ui-react'
+import ReactDOM from 'react-dom';
+import Slider, { Range } from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 var axios = require('axios')
+
 
 //Variables that are sent to Price.server.controller
 var uploadedFile;
@@ -53,6 +56,7 @@ class Material extends React.Component {
         this.handleChangeCountry = this.handleChangeCountry.bind(this)
         this.handleChangeCity = this.handleChangeCity.bind(this)
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
+        this.handleChangeScale = this.handleChangeScale.bind(this)
         this.getMats()
     }
 
@@ -118,8 +122,9 @@ class Material extends React.Component {
         console.log('uploadedFile:', uploadedFile, 'material:', materialzID, 'finish:', finishID)
         console.log('countryCode:', this.state.countryCode, 'stateCode:', this.state.stateCode)
         console.log('city:', city, 'zipcode:', zipcode, 'currency:', currency)
+        console.log('scale', this.state.scale)
 
-        const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency}
+        const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency, scale: this.state.scale}
 
         //Send the information to Price.server.controller
         axios.post("/api/sendMat", reactData)
@@ -136,9 +141,20 @@ class Material extends React.Component {
             .catch(err => console.log('error', err.data))
     }
 
+    handleChangeScale(event){
+        this.state.scale = event/100
+        console.log(this.state.scale)
+    }
+
 	render() {
 		return (
 			<div>
+                <p>Scale: </p>
+                <div>
+                    <Slider min={20} defaultValue={100} marks={{ 20: 20, 50: 50, 70: 70, 100: 100 }} step={null} onAfterChange={this.handleChangeScale}/>
+                    <p></p>
+                </div>
+                
                 <div>
                     <form onSubmit={this.handleSubmit}>
                         <label>
@@ -146,7 +162,6 @@ class Material extends React.Component {
                             <select onChange={this.handleChangeFinish}>
                                 {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
                             </select>
-
 
                             <p></p>
                             Material:
