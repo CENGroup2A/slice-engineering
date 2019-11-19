@@ -1,18 +1,29 @@
 import React, {Component} from 'react';
 import * as THREE from 'three';
 import Dropzone from 'react-dropzone'
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
+import {Redirect} from 'react-router-dom';
+import Accepted from './Accepted';
 
 class ThreeScene extends Component {
+    constructor(props) {
+        super(props);
 
-    state = {
-        fileRendered: false
+        this.state = {
+            currentFile: null,
+            link: null,
+            fileRendered: false
+        };
+    }
+
+    routeChange = () => {
+        this.setState({link: '/accepted'});
     }
 
     getFile() {
@@ -23,6 +34,7 @@ class ThreeScene extends Component {
             this.openFile(file);
             var text = document.getElementById('but-upload');
             text.textContent = file.name;
+            this.setState({currentFile: file});
         }
     }
 
@@ -36,6 +48,7 @@ class ThreeScene extends Component {
         this.openFile(file);
         var text = document.getElementById('but-upload');
         text.textContent = file.name;
+        this.setState({currentFile: file});
     }
 
     onOrientation = (eventKey) => {
@@ -338,6 +351,18 @@ class ThreeScene extends Component {
       }
 
     render() {
+        const {link} = this.state;
+        if (link) {
+            const {currentFile} = this.state;
+            if (currentFile) {
+                return (
+                    <div>
+                        <Redirect to={{pathname: link, state: {file: currentFile}}} />
+                    </div>
+                );
+            }
+        }
+
         return (
             <div className="dragDrop">
                 <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#F8F9FA"}}>
@@ -383,7 +408,7 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="topaz">Topaz</Dropdown.Item>
                                 <Dropdown.Item eventKey="turquoise">Turquoise</Dropdown.Item>
                             </DropdownButton>
-                            <Button id="ui-submit" type="submit">Request Quote</Button>
+                            <Button id="ui-submit" type="submit" onClick={this.routeChange}>Request Quote</Button>
                         </div>
                     </div>
                 </div>
