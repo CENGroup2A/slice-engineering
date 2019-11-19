@@ -3,8 +3,10 @@ axios = require('axios');
  router = express.Router();
  config = require('../config/config');
 
-var price
 
+ var PRICE="";
+ var mat;
+ var finish;
 
 //Upload model via URL
 async function FetchmodelID(){
@@ -56,17 +58,21 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
       })
       console.log("api request",data.data);
       console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
-      price = data.data.models[0].totalPrice
+      PRICE=data.data.models[0].totalPrice;
+      
     }
     
-    
-exports.Price = (req, res)=>
+exports.sendMatFIN = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
-  var mat = req.body.material
-  var finish = req.body.finish
-
-  fetchPrice(mat, finish);//abs, white
-
-  res.send(price)
+  mat = req.body.material
+   finish = req.body.finish
+   fetchPrice(mat,finish);
+  
+}
+exports.getPrice= (req, res)=>
+{
+    res.json(PRICE)
+    //Jason The Quote is now stored in http://localhost:5000/api/getPrice
+    //so do your thing in frontend 
 }

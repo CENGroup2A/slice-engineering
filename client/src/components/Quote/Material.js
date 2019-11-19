@@ -93,14 +93,14 @@ class Material extends React.Component {
 
         const reactData = {material: materialzID, finish: finishID}
 
-        axios.post("/api/price", reactData)
+        axios.post("/api/sendMat", reactData)
             .then(res => console.log('Data sent'))
             .catch(err => console.log('error', err.data))
     }
 
     getPrice = () =>
     {
-        axios.get("/api/price")
+        axios.get("/api/getPrice")
         .then((price) =>
         {
             console.log('price', price)
