@@ -12,7 +12,6 @@ var materialzID;
 var uploadedFile;
 var finishID;
 var finishes = [];
-var Price;
 
 
 //materialz = event.target.value; value -> name string
@@ -30,7 +29,8 @@ class Material extends React.Component {
             finish: '',
             materialsList: [''],
             finishList: ['please choose a material'],
-            mats: []
+            mats: [],
+            price: ''
         };
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
@@ -38,7 +38,6 @@ class Material extends React.Component {
         this.onChangeHandler = this.onChangeHandler.bind(this)
         
         this.getMats()
-        this.getPrice()
     }
 
     getMats = () =>
@@ -103,7 +102,7 @@ class Material extends React.Component {
             })
             .then((price) =>
             {
-                Price = price.data
+                this.setState({price: price.data})
                 console.log('price', Price)
             })
             .catch(err => console.log('error', err.data))
@@ -117,21 +116,21 @@ class Material extends React.Component {
 		return (
 			<div>
                 <div>
-                <Quote material = {this.state.material} service = {this.state.finish}/>
-				<form onSubmit={this.handleSubmit}>
-                    <label>
-                        Type of Printing Finish: 
-                        <select onChange={this.handleChangeFinish}>
-                            {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
-                        </select>
-                        <p></p>
-                        Material:
-                        <select onChange={this.handleChangeMaterial}>
-                            {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
-                        </select>
-                    </label>
-                <input type="submit" value="Submit" />
-                </form>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            Type of Printing Finish: 
+                            <select onChange={this.handleChangeFinish}>
+                                {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+                            <p></p>
+                            Material:
+                            <select onChange={this.handleChangeMaterial}>
+                                {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+                            Price: 
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
                 </div>
                 <div>
                     <input type="file" name="file" onChange={this.onChangeHandler}/>
