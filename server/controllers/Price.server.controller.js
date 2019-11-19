@@ -4,32 +4,37 @@ axios = require('axios');
  config = require('../config/config');
 
 
- var PRICE="";
+ var price ="";
  var mat;
  var finish;
+ var countryCode;
+ var stateCode;
+ var city;
+ var zipcode;
+ var currency
 
-//Upload model via URL
-async function FetchmodelID(){
-let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
-  {
-    //LINKS TO TRY
-    // https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar     CAT
-    //https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip    BOAT
-    //https://slice-engineering-file-test-open.s3.us-east-2.amazonaws.com/3DBenchy.stl"  BOAT FROM OUR AWS
-    fileUrl:"https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip",
-    fileUnits:"mm",
-    
+  //Upload model via URL
+  async function FetchmodelID(){
+    let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model', 
+    {
+      //LINKS TO TRY
+      // https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar     CAT
+      //https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip    BOAT
+      //https://slice-engineering-file-test-open.s3.us-east-2.amazonaws.com/3DBenchy.stl"  BOAT FROM OUR AWS
+
+      fileUrl:"https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip",
+      fileUnits:"mm",
       headers: {
         "accept": "application/json",
       }
-      
-  })
-   console.log("ModelID",data.data.modelID);
-   return(data.data.modelID)
-}
+        
+    })
+    console.log("ModelID",data.data.modelID);
+    return(data.data.modelID)
+  }
 
-  //get price
-  async function fetchPrice(material,finish){
+  //get price from API
+  async function fetchPrice(material,finish,countryCode,stateCode){
     let data = await axios.post('https://imatsandbox.materialise.net/web-api/pricing/model', 
     {
       models: [
@@ -43,42 +48,48 @@ let data =await axios.post('https://imatsandbox.materialise.net/web-api/tool/2ef
       ],
       shippingInfo: 
       {
-        countryCode: "US",
-        stateCode: "FL",
-        city : "Gainesville",
-        zipCode : "32603",
+        countryCode: countryCode,
+        stateCode: stateCode,
+        city : city,
+        zipCode : zipcode,
       },
-        "currency": "USD"
-      }, 
-      {
-        headers: {
-          "accept": "application/json",
-          "APICode": config.imaterialize.API
-        }
-      })
-      console.log("api request",data.data);
-      console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
-      console.log('Error: ', data.data.models[0].pricingError)
-      PRICE=data.data.models[0].totalPrice;
-      
-    }
-    
+        "currency": currency
+    }, 
+    {
+      headers: {
+        "accept": "application/json",
+        "APICode": config.imaterialize.API
+      }
+    })
+    console.log("api request",data.data);
+    console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
+    console.log('Error: ', data.data.models[0].pricingError)
+    price=data.data.models[0].totalPrice;
+  }
+
+//Receives the information from Material.js
 exports.sendMatFIN = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
   console.log('sendMatFIN')
   mat = req.body.material
-  finish = req.body.finish  
+  finish = req.body.finish
+  countryCode = req.body.countryCode;
+  stateCode = req.body.stateCode;
+  city = req.body.city;
+  zipcode = req.body.zipcode;
+  currency = req.body.currency
 
-  fetchPrice(mat,finish)
+  fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
   {
-    res.json(PRICE)
+    res.json(price)
   })
 }
 
+//Sends the Price back to Material.js
 exports.getPrice= (req, res)=>
 {
-  res.json(PRICE)
+  res.json(price)
   console.log('getPrice')
 }

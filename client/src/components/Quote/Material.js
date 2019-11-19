@@ -1,20 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { throws } from 'should';
+import { Button } from 'semantic-ui-react'
+
 var axios = require('axios')
 
-var listOfMats = [];
-var materialsArray = [];
-var listOfFinishes = ['please choose a material'];
-var materialz;
-var materialzID;
+//Variables that are sent to Price.server.controller
 var uploadedFile;
-var finishID;
-var finishes = [];
+var materialzID = "035f4772-da8a-400b-8be4-2dd344b28ddb";
+var finishID = "bba2bebb-8895-4049-aeb0-ab651cee2597";
+var city = "Gainesville"
+var zipcode = "32603"
+var currency = "USD"
+
+//Variables needed for parsing, searching, different things like that
+var materialObjects = [];
+var finishesObjects = [];
+var finishNames = ['please choose a material'];
+var materialz = "Polyamide (SLS)";
+var countryCodes = ["US"];
+var stateCodes = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",	"NC", "ND", "OH", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
 
 
-//materialz = event.target.value; value -> name string
-//var materialChosen = this.state.mats.find(isMaterial);
+//Function needed for finding material name
 function isMaterial(materialPassedIn) {
     return materialPassedIn.name === materialz;
 }
@@ -25,90 +33,107 @@ class Material extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            finish: '',
+            //Two lists needed for drop down menus
             materialsList: [''],
-            finishList: ['please choose a material'],
+            finishList: ["Natural white","Polished natural white","Dyed yellow","Satin Yellow","Polished and Dyed Yellow","Dyed orange","Satin Orange","Polished and Dyed Orange","Dyed red","Satin Red","Polished and Dyed Red","Satin Green","Polished and Dyed Green","Dyed blue","Satin Blue","Polished and Dyed Blue","Dyed purple","Satin Purple","Polished and Dyed Purple","Dyed black","Satin black","Polished and Dyed Black","Dyed bordeaux","Satin Bordeaux","Polished and Dyed Bordeaux","Dyed petrol blue","Satin Petrol Blue","Polished and Dyed Petrol blue","Dyed brown","Satin Brown","Polished and Dyed Brown","Velvet yellow","Velvet ochre","Velvet pink","Velvet bordeaux","Velvet green","Velvet petrol blue","Velvet blue","Velvet black","Spray painted white","Spray painted black","Waterproof white","Dyed green","Dyed grey"],
             mats: [],
-            price: ''
+            price: '',
+            scale: '1',
+            //Needed to send to Price.server.controller
+            countryCode: 'US',
+            stateCode: 'AL'
         };
+
+        //Functions needed
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onChangeHandler = this.onChangeHandler.bind(this)
-        
+        this.onChangeFileUpload = this.onChangeFileUpload.bind(this)
+        this.handleChangeState = this.handleChangeState.bind(this)
+        this.handleChangeCountry = this.handleChangeCountry.bind(this)
+        this.handleChangeCity = this.handleChangeCity.bind(this)
+        this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.getMats()
     }
 
+    //Gets the materials and finishes from the API
     getMats = () =>
     {
         axios.get("/api/mat")
         .then((mat) =>
         {
+            var matNames = [];
             mat.data.forEach(function(element){
-                materialsArray.push(element)
-                listOfMats.push(element.name)
-                console.log(element.name, element.materialID)
+                materialObjects.push(element)
+                matNames.push(element.name)
             });
-            this.setState({ materialsList: listOfMats })
+            this.setState({ materialsList: matNames })
             this.setState({mats: mat.data})
         })
     }
 
+    //Changes the finishes based on the material chosen
     handleChangeMaterial(event) {
-        var index = event.target.selectedIndex
-        console.log('index', index)
-        console.log('materialID', materialsArray[index].materialID)
-
-        materialzID = materialsArray[index].materialID;
+        materialzID = materialObjects[event.target.selectedIndex].materialID;
         
-        listOfFinishes = [];
-        this.setState({material: event.target.value})
+        finishNames = [];
         materialz = event.target.value;
         var materialChosen = this.state.mats.find(isMaterial);
         
-        materialChosen.finishes.forEach(function(element){
-            finishes.push(element)
-            console.log('element', element)
-            listOfFinishes.push(element.name);
+        materialChosen.finishesObjects.forEach(function(element){
+            finishesObjects.push(element)
+            finishNames.push(element.name);
         });
-        this.setState({finishList: listOfFinishes, finish: this.state.finishList[0]})
-        //this.setState({finish: this.state.finishList[0]})
-
-        //Need to set the default finsih
+        this.setState({finishList: finishNames, finish: this.state.finishList[0]})
+        finishID = finishesObjects[0].finishID
     }
 
     handleChangeFinish(event) {
-        var index = event.target.selectedIndex
-        console.log('index', index)
-        console.log('finishID', finishes[index].finishID)
-
-        finishID = finishes[index].finishID;
-
+        finishID = finishesObjects[event.target.selectedIndex].finishID;
         this.setState({finish: event.target.value})
+    }
+
+    handleChangeState(event) {
+        this.setState({stateCode: stateCodes[event.target.selectedIndex]})
+    }
+
+    handleChangeCountry(event) {
+        this.setState({countryCode: countryCodes[event.target.selectedIndex]})
+    }
+
+    handleChangeCity(event) {
+        city = event.target.value
+    }
+
+    handleChangeZipcode(event) {
+        zipcode = event.target.value
+    }
+
+    onChangeFileUpload=event=>{
+        uploadedFile = event.target.files[0];
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('uploadedFile', uploadedFile)
+        console.log('uploadedFile:', uploadedFile, 'material:', materialzID, 'finish:', finishID)
+        console.log('countryCode:', this.state.countryCode, 'stateCode:', this.state.stateCode)
+        console.log('city:', city, 'zipcode:', zipcode, 'currency:', currency)
 
-        const reactData = {material: materialzID, finish: finishID}
+        const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency}
 
+        //Send the information to Price.server.controller
         axios.post("/api/sendMat", reactData)
             .then(res => console.log('Data sent'))
             .then(() =>
             {
                 return axios.get("/api/getPrice")
             })
-            .then((price) =>
+            .then((price) => //Get the price back from Price.server.controller
             {
                 this.setState({price: price.data})
                 console.log('price', this.state.price)
             })
             .catch(err => console.log('error', err.data))
-    }
-
-    onChangeHandler=event=>{
-        uploadedFile = event.target.files[0];
     }
 
 	render() {
@@ -121,18 +146,44 @@ class Material extends React.Component {
                             <select onChange={this.handleChangeFinish}>
                                 {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
                             </select>
+
+
                             <p></p>
                             Material:
                             <select onChange={this.handleChangeMaterial}>
                                 {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
                             </select>
-                            <p>Price: {this.state.price} </p>
+
+                            <p>Country: </p>
+                            <select onChange={this.handleChangeCountry}>
+                                {countryCodes.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p>State: </p>
+                            <select onChange={this.handleChangeState}>
+                                {stateCodes.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p>City: </p>
+                            <input type="text" name="city" onChange={this.handleChangeCity}/>
+
+                            <p>Zipcode: </p>
+                            <input type="text" name="Zipcode" onChange={this.handleChangeZipcode}/>
+
+                            <p>Currency: </p>
+                            <select onChange={this.handleChangeCurrency}>
+                                <option>USD</option>
+                            </select>
+
+                            <p></p>
+                            
+                            <p>Total Price: {this.state.price} </p>
                         </label>
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
                 <div>
-                    <input type="file" name="file" onChange={this.onChangeHandler}/>
+                    <input type="file" name="file" onChange={this.onChangeFileUpload}/>
                 </div>
 			</div>
 		);
