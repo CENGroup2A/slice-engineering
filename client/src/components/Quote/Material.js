@@ -12,6 +12,7 @@ var materialzID;
 var uploadedFile;
 var finishID;
 var finishes = [];
+var Price;
 
 
 //materialz = event.target.value; value -> name string
@@ -37,6 +38,7 @@ class Material extends React.Component {
         this.onChangeHandler = this.onChangeHandler.bind(this)
         
         this.getMats()
+        this.getPrice()
     }
 
     getMats = () =>
@@ -103,7 +105,8 @@ class Material extends React.Component {
         axios.get("/api/getPrice")
         .then((price) =>
         {
-            console.log('price', price)
+            Price = price
+            console.log('price', Price)
         })
     }
 

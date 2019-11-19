@@ -11,7 +11,7 @@ router.route('/sendMat')
 
 router.route('/getPrice')
 .get(getPrice.getPrice)
-.post(getPrice.getPrice)
+// .post(getPrice.getPrice)
 
 
   

@@ -66,13 +66,13 @@ exports.sendMatFIN = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
   mat = req.body.material
-   finish = req.body.finish
-   fetchPrice(mat,finish);
-  
+  finish = req.body.finish  
 }
 exports.getPrice= (req, res)=>
 {
+  fetchPrice(mat,finish)
+  .then(() =>
+  {
     res.json(PRICE)
-    //Jason The Quote is now stored in http://localhost:5000/api/getPrice
-    //so do your thing in frontend 
+  })
 }
