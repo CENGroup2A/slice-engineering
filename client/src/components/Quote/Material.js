@@ -97,17 +97,16 @@ class Material extends React.Component {
 
         axios.post("/api/sendMat", reactData)
             .then(res => console.log('Data sent'))
+            .then(() =>
+            {
+                return axios.get("/api/getPrice")
+            })
+            .then((price) =>
+            {
+                Price = price.data
+                console.log('price', Price)
+            })
             .catch(err => console.log('error', err.data))
-    }
-
-    getPrice = () =>
-    {
-        axios.get("/api/getPrice")
-        .then((price) =>
-        {
-            Price = price
-            console.log('price', Price)
-        })
     }
 
     onChangeHandler=event=>{
