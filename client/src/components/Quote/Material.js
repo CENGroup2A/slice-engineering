@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Quote from "./Quote";
 import { throws } from 'should';
 var axios = require('axios')
 
@@ -127,7 +126,7 @@ class Material extends React.Component {
                             <select onChange={this.handleChangeMaterial}>
                                 {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
                             </select>
-                            <p>Price: </p> 
+                            <p>Price: {this.state.price} </p>
                         </label>
                         <input type="submit" value="Submit" />
                     </form>
