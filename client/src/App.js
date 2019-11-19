@@ -11,6 +11,7 @@ import Home from './views/Home/Home'
 import VerifyEmail from './views/Verify-Email/Verify-Email'
 import Quote from './views/Quote/Quote'
 import NavBar from './components/Navbar'
+import Orders from './views/Orders/Orders'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PrivateRoute from './components/PrivateRoute';
@@ -28,6 +29,7 @@ const App = () => {
         <Route exact path="/verify-email" component={VerifyEmail} />
         <Route exact path="/" component={Home} />
         <PrivateRoute exact path = "/protected" component={Quote} />
+        <PrivateRoute exact path="/orders" component={Orders} />
         <Route path="*">
           <p>well this is awkward, huh?</p>
         </Route>

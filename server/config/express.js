@@ -3,7 +3,6 @@ const path = require('path'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     bodyParser = require('body-parser'),
-    exampleRouter = require('../routes/examples.server.routes'),
     ordersRouter = require('../routes/orders.server.routes');
     passport = require('passport'),
     accountRouter = require('../routes/account.server.routes'),
@@ -51,7 +50,6 @@ module.exports.init = () => {
     app.use(bodyParser.json());
 
     // add a router
-    app.use('/api/example', exampleRouter);
     app.use('/api/orders', ordersRouter);
     app.use('/api/', accountRouter);
 
