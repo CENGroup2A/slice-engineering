@@ -15,6 +15,7 @@ var finishID = "bba2bebb-8895-4049-aeb0-ab651cee2597";
 var city = "Gainesville"
 var zipcode = "32603"
 var currency = "USD"
+var finishes = [];
 
 //Variables needed for parsing, searching, different things like that
 var materialObjects = [];
@@ -79,21 +80,24 @@ class Material extends React.Component {
     //Changes the finishes based on the material chosen
     handleChangeMaterial(event) {
         materialzID = materialObjects[event.target.selectedIndex].materialID;
-        
+        finishesObjects = materialObjects[event.target.selectedIndex].finishes
+
         finishNames = [];
         materialz = event.target.value;
         var materialChosen = this.state.mats.find(isMaterial);
-        
-        materialChosen.finishesObjects.forEach(function(element){
-            finishesObjects.push(element)
+        console.log(materialChosen)
+
+        materialChosen.finishes.forEach(function(element){
+            finishes.push(element)
             finishNames.push(element.name);
         });
+
         this.setState({finishList: finishNames, finish: this.state.finishList[0]})
         finishID = finishesObjects[0].finishID
     }
 
     handleChangeFinish(event) {
-        finishID = finishesObjects[event.target.selectedIndex].finishID;
+        finishID = finishes[event.target.selectedIndex].finishID;
         this.setState({finish: event.target.value})
     }
 
