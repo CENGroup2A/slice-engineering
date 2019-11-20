@@ -12,7 +12,6 @@ class Orders extends React.Component {
 		super(props)
 
 		this.state = {
-			user_id: localStorage.getItem('user_id') || '',
 			data: []
 		}
 
@@ -27,7 +26,7 @@ class Orders extends React.Component {
 			.then(res => {
 
 				user_orders = res.data.filter(order => {
-					return (order.user_id === this.state.user_id)
+					return (order.user_id === this.props.user_id)
 				})
 
 			})
@@ -46,12 +45,18 @@ class Orders extends React.Component {
 				return d1 < d2
 			}).map(order => {
 
-				let progressPercentage = 33
+				let progressPercentage = 20
 
-				if (order.status === 'In Progress') {
-					progressPercentage = 66
+				if (order.status === 'Order in progress') {
+					progressPercentage = 40
 				}
-				else if (order.status === 'Delivered') {
+				else if (order.status === 'Order complete') {
+					progressPercentage = 60
+				}
+				else if (order.status === 'Order has shipped') {
+					progressPercentage = 80
+				}
+				else if (order.status === 'Order delivered') {
 					progressPercentage = 100
 				}
 

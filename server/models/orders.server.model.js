@@ -14,7 +14,13 @@ var orderSchema = new Schema({
 	status: {
 		type: String,
 		required: true,
-		enum: ['In Progress', 'Delivered', 'Processing']
+		enum: [
+			'Quote accepted',
+			'Order in progress',
+			'Order complete',
+			'Order has shipped',
+			'Order delivered'
+		]
 	},
 	created_at: Date,
 	updated_at: Date
