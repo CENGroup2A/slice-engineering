@@ -12,8 +12,8 @@ var axios = require('axios')
 var uploadedFile;
 var materialzID = "035f4772-da8a-400b-8be4-2dd344b28ddb";
 var finishID = "bba2bebb-8895-4049-aeb0-ab651cee2597";
-var city = "Gainesville"
-var zipcode = "32603"
+var city = ""
+var zipcode = ""
 var currency = "USD"
 var finishes = [];
 
@@ -123,10 +123,6 @@ class Material extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('uploadedFile:', uploadedFile, 'material:', materialzID, 'finish:', finishID)
-        console.log('countryCode:', this.state.countryCode, 'stateCode:', this.state.stateCode)
-        console.log('city:', city, 'zipcode:', zipcode, 'currency:', currency)
-        console.log('scale', this.state.scale)
 
         const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency, scale: this.state.scale}
 

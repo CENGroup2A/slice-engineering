@@ -62,9 +62,10 @@ axios = require('axios');
         "APICode": config.imaterialize.API
       }
     })
-    console.log("api request",data.data);
+    // console.log("api request",data.data);
     console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
-    console.log('Error: ', data.data.models[0].pricingError)
+    // console.log('data.data.models[0]', data.data.models[0])
+    console.log('Shipping Info: ', data)
     price=data.data.models[0].totalPrice;
   }
 
@@ -72,7 +73,6 @@ axios = require('axios');
 exports.sendMatFIN = (req, res)=>
 {
   //req.body is the information after we hit "Submit" on the form
-  console.log('sendMatFIN')
   mat = req.body.material
   finish = req.body.finish
   countryCode = req.body.countryCode;
@@ -81,6 +81,11 @@ exports.sendMatFIN = (req, res)=>
   zipcode = req.body.zipcode;
   currency = req.body.currency
   scale = req.body.scale
+
+  console.log('material:', mat, 'finish:', finish)
+  console.log('countryCode:', countryCode, 'stateCode:', stateCode)
+  console.log('city:', city, 'zipcode:', zipcode, 'currency:', currency)
+  console.log('scale', scale)
 
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
