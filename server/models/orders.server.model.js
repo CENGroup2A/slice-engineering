@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
 	user_id: {
-		type: Number,
+		type: String,
 		required: true
 	},
 	order_number: {

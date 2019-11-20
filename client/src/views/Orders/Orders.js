@@ -7,13 +7,12 @@ const axios = require('axios')
 
 class Orders extends React.Component {
 
-	constructor() {
+	constructor(props) {
 		
-		super()
+		super(props)
 
-		// TODO: get username or an id from the passport session
 		this.state = {
-			user_id: 1234,
+			user_id: localStorage.getItem('user_id') || '',
 			data: []
 		}
 
