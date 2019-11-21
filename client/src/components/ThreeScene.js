@@ -8,6 +8,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
+import {TDSLoader} from 'three/examples/jsm/loaders/TDSLoader';
 import {Redirect} from 'react-router-dom';
 import Accepted from './Accepted';
 
@@ -250,6 +251,14 @@ class ThreeScene extends Component {
                     var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
                     g.center();
                     make(g, doAnimate);
+                });
+            }
+            else if (ext === '3ds') {
+                loader = new TDSLoader();
+                loader.load(tempURL, function(object) {
+                    var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
+                    g.center();
+                    make(g, doAnimate); 
                 });
             }
 
