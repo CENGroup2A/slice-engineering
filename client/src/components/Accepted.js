@@ -31,8 +31,12 @@ class Accepted extends Component {
 
         return (
             <div>
-                <p>TO DO FOR CARLOS: SEND FILE TO USE IN UPLOAD COMPONENT</p>
-                <div>FILE: {JSON.stringify(this.state.file.name)}</div>
+                <p>Thank you for submitting your request!</p>
+                <p>Our team is hard at work to provide you with a quote.
+                   You will receive an email once the model has been reviewed.
+                </p>
+                <br/>
+                <div>File: {JSON.stringify(this.state.file.name).replace(/\"/g, "")}</div>
                 <Button id="ui-submit" type="submit" onClick={this.routeChange}>Check Status</Button>
             </div>
         );
