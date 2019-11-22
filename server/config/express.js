@@ -5,6 +5,7 @@ const path = require('path'),
     bodyParser = require('body-parser'),
     passport = require('passport'),
     accountRouter = require('../routes/account.server.routes'),
+    uploadRouter = require('../routes/S3Upload.server.routes');
     User = require('../models/user.server.model')
 
 
@@ -52,6 +53,7 @@ module.exports.init = () => {
 
     // add a router
     app.use('/api/', accountRouter);
+    app.use('/api/upload', uploadRouter);
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
