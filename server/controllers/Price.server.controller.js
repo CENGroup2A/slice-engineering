@@ -47,7 +47,7 @@ axios = require('axios');
           "scale":scale
         }
       ],
-      shippingInfo: 
+      shipmentInfo: 
       {
         countryCode: countryCode,
         stateCode: stateCode,
@@ -65,7 +65,7 @@ axios = require('axios');
     // console.log("api request",data.data);
     console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
     // console.log('data.data.models[0]', data.data.models[0])
-    console.log('Shipping Info: ', data)
+    console.log('Shipping Info: ', data.data.shipmentCost)
     price=data.data.models[0].totalPrice;
   }
 
