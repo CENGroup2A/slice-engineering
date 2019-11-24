@@ -15,11 +15,13 @@ var orderSchema = new Schema({
 		type: String,
 		required: true,
 		enum: [
-			'Quote accepted',
-			'Order in progress',
-			'Order complete',
-			'Order has shipped',
-			'Order delivered'
+			'Cancelled',
+			'Ordered',
+			'Processing',
+			'In Production',
+			'Ready To Ship',
+			'Shipped',
+			'Delivered'
 		]
 	},
 	created_at: Date,

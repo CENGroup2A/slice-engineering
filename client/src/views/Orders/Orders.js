@@ -47,18 +47,24 @@ class Orders extends React.Component {
 				return d1 < d2
 			}).map(order => {
 
-				let progressPercentage = 20
+				let progressPercentage = 0
 
-				if (order.status === 'Order in progress') {
-					progressPercentage = 40
+				if (order.status === 'Ordered') {
+					progressPercentage = 100/6
 				}
-				else if (order.status === 'Order complete') {
-					progressPercentage = 60
+				else if (order.status === 'Processing') {
+					progressPercentage = 200/6
 				}
-				else if (order.status === 'Order has shipped') {
-					progressPercentage = 80
+				else if (order.status === 'In Production') {
+					progressPercentage = 300/6
 				}
-				else if (order.status === 'Order delivered') {
+				else if (order.status === 'Ready To Ship') {
+					progressPercentage = 400/6
+				}
+				else if (order.status === 'Shipped') {
+					progressPercentage = 500/6
+				}
+				else if (order.status === 'Delivered') {
 					progressPercentage = 100
 				}
 
