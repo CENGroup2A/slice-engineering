@@ -1,6 +1,7 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 
 const axios = require('axios')
@@ -12,6 +13,7 @@ class Orders extends React.Component {
 		super(props)
 
 		this.state = {
+			user_id: localStorage.getItem('user_id') || '',
 			data: []
 		}
 
@@ -26,7 +28,7 @@ class Orders extends React.Component {
 			.then(res => {
 
 				user_orders = res.data.filter(order => {
-					return (order.user_id === this.props.user_id)
+					return (order.user_id === this.state.user_id)
 				})
 
 			})
@@ -80,7 +82,14 @@ class Orders extends React.Component {
 
 			return (
 				<Container>
-					{orders_list}
+					<Row style={{paddingTop: '1.5em'}}>
+						<h3>Order History:</h3>
+					</Row>
+					<Row>
+						<Col>
+							{orders_list}
+						</Col>
+					</Row>
 				</Container>
 			)
 
