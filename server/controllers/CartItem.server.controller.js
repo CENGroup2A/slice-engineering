@@ -5,8 +5,6 @@ axios = require('axios');
 
 
 
- var mat;
- var finish;
 
 
   
@@ -49,10 +47,10 @@ axios = require('axios');
 
 
 
+
 exports.sendCartID = (req, res)=>
 {
-
-
-  res.send("test");
+  FetchCartItem();
+  res.send('test')
 }
 
