@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
 	user_id: {
-		type: String,
+		type: Schema.Types.ObjectId,
 		required: true
 	},
 	order_number: {

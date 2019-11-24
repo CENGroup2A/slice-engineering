@@ -25,10 +25,10 @@ class Profile extends React.Component {
 				<Row>
 					<Col>
 						<Row>
-							<p>{this.state.user_id}</p>
+							<p>[Name]</p>
 						</Row>
 						<Row>
-							<p>Email: {this.state.user_id}</p>
+							<p>Email: [Email]</p>
 						</Row>
 					</Col>
 				</Row>

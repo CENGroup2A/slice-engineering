@@ -49,10 +49,7 @@ class Login extends React.Component {
                       if (message.name == "success")
                       {
                         page.setState({continue: true})
-                        
-                        // TODO: rather than store the username itself, hash it or do something to make it more secure
-                        localStorage.setItem('user_id', values.username)
-
+                        localStorage.setItem('user_id', response.data.user._id)
                         window.location.reload();
                       }
                       else
