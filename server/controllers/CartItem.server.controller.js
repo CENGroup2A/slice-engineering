@@ -20,7 +20,7 @@ axios = require('axios');
             toolID:"2054608d-b469-4cab-adeb-cf1c0569e7a1",
             MyCartItemReference:"some reference",
             modelID:"",
-            modelFileName:"Box.stl",
+            modelFileName:"",
             fileUnits:"mm",
             fileScaleFactor:"1",
             materialID:"035f4772-da8a-400b-8be4-2dd344b28ddb",
@@ -48,15 +48,11 @@ axios = require('axios');
 
 
 
-/
+
 exports.sendCartID = (req, res)=>
 {
 
 
-  FetchCartItem(mat,finish,countryCode,stateCode)
-  .then(() =>
-  {
-    res.json(price)
-  })
+  res.send("test");
 }
 

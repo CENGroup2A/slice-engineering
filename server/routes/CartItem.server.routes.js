@@ -1,13 +1,13 @@
-const sendMAt = require("../controllers/CartID.server.controller.js"),
-getCartID = require("../controllers/CartID.server.controller.js"),
+const sendMAt = require("../controllers/Cartitem.server.controller.js"),
+getCartID = require("../controllers/Cartitem.server.controller.js"),
 
     express = require('express'), 
     router = express.Router()
 
 
 router.route('/getCartID')
-.get(getCartID.getPrice)
-// .post(getPrice.getPrice)
+.get(getCartID.sendCartID)
+
 
 
   
