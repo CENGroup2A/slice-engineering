@@ -135,9 +135,8 @@ class Material extends React.Component {
             })
             .then((price) => //Get the price back from Price.server.controller
             {
-                console.log(price.data);
-                this.setState({price: price.data})
-                // console.log('price', this.state.price)
+                console.log(price.data.totalPrice);
+                this.setState({price: price.data.totalPrice})
             })
             .catch(err => console.log('error', err.data))
     }
