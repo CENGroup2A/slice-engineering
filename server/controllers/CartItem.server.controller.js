@@ -16,8 +16,8 @@ var cartID="";
     cartItems:[
         {
             toolID:"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
-            MyCartItemReference:"",
-            modelID:"09fa85ba-9e43-4ccc-8d74-dd75dc4d84c7",
+            MyCartItemReference:"some ref",
+            modelID:"98370d93-b607-4e79-a7ed-ff4f8bfcd016",
             modelFileName:"",
             fileUnits:"mm",
             fileScaleFactor:"1",

@@ -66,7 +66,7 @@ axios = require('axios');
     console.log("Quote of Model Uploaded: $",data.data.models[0].totalPrice)
     // console.log('data.data.models[0]', data.data.models[0])
     console.log('Shipping Info: ', data.data.shipmentCost)
-    price=data.data.models[0].totalPrice;
+    price=data.data.models[0];
   }
 
 //Receives the information from Material.js
