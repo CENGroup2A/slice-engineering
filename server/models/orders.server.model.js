@@ -44,7 +44,8 @@ orderSchema.pre('save', function(next) {
 
 orderSchema.pre('find', function(next) {
 
-	request('https://i.materialise.com/web-api/order?id=' + this.order_number, function(err, res, body) {
+	/*
+	request.post('https://i.materialise.com/web-api/order?id=' + this.order_number, function(err, res, body) {
 
 		if (err) {
 			throw err
@@ -77,6 +78,9 @@ orderSchema.pre('find', function(next) {
 		next()
 
 	})
+	*/
+
+	next()
 
 })
 
