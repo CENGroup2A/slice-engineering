@@ -5,7 +5,7 @@ const path = require('path'),
     bodyParser = require('body-parser'),
     passport = require('passport'),
     accountRouter = require('../routes/account.server.routes'),
-    uploadRouter = require('../routes/S3Upload.server.routes');
+    uploadRouter = require('../routes/S3upload.server.routes');
     User = require('../models/user.server.model')
 
 
