@@ -11,43 +11,43 @@ var cartID="";
   async function FetchCartID(){
     let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
     {
-      "MyCartReference": "My cart",
-      "Currency": "USD",
-      "LanguageCode": "en",
-      "ReturnUrl": "http://mysite.com/success.html",
-      "OrderConfirmationUrl": "http://mysite.com/confirm.html",
-      "FailureUrl": "http://mysite.com/failure.html",
-      "PromoCode":"", 
-      "CartItems":[
+      MyCartReference: "My cart",
+      Currency: "USD",
+      LanguageCode: "en",
+      ReturnUrl: "http://mysite.com/success.html",
+      OrderConfirmationUrl: "http://mysite.com/confirm.html",
+      FailureUrl: "http://mysite.com/failure.html",
+      PromoCode:"", 
+      CartItems:[
          { 
-            "CartItemID": "69db9169-516d-4248-8a0f-115c82be1e91"
+            CartItemID: "f1adba7c-860f-4945-9988-70f5ce01f9d2"
          }],
-      "ShippingInfo": {
-        "FirstName": "John",
-        "LastName": "Smith",
-        "Email": "demo@demo.com",
-        "Phone": "1234567",
-        "Company": "No company",
-        "Line1": "North Street",
-        "Line2":"",
-        "CountryCode": "US",
-        "StateCode":"NY",
-        "ZipCode": "10001",
-        "City": "New York"
+      ShippingInfo: {
+        FirstName: "John",
+        LastName: "Smith",
+        Email: "demo@demo.com",
+        Phone: "1234567",
+        Company: "No company",
+        Line1: "North Street",
+        Line2:"",
+        CountryCode: "US",
+        StateCode:"FL",
+        ZipCode: "32608",
+        City: "Gainesville"
       },
-      "BillingInfo": {
-        "FirstName": "John",
-        "LastName": "Smith",
-        "Email": "demo@demo.com",
-        "Phone": "1234567",
-        "Company": "No company",
-        "Line1": "North Street",
-        "Line2":"",
-        "CountryCode": "BE",
-        "StateCode":"",
-        "ZipCode": "1020",
-        "City": "Brussels",
-        "VatNumber": "BE0999999922"
+      BillingInfo: {
+        FirstName: "John",
+        LastName: "Smith",
+        Email: "demo@demo.com",
+        Phone: "1234567",
+        Company: "No company",
+        Line1: "North Street",
+        Line2:"",
+        CountryCode: "BE",
+        StateCode:"",
+        ZipCode: "1020",
+        City: "Brussels",
+        VatNumber: "BE0999999922"
       }
   })
     console.log("data.data",data);

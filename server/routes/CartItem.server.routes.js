@@ -4,8 +4,8 @@ router = express.Router()
 
 
 router.route('/getCartItem')
-.get(getCartIDs.sendCartID)
-.post(getCartIDs.sendCartID)
+.get(getCartIDs.sendCartItem)
+.post(getCartIDs.sendCartItem)
 
 
   
