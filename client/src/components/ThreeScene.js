@@ -362,6 +362,7 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="x">X</Dropdown.Item>
                                 <Dropdown.Item eventKey="y">Y</Dropdown.Item>
                                 <Dropdown.Item eventKey="z">Z</Dropdown.Item>
+                                <Dropdown.Item eventKey="none">NONE</Dropdown.Item>
                             </DropdownButton>
                             <div id="ui-text">Type of printing service</div>
                             <DropdownButton id="ui-dropdown" title="Select">
