@@ -6,7 +6,6 @@ import Header from "./components/Header/Header"
 import Material from "./components/Quote/Material"
 
 
-
 const App = () => {
     return (
       <div>

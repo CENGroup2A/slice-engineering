@@ -6,6 +6,7 @@ const path = require('path'),
     materialsRouter = require('../routes/Materials.server.routes');
     PriceRouter = require('../routes/Price.server.routes');
     CartitemRouter = require('../routes/Cartitem.server.routes');
+    CartIDRouter= require('../routes/CartID.server.routes');
 
 module.exports.init = () => {
     /* 
@@ -30,7 +31,8 @@ module.exports.init = () => {
     // add a router
     app.use('/api', materialsRouter);
     app.use('/api', PriceRouter);
-    app.use('/api',CartitemRouter)
+    app.use('/api',CartitemRouter);
+    app.use('/api',CartIDRouter)
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files

@@ -10,9 +10,7 @@ var cartID="";
   
   async function FetchCartItem(){
     let data =await axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register', 
-    {
-      
-        
+    { 
     cartItems:[
         {
             toolID:"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
@@ -24,7 +22,7 @@ var cartID="";
             materialID:"035f4772-da8a-400b-8be4-2dd344b28ddb",
             finishID:"bba2bebb-8895-4049-aeb0-ab651cee2597",
             quantity:"1",
-            xDimMm:"12",
+            xDimMm:"-12",
             yDimMm:"12",
             zDimMm:"12",
             volumeCm3:"12",
@@ -38,7 +36,7 @@ var cartID="";
      
         
     })
-    console.log("data.data",data.data.cartItems);
+    console.log("data.data",data);
     cartID=data.data;
     return(data.data.modelID)
   }

@@ -1,9 +1,9 @@
-const getCartIDs= require("../controllers/Cartitem.server.controller.js"),
+const getCartIDs= require("../controllers/CartID.server.controller.js"),
 express = require('express'), 
 router = express.Router()
 
 
-router.route('/getCartItem')
+router.route('/getCartID')
 .get(getCartIDs.sendCartID)
 .post(getCartIDs.sendCartID)
 
