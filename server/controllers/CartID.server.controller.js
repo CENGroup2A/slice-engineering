@@ -20,7 +20,7 @@ var cartID="";
       PromoCode:"", 
       CartItems:[
          { 
-            CartItemID: "f1adba7c-860f-4945-9988-70f5ce01f9d2"
+            CartItemID: "3f32b116-805f-495c-9497-d70a77b68179"
          }],
       ShippingInfo: {
         FirstName: "John",

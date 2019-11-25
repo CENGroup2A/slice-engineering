@@ -11,14 +11,14 @@ var cartCheckout="";
   async function FetchCheckout(){
     let data =await axios.post('https://imatsandbox.materialise.net/web-api/order/post', 
     {
-      "cartID":"9540dba3-6b13-4934-aceb-d74445ab8530",
-      "myOrderReference":"",
-      "directMailingAllowed":"false",
-      "shipmentService":"",
-      "myInvoiceLink":"http://mysite.com/invoice.pdf",
-      "myDeliveryNoteLink":"http://mysite.com/deliverynote.pdf",
-      "remarks":"",
-      "languageCode":"en"
+      cartID:"0d705b9d-8376-4a26-8194-eb59e9e0b6dc",
+      myOrderReference:"dsd",
+      directMailingAllowed:"false",
+      shipmentService:"",
+      myInvoiceLink:"",
+      myDeliveryNoteLink:"",
+      remarks:"",
+      languageCode:"en"
    },
    {
     headers: {
