@@ -4,6 +4,7 @@ import { throws } from 'should';
 import ReactDOM from 'react-dom';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { link } from 'fs';
 
 var axios = require('axios')
 
@@ -80,7 +81,6 @@ class Material extends React.Component {
 
     handleChangeNext(value){
         console.log('Sending')
-        
         //Maybe need to send?
         //countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency
     }
@@ -157,6 +157,7 @@ class Material extends React.Component {
 
 	render() {
 		return (
+            //If the materials aren't in the array, don't render
 			<div>
                 <p>Scale: </p>
                 <div>
@@ -209,7 +210,8 @@ class Material extends React.Component {
                 <div>
                     <input type="file" name="file" onChange={this.onChangeFileUpload}/>
 
-                    <button onClick={this.handleChangeNext}>Continue</button>
+                    <button><Link to="/cart">Go to Cart</Link></button>
+                    
                 </div>
 			</div>
 		);

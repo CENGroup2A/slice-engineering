@@ -11,8 +11,5 @@ router.route('/getPrice')
   .get(priceCont.getPrice)
 // .post(priceCont.getPrice)
 
-router.route('/cartData')
-  .get(priceCont.cartData)
-  .post(priceCont.cartData)
 
 module.exports = router;

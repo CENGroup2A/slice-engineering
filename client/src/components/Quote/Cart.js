@@ -20,13 +20,12 @@ class Cart extends React.Component {
             scale: "",
             ourPrice: ""
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getData()
     }
 
-    //Ideally this is activated on the page loading
-    handleSubmit(event) {
-        event.preventDefault();
-        axios.get("/api/cartData")
+    getData = () =>
+    {
+        axios.get("/api/getPrice")
         .then((data) =>
         {
             console.log('data', data.data)
@@ -44,10 +43,9 @@ class Cart extends React.Component {
 	render() {
 		return (
 			<div>
-                <p>     Total Price: {this.state.totalPrice}</p>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="submit" value="Get Info" />
-                </form>
+                <p>Total Price: {this.state.totalPrice}</p>
+                <p>Material Name: {this.state.materialName}</p>
+                <button><Link to="/mat">Go Back</Link></button>
             </div>
 		);
 	}

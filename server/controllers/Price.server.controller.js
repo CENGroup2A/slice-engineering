@@ -88,6 +88,7 @@ exports.sendMatFIN = (req, res)=>
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
   {
+    price.scale = scale
     res.json(price)
   })
 }
@@ -95,15 +96,5 @@ exports.sendMatFIN = (req, res)=>
 //Sends the Price back to Material.js
 exports.getPrice= (req, res)=>
 {
-  res.json(price)
-}
-
-//Sends the Cart data back to cart.js
-exports.cartData= (req, res)=>
-{
-  //Price contains everything we need besides slace and our price
-  console.log(req.body)
-  price.scale = scale
-  console.log('price', price)
   res.json(price)
 }
