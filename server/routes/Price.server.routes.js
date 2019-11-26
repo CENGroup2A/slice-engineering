@@ -1,18 +1,18 @@
-const sendMAt = require("../controllers/Price.server.controller.js"),
-      getPrice = require("../controllers/Price.server.controller.js"),
-
-    express = require('express'), 
-    router = express.Router()
+const priceCont = require("../controllers/Price.server.controller.js"),
+  express = require('express'), 
+  router = express.Router()
 
 router.route('/sendMat')
-  .get(sendMAt.sendMatFIN)
-  .post(sendMAt.sendMatFIN)
+  .get(priceCont.sendMatFIN)
+  .post(priceCont.sendMatFIN)
   
 
 router.route('/getPrice')
-.get(getPrice.getPrice)
-// .post(getPrice.getPrice)
+  .get(priceCont.getPrice)
+// .post(priceCont.getPrice)
 
+router.route('/cartData')
+  .get(priceCont.cartData)
+  .post(priceCont.cartData)
 
-  
 module.exports = router;

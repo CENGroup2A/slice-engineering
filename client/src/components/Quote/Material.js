@@ -31,7 +31,6 @@ function isMaterial(materialPassedIn) {
     return materialPassedIn.name === materialz;
 }
 
-
 class Material extends React.Component {
 
     constructor(props){
@@ -45,7 +44,8 @@ class Material extends React.Component {
             scale: '1',
             //Needed to send to Price.server.controller
             countryCode: 'US',
-            stateCode: 'AL'
+            stateCode: 'AL',
+            modelID: ''
         };
 
         //Functions needed
@@ -59,6 +59,7 @@ class Material extends React.Component {
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.handleChangeScale = this.handleChangeScale.bind(this)
         this.getMats()
+        this.handleChangeNext = this.handleChangeNext.bind(this)
     }
 
     //Gets the materials and finishes from the API
@@ -75,6 +76,13 @@ class Material extends React.Component {
             this.setState({ materialsList: matNames })
             this.setState({mats: mat.data})
         })
+    }
+
+    handleChangeNext(value){
+        console.log('Sending')
+        
+        //Maybe need to send?
+        //countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency
     }
 
     //Changes the finishes based on the material chosen
@@ -136,7 +144,9 @@ class Material extends React.Component {
             .then((price) => //Get the price back from Price.server.controller
             {
                 console.log(price.data.totalPrice);
+                console.log('price.data', price.data)
                 this.setState({price: price.data.totalPrice})
+                this.setState({modelID: price.data.modelID})
             })
             .catch(err => console.log('error', err.data))
     }
@@ -198,6 +208,8 @@ class Material extends React.Component {
                 </div>
                 <div>
                     <input type="file" name="file" onChange={this.onChangeFileUpload}/>
+
+                    <button onClick={this.handleChangeNext}>Continue</button>
                 </div>
 			</div>
 		);

@@ -13,6 +13,7 @@ axios = require('axios');
  var zipcode;
  var currency
  var scale
+ var ourprice
 
   //Upload model via URL
   async function FetchmodelID(){
@@ -84,11 +85,6 @@ exports.sendMatFIN = (req, res)=>
   currency = req.body.currency
   scale = req.body.scale
 
-  console.log('material:', mat, 'finish:', finish)
-  console.log('countryCode:', countryCode, 'stateCode:', stateCode)
-  console.log('city:', city, 'zipcode:', zipcode, 'currency:', currency)
-  console.log('scale', scale)
-
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
   {
@@ -100,5 +96,14 @@ exports.sendMatFIN = (req, res)=>
 exports.getPrice= (req, res)=>
 {
   res.json(price)
-  console.log('getPrice')
+}
+
+//Sends the Cart data back to cart.js
+exports.cartData= (req, res)=>
+{
+  //Price contains everything we need besides slace and our price
+  console.log(req.body)
+  price.scale = scale
+  console.log('price', price)
+  res.json(price)
 }
