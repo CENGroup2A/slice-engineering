@@ -11,7 +11,6 @@ import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
 import {TDSLoader} from 'three/examples/jsm/loaders/TDSLoader';
 import {Redirect} from 'react-router-dom';
 import Accepted from './Accepted';
-import S3Upload from './S3Upload';
 
 class ThreeScene extends Component {
     constructor(props) {
@@ -436,8 +435,6 @@ class ThreeScene extends Component {
                 </div>
                 )}
                 </Dropzone>
-
-                <S3Upload />
             </div>
         );
     }
