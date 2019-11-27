@@ -58,12 +58,12 @@ module.exports.init = () => {
 
     // add a router
     app.use('/api/', accountRouter);
-    app.use('/api/upload', uploadRouter);
     app.use('/api', materialsRouter);
     app.use('/api', PriceRouter);
     app.use('/api',CartitemRouter);
     app.use('/api',CartIDRouter);
     app.use('/api',CheckoutRouter)
+    app.use('/api/', uploadRouter);
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
