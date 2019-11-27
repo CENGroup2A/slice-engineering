@@ -29,3 +29,4 @@ module.exports.upload = (file) => {
       //this.props.changeUploadStatus(false)
   });
 }
+export default S3Upload

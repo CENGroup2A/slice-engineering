@@ -53,7 +53,7 @@ module.exports.init = () => {
 
     // add a router
     app.use('/api/', accountRouter);
-    app.use('/api/upload', uploadRouter);
+    app.use('/api/', uploadRouter);
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
