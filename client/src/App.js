@@ -11,6 +11,15 @@ import Home from './views/Home/Home'
 import VerifyEmail from './views/Verify-Email/Verify-Email'
 import Quote from './views/Quote/Quote'
 import NavBar from './components/Navbar'
+import { Route, Switch, Redirect  } from 'react-router-dom';
+import Home from "./views/Home/Home"
+import NotFound from "./views/NotFound"
+import Header from "./components/Header/Header"
+import Material from "./components/Quote/Material"
+import MaterialView from "./views/MaterialView"
+import CartView from './views/CartView';
+
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PrivateRoute from './components/PrivateRoute';
@@ -37,6 +46,21 @@ const App = () => {
       </Switch>
     </Router>
   );
+
+    return (
+      <div>
+        <Header />
+        <Switch>
+          <Route exact path="/Home" component={Home} />
+          <Route exact path="/mat" component={MaterialView} />
+          <Route exact path="/cart" component={CartView} />
+          <Route exact path="/">
+            <Redirect to="/Home" />
+          </Route>
+          <Route component={NotFound}/>
+        </Switch>
+      </div>
+    );
 }
 
 export default App;
