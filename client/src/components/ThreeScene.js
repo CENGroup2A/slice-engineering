@@ -304,7 +304,7 @@ class ThreeScene extends Component {
             container.appendChild(renderer.domElement);
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xF2F2F2);
+            scene.background = new THREE.Color(0xF8F9FA);
             camera = new THREE.PerspectiveCamera(1, rect.width / rect.height, 1, 1000);
             controls = new OrbitControls(camera, container);
 
@@ -382,8 +382,8 @@ class ThreeScene extends Component {
 
         return (
             <div className="dragDrop">
-                <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#F8F9FA"}}>
-                    <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#F8F9FA" }}>
+                <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
+                    <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
                         <div>
                             <div id="ui-text">Upload</div>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
@@ -475,10 +475,10 @@ class ThreeScene extends Component {
 
                 <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>
                     {({ getRootProps, getInputProps, isDragActive }) => (
-                <div style={{ height: "100vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#F8F9FA"}}>
+                <div style={{ height: "100vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
                     <div
                         id="container"
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#F2F2F2" }}
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#F8F9FA" }}
                         {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div id='renderInfo'> {this.renderImage(isDragActive)} {this.renderInstruction(isDragActive)}</div>
