@@ -24,7 +24,7 @@ class ThreeScene extends Component {
     }
 
     routeChange = () => {
-        this.setState({link: '/accepted'});
+        this.setState({link: '/material'});
     }
 
     getFile() {
@@ -455,18 +455,31 @@ class ThreeScene extends Component {
                                 </div>
                             </DropdownButton>
                             <div id="ui-text">Material</div>
-                            <DropdownButton id="but-material" title="Select" onSelect={this.onMaterial}>
-                                <Dropdown.Item eventKey="copper">Copper</Dropdown.Item>
-                                <Dropdown.Item eventKey="matte">Matte</Dropdown.Item>
-                                <Dropdown.Item eventKey="glossy">Glossy</Dropdown.Item>
-                                <Dropdown.Item eventKey="aluminum">Aluminum</Dropdown.Item>
-                                <Dropdown.Item eventKey="pearl">Pearl</Dropdown.Item>
-                                <Dropdown.Item eventKey="rose">Rose</Dropdown.Item>
-                                <Dropdown.Item eventKey="bronze">Bronze</Dropdown.Item>
-                                <Dropdown.Item eventKey="magenta">Magenta</Dropdown.Item>
-                                <Dropdown.Item eventKey="gold">Gold</Dropdown.Item>
-                                <Dropdown.Item eventKey="topaz">Topaz</Dropdown.Item>
-                                <Dropdown.Item eventKey="turquoise">Turquoise</Dropdown.Item>
+                            <DropdownButton drop="down" id="but-material" title="Select" onSelect={this.onMaterial}>
+                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "415px"}}>
+                                <Dropdown.Item eventKey="">ABS</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Alumide</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Aluminum</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Brass</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Bronze</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Copper</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Gold</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Gray Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="">High Detail Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="">High Detail Stainless Steel</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Mammoth Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Multicolor+</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Polyamide (MJF)</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Polyamide (SLS)</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Polyamide Priority (SLS)</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Polypropylene</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Rubber-Like (MJF)</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Silver</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Standard Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Steel</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Titanium</Dropdown.Item>
+                                <Dropdown.Item eventKey="">Transparent Resin</Dropdown.Item>
+                            </div>
                             </DropdownButton>
                             <Button id="ui-submit" type="submit" onClick={this.routeChange}>Request Quote</Button>
                         </div>

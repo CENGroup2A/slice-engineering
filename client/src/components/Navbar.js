@@ -84,9 +84,6 @@ class NavBar extends React.Component
 
                 <div className="grid__item medium-up--one-quarter text-right site-header__icons site-header__icons--plus">
                 <div className="site-header__icons-wrapper">
-                    
-                <Link to="/login"><Button variant="outline-success">Login</Button></Link>
-                <Link to="/sign-up"><Button className="ml-3" variant="outline-success">Signup</Button></Link>
 
                   <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
                       <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-login" viewBox="0 0 28.33 37.68"><path d="M14.17 14.9a7.45 7.45 0 1 0-7.5-7.45 7.46 7.46 0 0 0 7.5 7.45zm0-10.91a3.45 3.45 0 1 1-3.5 3.46A3.46 3.46 0 0 1 14.17 4zM14.17 16.47A14.18 14.18 0 0 0 0 30.68c0 1.41.66 4 5.11 5.66a27.17 27.17 0 0 0 9.06 1.34c6.54 0 14.17-1.84 14.17-7a14.18 14.18 0 0 0-14.17-14.21zm0 17.21c-6.3 0-10.17-1.77-10.17-3a10.17 10.17 0 1 1 20.33 0c.01 1.23-3.86 3-10.16 3z"></path></svg>
@@ -128,6 +125,8 @@ class NavBar extends React.Component
                       </div>
                   </form>
 
+                  <Link to="/login"><Button style={{marginLeft: "15px"}} variant="outline-success">Login</Button></Link>
+                  <Link to="/sign-up"><Button className="ml-3" variant="outline-success">Signup</Button></Link>
                 </div>
                 </div>
                 </div>
@@ -192,12 +191,6 @@ class NavBar extends React.Component
 
                       <div className="grid__item medium-up--one-quarter text-right site-header__icons site-header__icons--plus">
                       <div className="site-header__icons-wrapper">
-                          
-                      <Button onClick={(event) =>
-                            {
-                                axios.post("/api/logout")
-                                window.location.reload();
-                            }} variant="outline-success">Log Out</Button>
 
                         <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-login" viewBox="0 0 28.33 37.68"><path d="M14.17 14.9a7.45 7.45 0 1 0-7.5-7.45 7.46 7.46 0 0 0 7.5 7.45zm0-10.91a3.45 3.45 0 1 1-3.5 3.46A3.46 3.46 0 0 1 14.17 4zM14.17 16.47A14.18 14.18 0 0 0 0 30.68c0 1.41.66 4 5.11 5.66a27.17 27.17 0 0 0 9.06 1.34c6.54 0 14.17-1.84 14.17-7a14.18 14.18 0 0 0-14.17-14.21zm0 17.21c-6.3 0-10.17-1.77-10.17-3a10.17 10.17 0 1 1 20.33 0c.01 1.23-3.86 3-10.16 3z"></path></svg>
@@ -238,6 +231,12 @@ class NavBar extends React.Component
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                             </div>
                         </form>
+
+                        <Button style={{marginLeft: "15px"}} onClick={(event) =>
+                            {
+                                axios.post("/api/logout")
+                                window.location.reload();
+                            }} variant="outline-success">Log Out</Button>
 
                       </div>
                       </div>
