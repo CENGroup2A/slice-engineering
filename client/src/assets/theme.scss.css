@@ -10,6 +10,64 @@
     margin-bottom: 15px;
 }
 
+#but-currency{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
+#but-city{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    line-height: 21px;
+    text-transform: uppercase;
+}
+
+#but-zip{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    line-height: 21px;
+    text-transform: uppercase;
+}
+
+#but-country{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
+#but-state{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
 #but-upload{
     text-align: left;
     width: 500px;

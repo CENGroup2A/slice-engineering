@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { link } from 'fs';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Button from 'react-bootstrap/Button';
 
 var axios = require('axios')
 
@@ -46,7 +49,8 @@ class Material extends React.Component {
             //Needed to send to Price.server.controller
             countryCode: 'US',
             stateCode: 'AL',
-            modelID: ''
+            modelID: '',
+            finishState: true
         };
 
         //Functions needed
@@ -86,12 +90,20 @@ class Material extends React.Component {
     }
 
     //Changes the finishes based on the material chosen
-    handleChangeMaterial(event) {
-        materialzID = materialObjects[event.target.selectedIndex].materialID;
-        finishesObjects = materialObjects[event.target.selectedIndex].finishes
+    handleChangeMaterial(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-material');
+        text.textContent = name;
+        this.setState({finishState: false});
+
+        materialzID = materialObjects[index].materialID;
+        finishesObjects = materialObjects[index].finishes
 
         finishNames = [];
-        materialz = event.target.value;
+        materialz = name;
         var materialChosen = this.state.mats.find(isMaterial);
         console.log(materialChosen)
 
@@ -104,17 +116,38 @@ class Material extends React.Component {
         finishID = finishesObjects[0].finishID
     }
 
-    handleChangeFinish(event) {
-        finishID = finishes[event.target.selectedIndex].finishID;
-        this.setState({finish: event.target.value})
+    handleChangeFinish(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-finish');
+        text.textContent = name;
+
+        finishID = finishes[index].finishID;
+        this.setState({finish: name})
     }
 
-    handleChangeState(event) {
-        this.setState({stateCode: stateCodes[event.target.selectedIndex]})
+    handleChangeState(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-state');
+        text.textContent = name;
+
+        this.setState({stateCode: stateCodes[index]})
     }
 
-    handleChangeCountry(event) {
-        this.setState({countryCode: countryCodes[event.target.selectedIndex]})
+    handleChangeCountry(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-country');
+        text.textContent = name;
+
+        this.setState({countryCode: countryCodes[index]})
     }
 
     handleChangeCity(event) {
@@ -123,6 +156,11 @@ class Material extends React.Component {
 
     handleChangeZipcode(event) {
         zipcode = event.target.value
+    }
+
+    handleChangeCurrency(eventKey) {
+        var text = document.getElementById('but-currency');
+        text.textContent = eventKey;
     }
 
     onChangeFileUpload=event=>{
@@ -166,46 +204,52 @@ class Material extends React.Component {
                 </div>
                 
                 <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <label>
-                            Type of Printing Finish: 
-                            <select onChange={this.handleChangeFinish}>
-                                {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
-                            </select>
+                    <div id="ui-text">Material</div>
+                    <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
+                        <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            {this.state.materialsList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                        </div>
+                    </DropdownButton>
 
-                            <p></p>
-                            Material:
-                            <select onChange={this.handleChangeMaterial}>
-                                {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
-                            </select>
+                    <div id="ui-text">Finish</div>
+                    <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.state.finishList[0]} onSelect={this.handleChangeFinish}>
+                        <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            {this.state.finishList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                        </div>
+                    </DropdownButton>
 
-                            <p>Country: </p>
-                            <select onChange={this.handleChangeCountry}>
-                                {countryCodes.map((x,y) => <option key={y}>{x}</option>)}
-                            </select>
+                    <div id="ui-text">Country</div>
+                    <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
+                        <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                        </div>
+                    </DropdownButton>
 
-                            <p>State: </p>
-                            <select onChange={this.handleChangeState}>
-                                {stateCodes.map((x,y) => <option key={y}>{x}</option>)}
-                            </select>
+                    <div id="ui-text">State</div>
+                    <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
+                        <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                        </div>
+                    </DropdownButton>
 
-                            <p>City: </p>
-                            <input type="text" name="city" onChange={this.handleChangeCity}/>
+                    <div id="ui-text">City</div>
+                    <input id="but-city" type="text" name="city" placeHolder="CITY" onChange={this.handleChangeCity}/>
 
-                            <p>Zipcode: </p>
-                            <input type="text" name="Zipcode" onChange={this.handleChangeZipcode}/>
+                    <div id="ui-text">Zip Code</div>
+                    <input id="but-zip" type="text" name="Zipcode" placeHolder="ZIP CODE" onChange={this.handleChangeZipcode}/>
 
-                            <p>Currency: </p>
-                            <select onChange={this.handleChangeCurrency}>
-                                <option>USD</option>
-                            </select>
+                    <div id="ui-text">Currency</div>
+                    <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
+                        <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
+                        </div>
+                    </DropdownButton>
 
-                            <p></p>
-                            
-                            <p>Total Price: {this.state.price} </p>
-                        </label>
-                        <input type="submit" value="Submit" />
-                    </form>
+                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}>
+                        Request Quote
+                    </Button>
+
+                    <p>Total Price: {this.state.price} </p>
                 </div>
                 <div>
                     <input type="file" name="file" onChange={this.onChangeFileUpload}/>

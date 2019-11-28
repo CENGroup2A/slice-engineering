@@ -141,7 +141,7 @@ class ThreeScene extends Component {
                 var materialPath;
 
                 if (material === 'ABS') {
-                    materialPath = '/materials/velvet-blue.png';
+                    materialPath = '/materials/poly.png';
                 }
                 else if (material === 'Alumide') {
 
