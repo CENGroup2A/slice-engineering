@@ -58,6 +58,11 @@ class ThreeScene extends Component {
         text.textContent = eventKey;
     }
 
+    onFinish = (eventKey) => {
+        var text = document.getElementById('but-finish');
+        text.textContent = eventKey;
+    }
+
     onRotation = (eventKey) => {
         this.updateRotation(eventKey);
         var text = document.getElementById('but-rotate');
@@ -370,6 +375,9 @@ class ThreeScene extends Component {
                     </div>
                 );
             }
+            else {
+                this.setState({link: null});
+            }
         }
 
         return (
@@ -377,12 +385,12 @@ class ThreeScene extends Component {
                 <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#F8F9FA"}}>
                     <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#F8F9FA" }}>
                         <div>
-                            <div id="ui-text">Upload file</div>
+                            <div id="ui-text">Upload</div>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
                                 Upload a file...
                             </Button>
-                            <div id="ui-text">Fix orientation</div>
+                            <div id="ui-text">Orientation</div>
                             <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
                                 <Dropdown.Item eventKey="xyz">XYZ</Dropdown.Item>
                                 <Dropdown.Item eventKey="xzy">XZY</Dropdown.Item>
@@ -391,17 +399,60 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="zxy">ZXY</Dropdown.Item>
                                 <Dropdown.Item eventKey="zyx">ZYX</Dropdown.Item>
                             </DropdownButton>
-                            <div id="ui-text">Fix rotation</div>
+                            <div id="ui-text">Rotation</div>
                             <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
                                 <Dropdown.Item eventKey="x">X</Dropdown.Item>
                                 <Dropdown.Item eventKey="y">Y</Dropdown.Item>
                                 <Dropdown.Item eventKey="z">Z</Dropdown.Item>
                             </DropdownButton>
-                            <div id="ui-text">Type of printing service</div>
-                            <DropdownButton id="ui-dropdown" title="Select">
-                                <Dropdown.Item eventKey="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item eventKey="#/action-2">Another action</Dropdown.Item>
-                                <Dropdown.Item eventKey="#/action-3">Something else</Dropdown.Item>
+                            <div id="ui-text">Finish</div>
+                            <DropdownButton drop="down" id="but-finish" title="Select" onSelect={this.onFinish}>
+                                <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "415px"}}>
+                                    <Dropdown.Item eventKey="">Dyed Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Grey</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Dyed Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Natural White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished and Dyed Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Polished Natural White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Satin Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Spray Painted Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Spray Painted White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Ochre</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Pink</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Velvet Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="">Waterproof White</Dropdown.Item>
+                                </div>
                             </DropdownButton>
                             <div id="ui-text">Material</div>
                             <DropdownButton id="but-material" title="Select" onSelect={this.onMaterial}>
