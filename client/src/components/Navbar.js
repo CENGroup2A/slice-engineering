@@ -69,7 +69,7 @@ class NavBar extends React.Component
                   </li>
 
                   <li>
-                      <a href="/protected" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                      <a href="/" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">3D Printing Service Portal</span>
                       </a>
                   </li>

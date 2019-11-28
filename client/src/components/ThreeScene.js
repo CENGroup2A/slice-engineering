@@ -85,7 +85,7 @@ class ThreeScene extends Component {
 
     componentDidMount() {
         var mesh, renderer, scene, camera, controls, bb, rect, uploadedFile, selectedMaterial;
-        var rotate = 'z';
+        var rotate = 'Z';
         var vector = new THREE.Vector3(0, 1, 0);
 
         this.openFile = (file) => {
@@ -102,22 +102,22 @@ class ThreeScene extends Component {
 
         this.updateOrientation = (type) => {
             if (uploadedFile) {
-                if (type === 'xyz') {
+                if (type === 'XYZ') {
                     vector = new THREE.Vector3(0, 1, 0);
                 }
-                else if (type === 'xzy') {
+                else if (type === 'XZY') {
                     vector = new THREE.Vector3(0, 0, 1);
                 }
-                else if (type === 'yxz') {
+                else if (type === 'YXZ') {
                     vector = new THREE.Vector3(1, 0, 0);
                 }
-                else if (type === 'yzx') {
+                else if (type === 'YZX') {
                     vector = new THREE.Vector3(-1, 0, 0);
                 }
-                else if (type === 'zxy') {
+                else if (type === 'ZXY') {
                     vector = new THREE.Vector3(0, 0, -1);
                 }
-                else if (type === 'zyx') {
+                else if (type === 'ZYX') {
                     vector = new THREE.Vector3(0, -1, 0);
                 }
                 update();
@@ -140,38 +140,71 @@ class ThreeScene extends Component {
 
                 var materialPath;
 
-                if (material === 'copper') {
-                    materialPath = '/materials/copper.png';
+                if (material === 'ABS') {
+                    materialPath = '/materials/velvet-blue.png';
                 }
-                else if (material === 'matte') {
-                    materialPath = '/materials/matte.jpg';
+                else if (material === 'Alumide') {
+
                 }
-                else if (material === 'glossy') {
-                    materialPath = '/materials/glossy.jpg';
+                else if (material === 'Aluminum') {
+
                 }
-                else if (material === 'aluminum') {
-                    materialPath = '/materials/alum.jpg';
+                else if (material === 'Brass') {
+
                 }
-                else if (material === 'pearl') {
-                    materialPath = '/materials/pearl.jpg';
+                else if (material === 'Bronze') {
+
                 }
-                else if (material === 'rose') {
-                    materialPath = '/materials/rose.jpg';
+                else if (material === 'Copper') {
+
                 }
-                else if (material === 'bronze') {
-                    materialPath = '/materials/bronze.png';
+                else if (material === 'Gold') {
+
                 }
-                else if (material === 'magenta') {
-                    materialPath = '/materials/magenta.jpg';
+                else if (material === 'Gray Resin') {
+
                 }
-                else if (material === 'gold') {
-                    materialPath = '/materials/gold.png';
+                else if (material === 'High Detail Resin') {
+
                 }
-                else if (material === 'topaz') {
-                    materialPath = '/materials/topaz.png'
+                else if (material === 'High Detail Stainless Steel') {
+
                 }
-                else if (material === 'turquoise') {
-                    materialPath = '/materials/turquoise.jpg';
+                else if (material === 'Mammoth Resin') {
+
+                }
+                else if (material === 'Multicolor+') {
+
+                }
+                else if (material === 'Polyamide (MJF)') {
+
+                }
+                else if (material === 'Polyamide (SLS)') {
+
+                }
+                else if (material === 'Polyamide Priority (SLS)') {
+
+                }
+                else if (material === 'Polypropylene') {
+
+                }
+                else if (material === 'Rubber-Like (MJF)') {
+
+                }
+                else if (material === 'Silver') {
+
+                }
+                else if (material === 'Standard Resin') {
+
+                }
+                else if (material === 'Steel') {
+
+                }
+                else if (material === 'Titanium') {
+
+                }
+                else if (material === 'Transparent Resin') {
+
                 }
 
                 const vs = `
@@ -336,13 +369,13 @@ class ThreeScene extends Component {
         }
 
         function animate() {
-            if (rotate === 'x') {
+            if (rotate === 'X') {
                 mesh.rotation.x += 0.01;
             }
-            else if (rotate === 'y') {
+            else if (rotate === 'Y') {
                 mesh.rotation.y += 0.01;
             }
-            else if (rotate === 'z') {
+            else if (rotate === 'Z') {
                 mesh.rotation.z += 0.01;
             }
             requestAnimationFrame(animate);
@@ -392,93 +425,97 @@ class ThreeScene extends Component {
                             </Button>
                             <div id="ui-text">Orientation</div>
                             <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
-                                <Dropdown.Item eventKey="xyz">XYZ</Dropdown.Item>
-                                <Dropdown.Item eventKey="xzy">XZY</Dropdown.Item>
-                                <Dropdown.Item eventKey="yxz">YXZ</Dropdown.Item>
-                                <Dropdown.Item eventKey="yzx">YZX</Dropdown.Item>
-                                <Dropdown.Item eventKey="zxy">ZXY</Dropdown.Item>
-                                <Dropdown.Item eventKey="zyx">ZYX</Dropdown.Item>
+                                <div style={{width: "500px"}}>
+                                    <Dropdown.Item eventKey="XYZ">XYZ</Dropdown.Item>
+                                    <Dropdown.Item eventKey="XZY">XZY</Dropdown.Item>
+                                    <Dropdown.Item eventKey="YXZ">YXZ</Dropdown.Item>
+                                    <Dropdown.Item eventKey="YZX">YZX</Dropdown.Item>
+                                    <Dropdown.Item eventKey="ZXY">ZXY</Dropdown.Item>
+                                    <Dropdown.Item eventKey="ZYX">ZYX</Dropdown.Item>
+                                </div>
                             </DropdownButton>
                             <div id="ui-text">Rotation</div>
                             <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
-                                <Dropdown.Item eventKey="x">X</Dropdown.Item>
-                                <Dropdown.Item eventKey="y">Y</Dropdown.Item>
-                                <Dropdown.Item eventKey="z">Z</Dropdown.Item>
+                                <div style={{width: "500px"}}>
+                                    <Dropdown.Item eventKey="X">X</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Y">Y</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Z">Z</Dropdown.Item>
+                                </div>
                             </DropdownButton>
                             <div id="ui-text">Finish</div>
                             <DropdownButton drop="down" id="but-finish" title="Select" onSelect={this.onFinish}>
-                                <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "415px"}}>
-                                    <Dropdown.Item eventKey="">Dyed Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Grey</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Dyed Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Natural White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished and Dyed Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Polished Natural White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Satin Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Spray Painted Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Spray Painted White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Ochre</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Pink</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Velvet Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="">Waterproof White</Dropdown.Item>
+                                <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                                    <Dropdown.Item eventKey="Dyed Black">Dyed Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Blue">Dyed Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Bordeaux">Dyed Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Brown">Dyed Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Green">Dyed Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Grey">Dyed Grey</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Orange">Dyed Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Petrol Blue">Dyed Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Purple">Dyed Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Red">Dyed Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Dyed Yellow">Dyed Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Natural White">Natural White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Black">Polished and Dyed Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Blue">Polished and Dyed Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Bordeaux">Polished and Dyed Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Brown">Polished and Dyed Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Green">Polished and Dyed Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Orange">Polished and Dyed Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Petrol Blue">Polished and Dyed Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Purple">Polished and Dyed Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Red">Polished and Dyed Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished and Dyed Yellow">Polished and Dyed Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Polished Natural White">Polished Natural White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Black">Satin Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Blue">Satin Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Bordeaux">Satin Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Brown">Satin Brown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Green">Satin Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Orange">Satin Orange</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Petrol Blue">Satin Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Purple">Satin Purple</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Red">Satin Red</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Satin Yellow">Satin Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Spray Painted Black">Spray Painted Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Spray Painted White">Spray Painted White</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Black">Velvet Black</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Blue">Velvet Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Bordeaux">Velvet Bordeaux</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Green">Velvet Green</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Ochre">Velvet Ochre</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Petrol Blue">Velvet Petrol Blue</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Pink">Velvet Pink</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Velvet Yellow">Velvet Yellow</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Waterproof White">Waterproof White</Dropdown.Item>
                                 </div>
                             </DropdownButton>
                             <div id="ui-text">Material</div>
                             <DropdownButton drop="down" id="but-material" title="Select" onSelect={this.onMaterial}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "415px"}}>
-                                <Dropdown.Item eventKey="">ABS</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Alumide</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Aluminum</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Brass</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Bronze</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Copper</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Gold</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Gray Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="">High Detail Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="">High Detail Stainless Steel</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Mammoth Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Multicolor+</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Polyamide (MJF)</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Polyamide (SLS)</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Polyamide Priority (SLS)</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Polypropylene</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Rubber-Like (MJF)</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Silver</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Standard Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Steel</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Titanium</Dropdown.Item>
-                                <Dropdown.Item eventKey="">Transparent Resin</Dropdown.Item>
+                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                                <Dropdown.Item eventKey="ABS">ABS</Dropdown.Item>
+                                <Dropdown.Item eventKey="Alumide">Alumide</Dropdown.Item>
+                                <Dropdown.Item eventKey="Aluminum">Aluminum</Dropdown.Item>
+                                <Dropdown.Item eventKey="Brass">Brass</Dropdown.Item>
+                                <Dropdown.Item eventKey="Bronze">Bronze</Dropdown.Item>
+                                <Dropdown.Item eventKey="Copper">Copper</Dropdown.Item>
+                                <Dropdown.Item eventKey="Gold">Gold</Dropdown.Item>
+                                <Dropdown.Item eventKey="Gray Resin">Gray Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="High Detail Resin">High Detail Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="High Detail Stainless Steel">High Detail Stainless Steel</Dropdown.Item>
+                                <Dropdown.Item eventKey="Mammoth Resin">Mammoth Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="Multicolor+">Multicolor+</Dropdown.Item>
+                                <Dropdown.Item eventKey="Polyamide (MJF)">Polyamide (MJF)</Dropdown.Item>
+                                <Dropdown.Item eventKey="Polyamide (SLS)">Polyamide (SLS)</Dropdown.Item>
+                                <Dropdown.Item eventKey="Polyamide Priority (SLS)">Polyamide Priority (SLS)</Dropdown.Item>
+                                <Dropdown.Item eventKey="Polypropylene">Polypropylene</Dropdown.Item>
+                                <Dropdown.Item eventKey="Rubber-Like (MJF)">Rubber-Like (MJF)</Dropdown.Item>
+                                <Dropdown.Item eventKey="Silver">Silver</Dropdown.Item>
+                                <Dropdown.Item eventKey="Standard Resin">Standard Resin</Dropdown.Item>
+                                <Dropdown.Item eventKey="Steel">Steel</Dropdown.Item>
+                                <Dropdown.Item eventKey="Titanium">Titanium</Dropdown.Item>
+                                <Dropdown.Item eventKey="Transparent Resin">Transparent Resin</Dropdown.Item>
                             </div>
                             </DropdownButton>
                             <Button id="ui-submit" type="submit" onClick={this.routeChange}>Request Quote</Button>
