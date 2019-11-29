@@ -49,7 +49,7 @@ exports.get_s3 = (req, res) => {
                 varFileParams = {
                     Bucket: BUCKET_NAME,
                     Key: data.Contents[file].Key,
-                    Expires: 60 //Set expiration time that i.materialise could use this link
+                    Expires: 180 //Set expiration time that i.materialise could use this link
                 }
                 //console.log(data.Contents);
                 //console.log(data.Contents[file].Key)

@@ -13,14 +13,15 @@ import {TDSLoader} from 'three/examples/jsm/loaders/TDSLoader';
 import {Redirect} from 'react-router-dom';
 import Accepted from './Accepted';
 var axios = require('axios');
+const S3Upload = require('./S3Upload.js');
 
 //Variables that are sent to Price.server.controller
 var uploadedFile;
-var materialzID = "035f4772-da8a-400b-8be4-2dd344b28ddb";
-var finishID = "bba2bebb-8895-4049-aeb0-ab651cee2597";
+var materialzID = "";
+var finishID = "";
 var city = ""
 var zipcode = ""
-var currency = "USD"
+var currency = "";
 var finishes = [];
 
 //Variables needed for parsing, searching, different things like that
@@ -49,10 +50,10 @@ class ThreeScene extends Component {
             finishList: ["Natural white","Polished natural white","Dyed yellow","Satin Yellow","Polished and Dyed Yellow","Dyed orange","Satin Orange","Polished and Dyed Orange","Dyed red","Satin Red","Polished and Dyed Red","Satin Green","Polished and Dyed Green","Dyed blue","Satin Blue","Polished and Dyed Blue","Dyed purple","Satin Purple","Polished and Dyed Purple","Dyed black","Satin black","Polished and Dyed Black","Dyed bordeaux","Satin Bordeaux","Polished and Dyed Bordeaux","Dyed petrol blue","Satin Petrol Blue","Polished and Dyed Petrol blue","Dyed brown","Satin Brown","Polished and Dyed Brown","Velvet yellow","Velvet ochre","Velvet pink","Velvet bordeaux","Velvet green","Velvet petrol blue","Velvet blue","Velvet black","Spray painted white","Spray painted black","Waterproof white","Dyed green","Dyed grey"],
             mats: [],
             price: '0.00',
-            scale: '1',
+            scale: '',
             //Needed to send to Price.server.controller
-            countryCode: 'US',
-            stateCode: 'AL',
+            countryCode: '',
+            stateCode: '',
             modelID: '',
             finishState: true,
             cartState: true
@@ -84,6 +85,9 @@ class ThreeScene extends Component {
             var text = document.getElementById('but-upload');
             text.textContent = file.name;
             this.setState({currentFile: file});
+
+            //axios.post("http://localhost:5000/api/getS3");
+            //S3Upload.upload(file);
         }
     }
 
@@ -98,6 +102,9 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-upload');
         text.textContent = file.name;
         this.setState({currentFile: file});
+
+        //axios.post("http://localhost:5000/api/getS3");
+        //S3Upload.upload(file);
     }
 
     onOrientation = (eventKey) => {
@@ -180,6 +187,7 @@ class ThreeScene extends Component {
                 update();
                 load(uploadedFile, false);
 
+                material = material.replace(/\s/g, '');
                 var materialPath = '/materials/' + material.toLowerCase() + '.png';
                 console.log(materialPath);
 
@@ -421,7 +429,8 @@ class ThreeScene extends Component {
         });
 
         this.setState({finishList: finishNames, finish: this.state.finishList[0]})
-        finishID = finishesObjects[0].finishID
+        //finishID = finishesObjects[0].finishID
+        document.getElementById('but-material').style.borderColor = "#BEBEBE";
     }
 
     handleChangeFinish(eventKey) {
@@ -434,6 +443,7 @@ class ThreeScene extends Component {
 
         finishID = finishes[index].finishID;
         this.setState({finish: name})
+        document.getElementById('but-finish').style.borderColor = "#BEBEBE";
     }
 
     handleChangeState(eventKey) {
@@ -445,6 +455,7 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({stateCode: stateCodes[index]})
+        document.getElementById('but-state').style.borderColor = "#BEBEBE";
     }
 
     handleChangeCountry(eventKey) {
@@ -456,19 +467,29 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({countryCode: countryCodes[index]})
+        document.getElementById('but-country').style.borderLeftColor = "#BEBEBE";
+        document.getElementById('but-country').style.borderTopColor = "#BEBEBE";
+        document.getElementById('but-country').style.borderBottomColor = "#BEBEBE";
     }
 
     handleChangeCity(event) {
         city = event.target.value
+        document.getElementById('but-city').style.borderColor = "#BEBEBE";
     }
 
     handleChangeZipcode(event) {
         zipcode = event.target.value
+        document.getElementById('but-zip').style.borderColor = "#BEBEBE";
     }
 
     handleChangeCurrency(eventKey) {
         var text = document.getElementById('but-currency');
         text.textContent = eventKey;
+        currency = eventKey;
+
+        document.getElementById('but-currency').style.borderRightColor = "#BEBEBE";
+        document.getElementById('but-currency').style.borderTopColor = "#BEBEBE";
+        document.getElementById('but-currency').style.borderBottomColor = "#BEBEBE";
     }
 
     onChangeFileUpload=event=>{
@@ -476,42 +497,89 @@ class ThreeScene extends Component {
     }
 
     handleSubmit(event) {
-        var text = document.getElementById('priceText');
-        text.textContent = "Calculating";
-        document.getElementById('wave').style.display = '';
-        this.setState({cartState: false});
+        if (materialzID && finishID && this.state.countryCode && this.state.stateCode && city && zipcode && currency && this.state.scale) {
+            var text = document.getElementById('priceText');
+            text.textContent = "Calculating";
+            document.getElementById('wave').style.display = '';
+            this.setState({cartState: false});
 
-        event.preventDefault();
+            event.preventDefault();
 
-        const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency, scale: this.state.scale}
+            const reactData = {
+                material: materialzID,
+                finish: finishID,
+                countryCode: this.state.countryCode,
+                stateCode: this.state.stateCode,
+                city: city, 
+                zipcode: zipcode,
+                currency: currency,
+                scale: this.state.scale
+            }
 
-        //Send the information to Price.server.controller
-        axios.post("/api/sendMat", reactData)
-            .then(res => console.log('Data sent'))
-            .then(() =>
-            {
-                return axios.get("/api/getPrice")
-            })
-            .then((price) => //Get the price back from Price.server.controller
-            {
-                console.log(price.data.totalPrice);
-                console.log('price.data', price.data)
-                this.setState({price: price.data.totalPrice})
-                this.setState({modelID: price.data.modelID})
-                text.textContent = "Add to Cart for: $" + this.state.price;
-                document.getElementById('wave').style.display = 'none';
-            })
-            .catch((err) => {
-                text.textContent = "An error has occured. Please refresh the page!";
-                document.getElementById('wave').style.display = 'none';
-                console.log('error', err.data)
-            })
+            //Send the information to Price.server.controller
+            axios.post("/api/sendMat", reactData)
+                .then(res => console.log('Data sent'))
+                .then(() =>
+                {
+                    return axios.get("/api/getPrice")
+                })
+                .then((price) => //Get the price back from Price.server.controller
+                {
+                    console.log(price.data.totalPrice);
+                    console.log('price.data', price.data)
+                    this.setState({price: price.data.totalPrice})
+                    this.setState({modelID: price.data.modelID})
+                    text.textContent = "Add to Cart for: $" + this.state.price;
+                    document.getElementById('wave').style.display = 'none';
+                })
+                .catch((err) => {
+                    text.textContent = "An error has occured. Please refresh the page!";
+                    document.getElementById('wave').style.display = 'none';
+                    console.log('error', err.data)
+                })
+        }
+        else {
+            if (!materialzID) {
+                document.getElementById('but-material').style.borderColor = "#e32c2b";
+            }
+            if (!finishID) {
+                document.getElementById('but-finish').style.borderColor = "#e32c2b";
+            }
+            if (!this.state.countryCode) {
+                document.getElementById('but-country').style.borderLeftColor = "#e32c2b";
+                document.getElementById('but-country').style.borderTopColor = "#e32c2b";
+                document.getElementById('but-country').style.borderBottomColor = "#e32c2b";
+            }
+            if (!this.state.stateCode) {
+                document.getElementById('but-state').style.borderColor = "#e32c2b";
+            }
+            if (!city) {
+                document.getElementById('but-city').style.borderColor = "#e32c2b";
+            }
+            if (!zipcode) {
+                document.getElementById('but-zip').style.borderColor = "#e32c2b";
+            }
+            if (!currency) {
+                document.getElementById('but-currency').style.borderRightColor = "#e32c2b";
+                document.getElementById('but-currency').style.borderTopColor = "#e32c2b";
+                document.getElementById('but-currency').style.borderBottomColor = "#e32c2b";
+            }
+            if (!this.state.scale) {
+                document.getElementById('but-scale').style.borderRightColor = "#e32c2b";
+                document.getElementById('but-scale').style.borderTopColor = "#e32c2b";
+                document.getElementById('but-scale').style.borderBottomColor = "#e32c2b";
+            }
+        }
     }
 
     handleChangeScale(eventKey){
         this.state.scale = eventKey/100;
         var text = document.getElementById('but-scale');
         text.textContent = eventKey + '%';
+
+        document.getElementById('but-scale').style.borderRightColor = "#BEBEBE";
+        document.getElementById('but-scale').style.borderTopColor = "#BEBEBE";
+        document.getElementById('but-scale').style.borderBottomColor = "#BEBEBE";
     }
 
     render() {
@@ -527,6 +595,14 @@ class ThreeScene extends Component {
             }
             else {
                 this.setState({link: null});
+            }
+        }
+
+        const handleSubmit = event => {
+            const form = event.currentTarget;
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
             }
         }
 
@@ -595,14 +671,14 @@ class ThreeScene extends Component {
                         <div id="ui-text">Material</div>
                         <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
                             <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.materialsList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                {this.state.materialsList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
                         </DropdownButton>
 
                         <div id="ui-text">Finish</div>
-                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.state.finishList[0]} onSelect={this.handleChangeFinish}>
+                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={"Select"} onSelect={this.handleChangeFinish}>
                             <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.finishList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                {this.state.finishList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
                         </DropdownButton>
                         
