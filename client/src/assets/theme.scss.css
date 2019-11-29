@@ -58,6 +58,16 @@
     margin-bottom: 15px;
 }
 
+#but-scale{
+    text-align: left;
+    width: 500px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
 #but-state{
     text-align: left;
     width: 500px;

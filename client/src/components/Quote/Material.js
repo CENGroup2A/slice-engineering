@@ -199,8 +199,10 @@ class Material extends React.Component {
             })
     }
 
-    handleChangeScale(event){
-        this.state.scale = event/100
+    handleChangeScale(eventKey){
+        this.state.scale = eventKey/100;
+        var text = document.getElementById('but-scale');
+        text.textContent = eventKey + '%';
     }
 
 	render() {
@@ -209,11 +211,6 @@ class Material extends React.Component {
             <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
                 <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
                 <div>
-                    <div id="ui-text">Scale</div>
-                    <div>
-                        <Slider min={20} defaultValue={100} marks={{ 20: 20, 50: 50, 70: 70, 100: 100 }} step={null} onAfterChange={this.handleChangeScale}/>
-                    </div>
-                    <br/>
                     <div>
                         <div id="ui-text">Material</div>
                         <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
@@ -229,9 +226,19 @@ class Material extends React.Component {
                             </div>
                         </DropdownButton>
 
+                        <div id="ui-text">Scale</div>
+                        <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
+                            <div style={{width: "500px"}}>
+                                <Dropdown.Item eventKey="20">20%</Dropdown.Item>
+                                <Dropdown.Item eventKey="50">50%</Dropdown.Item>
+                                <Dropdown.Item eventKey="70">70%</Dropdown.Item>
+                                <Dropdown.Item eventKey="100">100%</Dropdown.Item>
+                            </div>
+                        </DropdownButton>
+
                         <div id="ui-text">Country</div>
                         <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            <div style={{width: "500px"}}>
                                 {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
                         </DropdownButton>
@@ -251,7 +258,7 @@ class Material extends React.Component {
 
                         <div id="ui-text">Currency</div>
                         <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                            <div style={{width: "500px"}}>
                                 <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
                             </div>
                         </DropdownButton>
