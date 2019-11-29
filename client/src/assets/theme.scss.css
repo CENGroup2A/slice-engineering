@@ -66,9 +66,12 @@
 
 #but-scale{
     text-align: left;
-    width: 500px;
+    width: 167px;
     border-width: 2px;
-    border-color: #BEBEBE;
+    border-left-color: #BEBEBE00;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-right-color: #BEBEBE;
     color: black;
     background-color: white;
     margin-bottom: 15px;
@@ -96,7 +99,7 @@
 
 #but-orientate{
     text-align: left;
-    width: 250px;
+    width: 167px;
     border-width: 2px;
     border-left-color: #BEBEBE;
     border-top-color: #BEBEBE;
@@ -109,7 +112,7 @@
 
 #but-rotate{
     text-align: left;
-    width: 250px;
+    width: 166px;
     border-width: 2px;
     border-color: #BEBEBE;
     color: black;

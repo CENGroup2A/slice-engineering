@@ -133,7 +133,7 @@ class ThreeScene extends Component {
     componentDidMount() {
         var mesh, renderer, scene, camera, controls, bb, rect, uploadedFile, selectedMaterial;
         var rotate = 'Z';
-        var vector = new THREE.Vector3(0, 1, 0);
+        var vector = new THREE.Vector3(-1, 0, 0);
 
         this.openFile = (file) => {
             uploadedFile = file;
@@ -150,7 +150,7 @@ class ThreeScene extends Component {
         this.updateOrientation = (type) => {
             if (uploadedFile) {
                 if (type === 'XYZ') {
-                    vector = new THREE.Vector3(0, 1, 0);
+                    vector = new THREE.Vector3(-1, 0, 0);
                 }
                 else if (type === 'XZY') {
                     vector = new THREE.Vector3(0, 0, 1);
@@ -159,7 +159,7 @@ class ThreeScene extends Component {
                     vector = new THREE.Vector3(1, 0, 0);
                 }
                 else if (type === 'YZX') {
-                    vector = new THREE.Vector3(-1, 0, 0);
+                    vector = new THREE.Vector3(0, 1, 0);
                 }
                 else if (type === 'ZXY') {
                     vector = new THREE.Vector3(0, 0, -1);
@@ -601,8 +601,8 @@ class ThreeScene extends Component {
 
         return (
             <div className="dragDrop">
-                <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
-                    <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
+                <div style={{ height: "95vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
                         <div>
                             <div id="ui-text">Upload</div>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
@@ -617,7 +617,7 @@ class ThreeScene extends Component {
                                     </li>
                                     <li>
                                         <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
-                                            <div style={{width: "250px"}}>
+                                            <div style={{width: "167px"}}>
                                                 <Dropdown.Item eventKey="XYZ">XYZ</Dropdown.Item>
                                                 <Dropdown.Item eventKey="XZY">XZY</Dropdown.Item>
                                                 <Dropdown.Item eventKey="YXZ">YXZ</Dropdown.Item>
@@ -635,10 +635,26 @@ class ThreeScene extends Component {
                                     </li>
                                     <li>
                                         <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
-                                            <div style={{width: "250px"}}>
+                                            <div style={{width: "166px"}}>
                                                 <Dropdown.Item eventKey="X">X</Dropdown.Item>
                                                 <Dropdown.Item eventKey="Y">Y</Dropdown.Item>
                                                 <Dropdown.Item eventKey="Z">Z</Dropdown.Item>
+                                            </div>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
+
+                                <ul>
+                                    <li>
+                                        <div id="ui-text">Scale</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
+                                            <div style={{width: "167px"}}>
+                                                <Dropdown.Item eventKey="20">20%</Dropdown.Item>
+                                                <Dropdown.Item eventKey="50">50%</Dropdown.Item>
+                                                <Dropdown.Item eventKey="70">70%</Dropdown.Item>
+                                                <Dropdown.Item eventKey="100">100%</Dropdown.Item>
                                             </div>
                                         </DropdownButton>
                                     </li>
@@ -656,16 +672,6 @@ class ThreeScene extends Component {
                         <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.state.finishList[0]} onSelect={this.handleChangeFinish}>
                             <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
                                 {this.state.finishList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
-
-                        <div id="ui-text">Scale</div>
-                        <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
-                            <div style={{width: "500px"}}>
-                                <Dropdown.Item eventKey="20">20%</Dropdown.Item>
-                                <Dropdown.Item eventKey="50">50%</Dropdown.Item>
-                                <Dropdown.Item eventKey="70">70%</Dropdown.Item>
-                                <Dropdown.Item eventKey="100">100%</Dropdown.Item>
                             </div>
                         </DropdownButton>
                         
@@ -746,10 +752,10 @@ class ThreeScene extends Component {
 
                 <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>
                     {({ getRootProps, getInputProps, isDragActive }) => (
-                <div style={{ height: "100vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
+                <div style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
                     <div
                         id="container"
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#F8F9FA" }}
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }}
                         {...getRootProps()}>
                         <input {...getInputProps()} />
                         <div id='renderInfo'> {this.renderImage(isDragActive)} {this.renderInstruction(isDragActive)}</div>
