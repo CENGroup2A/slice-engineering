@@ -12,9 +12,12 @@
 
 #but-currency{
     text-align: left;
-    width: 500px;
+    width: 167px;
     border-width: 2px;
-    border-color: #BEBEBE;
+    border-right-color: #BEBEBE;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-left-color: #BEBEBE00;
     color: black;
     background-color: white;
     margin-bottom: 15px;
@@ -50,9 +53,12 @@
 
 #but-country{
     text-align: left;
-    width: 500px;
+    width: 167px;
     border-width: 2px;
-    border-color: #BEBEBE;
+    border-left-color: #BEBEBE;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-right-color: #BEBEBE00;
     color: black;
     background-color: white;
     margin-bottom: 15px;
@@ -70,7 +76,7 @@
 
 #but-state{
     text-align: left;
-    width: 500px;
+    width: 166px;
     border-width: 2px;
     border-color: #BEBEBE;
     color: black;

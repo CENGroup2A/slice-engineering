@@ -8,6 +8,7 @@ import { link } from 'fs';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 var axios = require('axios')
 
@@ -235,33 +236,53 @@ class Material extends React.Component {
                                 <Dropdown.Item eventKey="100">100%</Dropdown.Item>
                             </div>
                         </DropdownButton>
+                        
+                        <ButtonGroup>
+                            <ul>
+                                <li>
+                                    <div id="ui-text">Country</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
+                                        <div style={{width: "167px"}}>
+                                            {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
 
-                        <div id="ui-text">Country</div>
-                        <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                            <div style={{width: "500px"}}>
-                                {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
+                            <ul>
+                                <li>
+                                    <div id="ui-text">State</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
+                                        <div id="scroll" style={{width: "166px", overflowY: "scroll", maxHeight: "315px"}}>
+                                            {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
 
-                        <div id="ui-text">State</div>
-                        <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
+                            <ul>
+                                <li>
+                                    <div id="ui-text">Currency</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
+                                        <div style={{width: "167px"}}>
+                                            <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
+                        </ButtonGroup>
 
                         <div id="ui-text">City</div>
                         <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity}/>
 
                         <div id="ui-text">Zip Code</div>
                         <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode}/>
-
-                        <div id="ui-text">Currency</div>
-                        <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                            <div style={{width: "500px"}}>
-                                <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
-                            </div>
-                        </DropdownButton>
                         
                         <div>
                             <ul>
