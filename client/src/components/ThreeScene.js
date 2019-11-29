@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone'
 import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
@@ -11,6 +12,28 @@ import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
 import {TDSLoader} from 'three/examples/jsm/loaders/TDSLoader';
 import {Redirect} from 'react-router-dom';
 import Accepted from './Accepted';
+var axios = require('axios');
+
+//Variables that are sent to Price.server.controller
+var uploadedFile;
+var materialzID = "035f4772-da8a-400b-8be4-2dd344b28ddb";
+var finishID = "bba2bebb-8895-4049-aeb0-ab651cee2597";
+var city = ""
+var zipcode = ""
+var currency = "USD"
+var finishes = [];
+
+//Variables needed for parsing, searching, different things like that
+var materialObjects = [];
+var finishesObjects = [];
+var finishNames = ['please choose a material'];
+var materialz = "Polyamide (SLS)";
+var countryCodes = ["US"];
+var stateCodes = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY",	"NC", "ND", "OH", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+
+function isMaterial(materialPassedIn) {
+    return materialPassedIn.name === materialz;
+}
 
 class ThreeScene extends Component {
     constructor(props) {
@@ -19,8 +42,32 @@ class ThreeScene extends Component {
         this.state = {
             currentFile: null,
             link: null,
-            fileRendered: false
+            fileRendered: false,
+
+            //Two lists needed for drop down menus
+            materialsList: [''],
+            finishList: ["Natural white","Polished natural white","Dyed yellow","Satin Yellow","Polished and Dyed Yellow","Dyed orange","Satin Orange","Polished and Dyed Orange","Dyed red","Satin Red","Polished and Dyed Red","Satin Green","Polished and Dyed Green","Dyed blue","Satin Blue","Polished and Dyed Blue","Dyed purple","Satin Purple","Polished and Dyed Purple","Dyed black","Satin black","Polished and Dyed Black","Dyed bordeaux","Satin Bordeaux","Polished and Dyed Bordeaux","Dyed petrol blue","Satin Petrol Blue","Polished and Dyed Petrol blue","Dyed brown","Satin Brown","Polished and Dyed Brown","Velvet yellow","Velvet ochre","Velvet pink","Velvet bordeaux","Velvet green","Velvet petrol blue","Velvet blue","Velvet black","Spray painted white","Spray painted black","Waterproof white","Dyed green","Dyed grey"],
+            mats: [],
+            price: '0.00',
+            scale: '1',
+            //Needed to send to Price.server.controller
+            countryCode: 'US',
+            stateCode: 'AL',
+            modelID: '',
+            finishState: true
         };
+
+        this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
+        this.handleChangeFinish = this.handleChangeFinish.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.onChangeFileUpload = this.onChangeFileUpload.bind(this)
+        this.handleChangeState = this.handleChangeState.bind(this)
+        this.handleChangeCountry = this.handleChangeCountry.bind(this)
+        this.handleChangeCity = this.handleChangeCity.bind(this)
+        this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
+        this.handleChangeScale = this.handleChangeScale.bind(this)
+        this.getMats()
+        this.handleChangeNext = this.handleChangeNext.bind(this)
     }
 
     routeChange = () => {
@@ -395,7 +442,146 @@ class ThreeScene extends Component {
             return <br/>;
         }
         return <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div>
-      }
+    }
+
+    //<-------------------------------------------------------------------------Copied from Material.js Component------------------------------------------------------------------------->
+    //Gets the materials and finishes from the API
+    getMats = () =>
+    {
+        axios.get("/api/mat")
+        .then((mat) =>
+        {
+            var matNames = [];
+            mat.data.forEach(function(element){
+                materialObjects.push(element)
+                matNames.push(element.name)
+            });
+            this.setState({ materialsList: matNames })
+            this.setState({mats: mat.data})
+        })
+    }
+
+    handleChangeNext(value){
+        console.log('Sending')
+        //Maybe need to send?
+        //countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency
+    }
+
+    //Changes the finishes based on the material chosen
+    handleChangeMaterial(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-material');
+        text.textContent = name;
+        this.setState({finishState: false});
+
+        materialzID = materialObjects[index].materialID;
+        finishesObjects = materialObjects[index].finishes
+
+        finishNames = [];
+        materialz = name;
+        var materialChosen = this.state.mats.find(isMaterial);
+        console.log(materialChosen)
+
+        materialChosen.finishes.forEach(function(element){
+            finishes.push(element)
+            finishNames.push(element.name);
+        });
+
+        this.setState({finishList: finishNames, finish: this.state.finishList[0]})
+        finishID = finishesObjects[0].finishID
+    }
+
+    handleChangeFinish(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-finish');
+        text.textContent = name;
+
+        finishID = finishes[index].finishID;
+        this.setState({finish: name})
+    }
+
+    handleChangeState(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-state');
+        text.textContent = name;
+
+        this.setState({stateCode: stateCodes[index]})
+    }
+
+    handleChangeCountry(eventKey) {
+        var string = eventKey.toString();
+        var array = string.split(',');
+        var index = array[0];
+        var name = array[1];
+        var text = document.getElementById('but-country');
+        text.textContent = name;
+
+        this.setState({countryCode: countryCodes[index]})
+    }
+
+    handleChangeCity(event) {
+        city = event.target.value
+    }
+
+    handleChangeZipcode(event) {
+        zipcode = event.target.value
+    }
+
+    handleChangeCurrency(eventKey) {
+        var text = document.getElementById('but-currency');
+        text.textContent = eventKey;
+    }
+
+    onChangeFileUpload=event=>{
+        uploadedFile = event.target.files[0];
+    }
+
+    handleSubmit(event) {
+        var text = document.getElementById('ui-price');
+        text.textContent = "Calculating";
+        document.getElementById('wave').style.display = '';
+
+        event.preventDefault();
+
+        const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency, scale: this.state.scale}
+
+        //Send the information to Price.server.controller
+        axios.post("/api/sendMat", reactData)
+            .then(res => console.log('Data sent'))
+            .then(() =>
+            {
+                return axios.get("/api/getPrice")
+            })
+            .then((price) => //Get the price back from Price.server.controller
+            {
+                console.log(price.data.totalPrice);
+                console.log('price.data', price.data)
+                this.setState({price: price.data.totalPrice})
+                this.setState({modelID: price.data.modelID})
+                text.textContent = "Total Price: $" + this.state.price;
+                document.getElementById('wave').style.display = 'none';
+            })
+            .catch((err) => {
+                text.textContent = "An error has occured. Please refresh the page!";
+                document.getElementById('wave').style.display = 'none';
+                console.log('error', err.data)
+            })
+    }
+
+    handleChangeScale(eventKey){
+        this.state.scale = eventKey/100;
+        var text = document.getElementById('but-scale');
+        text.textContent = eventKey + '%';
+    }
 
     render() {
         const {link} = this.state;
@@ -423,102 +609,137 @@ class ThreeScene extends Component {
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
                                 Upload a file...
                             </Button>
-                            <div id="ui-text">Orientation</div>
-                            <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
-                                <div style={{width: "500px"}}>
-                                    <Dropdown.Item eventKey="XYZ">XYZ</Dropdown.Item>
-                                    <Dropdown.Item eventKey="XZY">XZY</Dropdown.Item>
-                                    <Dropdown.Item eventKey="YXZ">YXZ</Dropdown.Item>
-                                    <Dropdown.Item eventKey="YZX">YZX</Dropdown.Item>
-                                    <Dropdown.Item eventKey="ZXY">ZXY</Dropdown.Item>
-                                    <Dropdown.Item eventKey="ZYX">ZYX</Dropdown.Item>
-                                </div>
-                            </DropdownButton>
-                            <div id="ui-text">Rotation</div>
-                            <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
-                                <div style={{width: "500px"}}>
-                                    <Dropdown.Item eventKey="X">X</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Y">Y</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Z">Z</Dropdown.Item>
-                                </div>
-                            </DropdownButton>
-                            <div id="ui-text">Finish</div>
-                            <DropdownButton drop="down" id="but-finish" title="Select" onSelect={this.onFinish}>
-                                <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                    <Dropdown.Item eventKey="Dyed Black">Dyed Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Blue">Dyed Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Bordeaux">Dyed Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Brown">Dyed Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Green">Dyed Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Grey">Dyed Grey</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Orange">Dyed Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Petrol Blue">Dyed Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Purple">Dyed Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Red">Dyed Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Dyed Yellow">Dyed Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Natural White">Natural White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Black">Polished and Dyed Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Blue">Polished and Dyed Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Bordeaux">Polished and Dyed Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Brown">Polished and Dyed Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Green">Polished and Dyed Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Orange">Polished and Dyed Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Petrol Blue">Polished and Dyed Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Purple">Polished and Dyed Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Red">Polished and Dyed Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished and Dyed Yellow">Polished and Dyed Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Polished Natural White">Polished Natural White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Black">Satin Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Blue">Satin Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Bordeaux">Satin Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Brown">Satin Brown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Green">Satin Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Orange">Satin Orange</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Petrol Blue">Satin Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Purple">Satin Purple</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Red">Satin Red</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Satin Yellow">Satin Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Spray Painted Black">Spray Painted Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Spray Painted White">Spray Painted White</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Black">Velvet Black</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Blue">Velvet Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Bordeaux">Velvet Bordeaux</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Green">Velvet Green</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Ochre">Velvet Ochre</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Petrol Blue">Velvet Petrol Blue</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Pink">Velvet Pink</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Velvet Yellow">Velvet Yellow</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Waterproof White">Waterproof White</Dropdown.Item>
-                                </div>
-                            </DropdownButton>
-                            <div id="ui-text">Material</div>
-                            <DropdownButton drop="down" id="but-material" title="Select" onSelect={this.onMaterial}>
+
+                            <ButtonGroup>
+                                <ul>
+                                    <li>
+                                        <div id="ui-text">Orientation</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
+                                            <div style={{width: "250px"}}>
+                                                <Dropdown.Item eventKey="XYZ">XYZ</Dropdown.Item>
+                                                <Dropdown.Item eventKey="XZY">XZY</Dropdown.Item>
+                                                <Dropdown.Item eventKey="YXZ">YXZ</Dropdown.Item>
+                                                <Dropdown.Item eventKey="YZX">YZX</Dropdown.Item>
+                                                <Dropdown.Item eventKey="ZXY">ZXY</Dropdown.Item>
+                                                <Dropdown.Item eventKey="ZYX">ZYX</Dropdown.Item>
+                                            </div>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
+
+                                <ul>
+                                    <li>
+                                        <div id="ui-text">Rotation</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
+                                            <div style={{width: "250px"}}>
+                                                <Dropdown.Item eventKey="X">X</Dropdown.Item>
+                                                <Dropdown.Item eventKey="Y">Y</Dropdown.Item>
+                                                <Dropdown.Item eventKey="Z">Z</Dropdown.Item>
+                                            </div>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
+                            </ButtonGroup>
+
+                        <div id="ui-text">Material</div>
+                        <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
                             <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                <Dropdown.Item eventKey="ABS">ABS</Dropdown.Item>
-                                <Dropdown.Item eventKey="Alumide">Alumide</Dropdown.Item>
-                                <Dropdown.Item eventKey="Aluminum">Aluminum</Dropdown.Item>
-                                <Dropdown.Item eventKey="Brass">Brass</Dropdown.Item>
-                                <Dropdown.Item eventKey="Bronze">Bronze</Dropdown.Item>
-                                <Dropdown.Item eventKey="Copper">Copper</Dropdown.Item>
-                                <Dropdown.Item eventKey="Gold">Gold</Dropdown.Item>
-                                <Dropdown.Item eventKey="Gray Resin">Gray Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="High Detail Resin">High Detail Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="High Detail Stainless Steel">High Detail Stainless Steel</Dropdown.Item>
-                                <Dropdown.Item eventKey="Mammoth Resin">Mammoth Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="Multicolor+">Multicolor+</Dropdown.Item>
-                                <Dropdown.Item eventKey="Polyamide (MJF)">Polyamide (MJF)</Dropdown.Item>
-                                <Dropdown.Item eventKey="Polyamide (SLS)">Polyamide (SLS)</Dropdown.Item>
-                                <Dropdown.Item eventKey="Polyamide Priority (SLS)">Polyamide Priority (SLS)</Dropdown.Item>
-                                <Dropdown.Item eventKey="Polypropylene">Polypropylene</Dropdown.Item>
-                                <Dropdown.Item eventKey="Rubber-Like (MJF)">Rubber-Like (MJF)</Dropdown.Item>
-                                <Dropdown.Item eventKey="Silver">Silver</Dropdown.Item>
-                                <Dropdown.Item eventKey="Standard Resin">Standard Resin</Dropdown.Item>
-                                <Dropdown.Item eventKey="Steel">Steel</Dropdown.Item>
-                                <Dropdown.Item eventKey="Titanium">Titanium</Dropdown.Item>
-                                <Dropdown.Item eventKey="Transparent Resin">Transparent Resin</Dropdown.Item>
+                                {this.state.materialsList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
-                            </DropdownButton>
-                            <Button id="ui-submit" type="submit" onClick={this.routeChange}>Request Quote</Button>
+                        </DropdownButton>
+
+                        <div id="ui-text">Finish</div>
+                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.state.finishList[0]} onSelect={this.handleChangeFinish}>
+                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
+                                {this.state.finishList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                            </div>
+                        </DropdownButton>
+
+                        <div id="ui-text">Scale</div>
+                        <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
+                            <div style={{width: "500px"}}>
+                                <Dropdown.Item eventKey="20">20%</Dropdown.Item>
+                                <Dropdown.Item eventKey="50">50%</Dropdown.Item>
+                                <Dropdown.Item eventKey="70">70%</Dropdown.Item>
+                                <Dropdown.Item eventKey="100">100%</Dropdown.Item>
+                            </div>
+                        </DropdownButton>
+                        
+                        <ButtonGroup>
+                            <ul>
+                                <li>
+                                    <div id="ui-text">Country</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
+                                        <div style={{width: "167px"}}>
+                                            {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li>
+                                    <div id="ui-text">State</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
+                                        <div id="scroll" style={{width: "166px", overflowY: "scroll", maxHeight: "315px"}}>
+                                            {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li>
+                                    <div id="ui-text">Currency</div>
+                                </li>
+                                <li>
+                                    <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
+                                        <div style={{width: "167px"}}>
+                                            <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
+                                        </div>
+                                    </DropdownButton>
+                                </li>
+                            </ul>
+                        </ButtonGroup>
+
+                        <div id="ui-text">City</div>
+                        <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity}/>
+
+                        <div id="ui-text">Zip Code</div>
+                        <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode}/>
+                        
+                        <div>
+                            <ul style={{display: 'flex', alignItems: 'center'}}>
+                                <li>
+                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
+                                </li>
+
+                                <li>
+                                    <ul style={{display: 'flex', alignItems: 'center'}}>
+                                        <li>
+                                            <div id="ui-price">
+                                                Total Price: ${this.state.price} 
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div style={{display: "none"}} id="wave">
+                                                <span class="dot"></span>
+                                                <span class="dot"></span>
+                                                <span class="dot"></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                         </div>
                     </div>
                 </div>

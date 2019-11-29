@@ -96,9 +96,12 @@
 
 #but-orientate{
     text-align: left;
-    width: 500px;
+    width: 250px;
     border-width: 2px;
-    border-color: #BEBEBE;
+    border-left-color: #BEBEBE;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-right-color: #BEBEBE00;
     color: black;
     background-color: white;
     margin-bottom: 15px;
@@ -106,7 +109,7 @@
 
 #but-rotate{
     text-align: left;
-    width: 500px;
+    width: 250px;
     border-width: 2px;
     border-color: #BEBEBE;
     color: black;
@@ -140,6 +143,7 @@
 #ui-price {
     color: black;
     margin-bottom: 5px;
+    margin-left: 10px;
 }
 
 div#wave {

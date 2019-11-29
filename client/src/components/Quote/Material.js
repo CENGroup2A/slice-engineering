@@ -211,7 +211,6 @@ class Material extends React.Component {
             //If the materials aren't in the array, don't render
             <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
                 <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
-                <div>
                     <div>
                         <div id="ui-text">Material</div>
                         <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
@@ -309,7 +308,6 @@ class Material extends React.Component {
                                 </li>
                             </ul>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
