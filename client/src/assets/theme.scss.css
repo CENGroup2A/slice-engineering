@@ -131,7 +131,7 @@
 }
 
 #ui-submit{
-    border-color: #F8F9FA;
+    width: 165px;
     color: white;
     background-color:#FF9702;
     margin-top: 15px;
@@ -144,9 +144,13 @@
 }
 
 #ui-price {
-    color: black;
-    margin-bottom: 5px;
-    margin-left: 10px;
+    width: 330px;
+    border-color: #14a96d;
+    color: #14a96d;
+    background-color:#FFFFFF;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    margin-left: 5px;
 }
 
 div#wave {
@@ -160,7 +164,7 @@ div#wave {
     height: 5px;
     border-radius: 50%;
     margin-right: 3px;
-    background: #303131;
+    background: #14a96d;
     animation: wave 1.3s linear infinite;
   }
   div#wave .dot:nth-child(2) {
@@ -175,6 +179,6 @@ div#wave {
       transform: initial;
     }
     30% {
-      transform: translateY(-15px);
+      transform: translateY(-12px);
     }
   }

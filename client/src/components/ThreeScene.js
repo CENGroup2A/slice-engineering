@@ -54,7 +54,8 @@ class ThreeScene extends Component {
             countryCode: 'US',
             stateCode: 'AL',
             modelID: '',
-            finishState: true
+            finishState: true,
+            cartState: true
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
@@ -113,12 +114,6 @@ class ThreeScene extends Component {
     onRotation = (eventKey) => {
         this.updateRotation(eventKey);
         var text = document.getElementById('but-rotate');
-        text.textContent = eventKey;
-    }
-
-    onMaterial = (eventKey) => {
-        this.updateMaterial(eventKey);
-        var text = document.getElementById('but-material');
         text.textContent = eventKey;
     }
 
@@ -185,74 +180,8 @@ class ThreeScene extends Component {
                 update();
                 load(uploadedFile, false);
 
-                var materialPath;
-
-                if (material === 'ABS') {
-                    materialPath = '/materials/poly.png';
-                }
-                else if (material === 'Alumide') {
-
-                }
-                else if (material === 'Aluminum') {
-
-                }
-                else if (material === 'Brass') {
-
-                }
-                else if (material === 'Bronze') {
-
-                }
-                else if (material === 'Copper') {
-
-                }
-                else if (material === 'Gold') {
-
-                }
-                else if (material === 'Gray Resin') {
-
-                }
-                else if (material === 'High Detail Resin') {
-
-                }
-                else if (material === 'High Detail Stainless Steel') {
-
-                }
-                else if (material === 'Mammoth Resin') {
-
-                }
-                else if (material === 'Multicolor+') {
-
-                }
-                else if (material === 'Polyamide (MJF)') {
-
-                }
-                else if (material === 'Polyamide (SLS)') {
-
-                }
-                else if (material === 'Polyamide Priority (SLS)') {
-
-                }
-                else if (material === 'Polypropylene') {
-
-                }
-                else if (material === 'Rubber-Like (MJF)') {
-
-                }
-                else if (material === 'Silver') {
-
-                }
-                else if (material === 'Standard Resin') {
-
-                }
-                else if (material === 'Steel') {
-
-                }
-                else if (material === 'Titanium') {
-
-                }
-                else if (material === 'Transparent Resin') {
-
-                }
+                var materialPath = '/materials/' + material.toLowerCase() + '.png';
+                console.log(materialPath);
 
                 const vs = `
                 varying vec3 e;
@@ -476,6 +405,7 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-material');
         text.textContent = name;
         this.setState({finishState: false});
+        this.updateMaterial(name);
 
         materialzID = materialObjects[index].materialID;
         finishesObjects = materialObjects[index].finishes
@@ -546,9 +476,10 @@ class ThreeScene extends Component {
     }
 
     handleSubmit(event) {
-        var text = document.getElementById('ui-price');
+        var text = document.getElementById('priceText');
         text.textContent = "Calculating";
         document.getElementById('wave').style.display = '';
+        this.setState({cartState: false});
 
         event.preventDefault();
 
@@ -567,7 +498,7 @@ class ThreeScene extends Component {
                 console.log('price.data', price.data)
                 this.setState({price: price.data.totalPrice})
                 this.setState({modelID: price.data.modelID})
-                text.textContent = "Total Price: $" + this.state.price;
+                text.textContent = "Add to Cart for: $" + this.state.price;
                 document.getElementById('wave').style.display = 'none';
             })
             .catch((err) => {
@@ -721,31 +652,31 @@ class ThreeScene extends Component {
 
                         <div id="ui-text">Zip Code</div>
                         <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode}/>
-                        
-                        <div>
-                            <ul style={{display: 'flex', alignItems: 'center'}}>
-                                <li>
-                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
-                                </li>
 
-                                <li>
-                                    <ul style={{display: 'flex', alignItems: 'center'}}>
-                                        <li>
-                                            <div id="ui-price">
-                                                Total Price: ${this.state.price} 
-                                            </div>
+                        <ButtonGroup>
+                            <ul>
+                                <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
+                            </ul>
+
+                            <ul>
+                                <Button disabled={this.state.cartState} id="ui-price">
+                                    <ul style={{display: 'flex', justifyContent: "center", alignItems: 'center'}}>
+                                        <li id="priceText">
+                                            Add to Cart for: ${this.state.price}
                                         </li>
                                         <li>
-                                            <div style={{display: "none"}} id="wave">
-                                                <span class="dot"></span>
-                                                <span class="dot"></span>
-                                                <span class="dot"></span>
+                                            <div id="wave" style={{display: "none"}}>
+                                                <span className="dot"></span>
+                                                <span className="dot"></span>
+                                                <span className="dot"></span>
                                             </div>
                                         </li>
                                     </ul>
-                                </li>
+
+                                </Button>
                             </ul>
-                        </div>
+                        </ButtonGroup>
+
                         </div>
                     </div>
                 </div>
