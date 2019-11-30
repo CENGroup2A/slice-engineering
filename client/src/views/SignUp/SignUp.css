@@ -1,0 +1,23 @@
+#ui-signup {
+  height: 50%;
+  width: 40%;
+  justify-content: center;
+  text-align: left;
+  background-color: #FFFFFF;
+  margin: 0 auto;
+  margin-top: 80px;
+}
+
+#ui-signup-boxes {
+  display: flex;
+  justifyContent: center;
+  align-items: center;
+  height: 85%;
+  width: 85%;
+  backgroundColor: #FFFFFF;
+}
+
+#signup-button {
+  text-align: left;
+  margin-top: 30px;
+}
