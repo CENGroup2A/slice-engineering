@@ -103,23 +103,23 @@ class NavBar extends React.Component
                       <label htmlFor="CurrencySelector" className="visually-hidden">Currency</label>
                       <div className="currency-selector__input-wrapper select-group">
                       <select defaultValue={'USD'} name="currency" id="CurrencySelector" className="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message a11y-selection-message" data-currency-selector="">
-                          
+
                           <option value="AUD">AUD</option>
-                          
+
                           <option value="CAD">CAD</option>
-                          
+
                           <option value="DKK">DKK</option>
-                          
+
                           <option value="EUR">EUR</option>
-                          
+
                           <option value="GBP">GBP</option>
-                          
+
                           <option value="JPY">JPY</option>
-                          
+
                           <option value="NZD">NZD</option>
-                          
+
                           <option value="USD">USD</option>
-                          
+
                       </select>
                       <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                       </div>
@@ -210,23 +210,23 @@ class NavBar extends React.Component
                             <label htmlFor="CurrencySelector" className="visually-hidden">Currency</label>
                             <div className="currency-selector__input-wrapper select-group">
                             <select defaultValue={'USD'} name="currency" id="CurrencySelector" className="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message a11y-selection-message" data-currency-selector="">
-                                
+
                                 <option value="AUD">AUD</option>
-                                
+
                                 <option value="CAD">CAD</option>
-                                
+
                                 <option value="DKK">DKK</option>
-                                
+
                                 <option value="EUR">EUR</option>
-                                
+
                                 <option value="GBP">GBP</option>
-                                
+
                                 <option value="JPY">JPY</option>
-                                
+
                                 <option value="NZD">NZD</option>
-                                
+
                                 <option value="USD">USD</option>
-                                
+
                             </select>
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                             </div>

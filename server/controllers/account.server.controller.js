@@ -1,7 +1,7 @@
 const User = require('../models/user.server.model')
-    EmailCode = require('../models/emailcode.server.model'),
-    sgMail = require('@sendgrid/mail'),
-    passport = require('passport')
+      EmailCode = require('../models/emailcode.server.model'),
+      sgMail = require('@sendgrid/mail'),
+      passport = require('passport')
 
 
 
@@ -77,7 +77,7 @@ exports.login = function(req, res, next)
             goodRequest(res)
         });
     })(req, res, next);
-    
+
 };
 
 exports.logout = (req, res) =>
@@ -103,13 +103,13 @@ exports.verifyEmail = (req, res) =>
     {
         if (code == null)
             return errorRequest(res, "MissingCode", "The requested code does not exist for this user.")
-        
+
         User.findOne({username: code.username})
         .then((user) =>
         {
             if (user == null)
                 return errorRequest(res, "MissingUser", "The user attached to the code no longer exists.")
-            
+
             return User.update({"username": user.username},
             {
                 "email": code.email,
@@ -124,6 +124,6 @@ exports.verifyEmail = (req, res) =>
         {
             return goodRequest(res)
         })
-        
+
     })
 }

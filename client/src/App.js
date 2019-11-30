@@ -6,7 +6,7 @@ import Home from './views/Home/Home'
 import VerifyEmail from './views/Verify-Email/Verify-Email'
 import Quote from './views/Quote/Quote'
 import NavBar from './components/Navbar'
-import NotFound from "./views/NotFound"
+import NotFound from "./views/NotFound/NotFound"
 import Material from "./components/Quote/Material"
 import MaterialView from "./views/MaterialView"
 import CartView from './views/CartView';
@@ -29,9 +29,7 @@ const App = () => {
         <PrivateRoute exact path="/accepted" component={Accepted} />
         <PrivateRoute exact path="/status" component={Status} />
         <PrivateRoute exact path="/material" component={MaterialView} />
-        <Route path="*">
-          <p>well this is awkward, huh?</p>
-        </Route>
+        <Route path="*" component={NotFound}/>
       </Switch>
     </Router>
   );
