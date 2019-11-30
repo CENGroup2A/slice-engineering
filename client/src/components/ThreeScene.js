@@ -114,10 +114,13 @@ class ThreeScene extends Component {
       }
     }
 
+<<<<<<< HEAD
     dropClick = () => {
         document.getElementById("renderInstruc").textContent = this.getInstruction(false);
     }
 
+=======
+>>>>>>> ea190d3b8ce2d01548eaab6521f65ac015aeb5f7
     onDrop = (files) => {
         var file = files[0];
         this.renderFile(file);
@@ -790,7 +793,7 @@ class ThreeScene extends Component {
                 </div>
 
                 <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({getRootProps, getInputProps, isDragActive}) => (
-                <div onClick={this.dropClick} style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
+                <div style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
                     <div id="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
                         <input {...getInputProps()} />
                         <ul>
