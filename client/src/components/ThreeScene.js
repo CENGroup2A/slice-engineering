@@ -70,6 +70,7 @@ class ThreeScene extends Component {
         this.handleChangeCity = this.handleChangeCity.bind(this)
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.handleChangeScale = this.handleChangeScale.bind(this)
+        this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
         this.getMats()
         this.handleChangeNext = this.handleChangeNext.bind(this)
     }
@@ -483,7 +484,14 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({stateCode: stateCodes[index]})
-        document.getElementById('but-state').style.borderColor = "#BEBEBE";
+        document.getElementById('but-state').style.borderTopColor = "#BEBEBE";
+        document.getElementById('but-state').style.borderBottomColor = "#BEBEBE";
+        if (this.state.countryCode) {
+            document.getElementById('but-country').style.borderRightColor = "#BEBEBE";
+        }
+        if (currency) {
+            document.getElementById('but-currency').style.borderLeftColor = "#BEBEBE";
+        }
     }
 
     handleChangeCountry(eventKey) {
@@ -495,9 +503,14 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({countryCode: countryCodes[index]})
-        document.getElementById('but-country').style.borderLeftColor = "#BEBEBE";
-        document.getElementById('but-country').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-country').style.borderBottomColor = "#BEBEBE";
+        if (!this.state.stateCode) {
+            document.getElementById('but-country').style.borderTopColor = "#BEBEBE";
+            document.getElementById('but-country').style.borderBottomColor = "#BEBEBE";
+            document.getElementById('but-country').style.borderLeftColor = "#BEBEBE";
+        }
+        else {
+            document.getElementById('but-country').style.borderColor = "#BEBEBE";
+        }
     }
 
     handleChangeCity(event) {
@@ -514,13 +527,17 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-currency');
         text.textContent = eventKey;
         currency = eventKey;
-
-        document.getElementById('but-currency').style.borderRightColor = "#BEBEBE";
-        document.getElementById('but-currency').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-currency').style.borderBottomColor = "#BEBEBE";
+        if (!this.state.stateCode) {
+            document.getElementById('but-currency').style.borderTopColor = "#BEBEBE";
+            document.getElementById('but-currency').style.borderBottomColor = "#BEBEBE";
+            document.getElementById('but-currency').style.borderRightColor = "#BEBEBE";
+        }
+        else {
+            document.getElementById('but-currency').style.borderColor = "#BEBEBE";   
+        }
     }
 
-    onChangeFileUpload=event=> {
+    onChangeFileUpload=event=>{
         uploadedFile = event.target.files[0];
     }
 
@@ -574,12 +591,20 @@ class ThreeScene extends Component {
                 document.getElementById('but-finish').style.borderColor = "#e32c2b";
             }
             if (!this.state.countryCode) {
-                document.getElementById('but-country').style.borderLeftColor = "#e32c2b";
-                document.getElementById('but-country').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-country').style.borderBottomColor = "#e32c2b";
+                document.getElementById('but-country').style.borderColor = "#e32c2b";
             }
             if (!this.state.stateCode) {
-                document.getElementById('but-state').style.borderColor = "#e32c2b";
+                if (this.state.countryCode) {
+                    document.getElementById('but-country').style.borderRightColor = "#e32c2b";
+                }
+                if (currency) {
+                    document.getElementById('but-currency').style.borderLeftColor = "#e32c2b";
+                }
+                document.getElementById('but-state').style.borderTopColor = "#e32c2b";
+                document.getElementById('but-state').style.borderBottomColor = "#e32c2b";
+            }
+            if (!currency) {
+                document.getElementById('but-currency').style.borderColor = "#e32c2b";
             }
             if (!city) {
                 document.getElementById('but-city').style.borderColor = "#e32c2b";
@@ -587,15 +612,8 @@ class ThreeScene extends Component {
             if (!zipcode) {
                 document.getElementById('but-zip').style.borderColor = "#e32c2b";
             }
-            if (!currency) {
-                document.getElementById('but-currency').style.borderRightColor = "#e32c2b";
-                document.getElementById('but-currency').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-currency').style.borderBottomColor = "#e32c2b";
-            }
             if (!this.state.scale) {
-                document.getElementById('but-scale').style.borderRightColor = "#e32c2b";
-                document.getElementById('but-scale').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-scale').style.borderBottomColor = "#e32c2b";
+                document.getElementById('but-scale').style.borderColor = "#e32c2b";
             }
         }
     }
@@ -605,9 +623,7 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-scale');
         text.textContent = eventKey + '%';
 
-        document.getElementById('but-scale').style.borderRightColor = "#BEBEBE";
-        document.getElementById('but-scale').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-scale').style.borderBottomColor = "#BEBEBE";
+        document.getElementById('but-scale').style.borderColor = "#BEBEBE";
     }
 
     render() {
@@ -639,18 +655,17 @@ class ThreeScene extends Component {
                 <div style={{ height: "95vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
                         <div>
-                            <a data-tip data-for='upload'> Upload </a>
+                            <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
                             <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
                                 <span>supported files are {this.getSupportedFileString()}</span>
                             </ReactTooltip>
-                            <br/>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
                                 Upload a file ({this.getSupportedFileString()})
                             </Button>
 
                             <ButtonGroup>
-                                <ul>
+                                <ul style={{zIndex: 2}}>
                                     <li>
                                         <div id="ui-text">Orientation</div>
                                     </li>
@@ -668,7 +683,7 @@ class ThreeScene extends Component {
                                     </li>
                                 </ul>
 
-                                <ul>
+                                <ul style={{zIndex: 1}}>
                                     <li>
                                         <div id="ui-text">Rotation</div>
                                     </li>
@@ -683,7 +698,7 @@ class ThreeScene extends Component {
                                     </li>
                                 </ul>
 
-                                <ul>
+                                <ul style={{zIndex: 2}}>
                                     <li>
                                         <div id="ui-text">Scale</div>
                                     </li>
@@ -715,7 +730,7 @@ class ThreeScene extends Component {
                         </DropdownButton>
 
                         <ButtonGroup>
-                            <ul>
+                            <ul style={{zIndex: 2}}>
                                 <li>
                                     <div id="ui-text">Country</div>
                                 </li>
@@ -728,7 +743,7 @@ class ThreeScene extends Component {
                                 </li>
                             </ul>
 
-                            <ul>
+                            <ul style={{zIndex: 1}}>
                                 <li>
                                     <div id="ui-text">State</div>
                                 </li>
@@ -741,7 +756,7 @@ class ThreeScene extends Component {
                                 </li>
                             </ul>
 
-                            <ul>
+                            <ul style={{zIndex: 2}}>
                                 <li>
                                     <div id="ui-text">Currency</div>
                                 </li>

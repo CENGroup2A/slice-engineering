@@ -10,19 +10,6 @@
     margin-bottom: 15px;
 }
 
-#but-currency{
-    text-align: left;
-    width: 167px;
-    border-width: 2px;
-    border-right-color: #BEBEBE;
-    border-top-color: #BEBEBE;
-    border-bottom-color: #BEBEBE;
-    border-left-color: #BEBEBE00;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-}
-
 #but-city{
     text-align: left;
     width: 500px;
@@ -51,42 +38,6 @@
     text-transform: uppercase;
 }
 
-#but-country{
-    text-align: left;
-    width: 167px;
-    border-width: 2px;
-    border-left-color: #BEBEBE;
-    border-top-color: #BEBEBE;
-    border-bottom-color: #BEBEBE;
-    border-right-color: #BEBEBE00;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-}
-
-#but-scale{
-    text-align: left;
-    width: 167px;
-    border-width: 2px;
-    border-left-color: #BEBEBE00;
-    border-top-color: #BEBEBE;
-    border-bottom-color: #BEBEBE;
-    border-right-color: #BEBEBE;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-}
-
-#but-state{
-    text-align: left;
-    width: 166px;
-    border-width: 2px;
-    border-color: #BEBEBE;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-}
-
 #but-upload{
     text-align: left;
     width: 500px;
@@ -97,14 +48,46 @@
     margin-bottom: 15px;
 }
 
+#but-country{
+    text-align: left;
+    width: 167px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+}
+
+#but-state{
+    text-align: left;
+    width: 167px;
+    border-width: 2px;
+    border-left-color: #BEBEBE00;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-right-color: #BEBEBE00;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+    margin-left: -1px;
+}
+
+#but-currency{
+    text-align: left;
+    width: 168px;
+    border-width: 2px;
+    border-color: #BEBEBE;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+    margin-left: -1px;
+}
+
 #but-orientate{
     text-align: left;
     width: 167px;
     border-width: 2px;
-    border-left-color: #BEBEBE;
-    border-top-color: #BEBEBE;
-    border-bottom-color: #BEBEBE;
-    border-right-color: #BEBEBE00;
+    border-color: #BEBEBE;
     color: black;
     background-color: white;
     margin-bottom: 15px;
@@ -112,12 +95,27 @@
 
 #but-rotate{
     text-align: left;
-    width: 166px;
+    width: 167px;
+    border-width: 2px;
+    border-left-color: #BEBEBE00;
+    border-top-color: #BEBEBE;
+    border-bottom-color: #BEBEBE;
+    border-right-color: #BEBEBE00;
+    color: black;
+    background-color: white;
+    margin-bottom: 15px;
+    margin-left: -1px;
+}
+
+#but-scale{
+    text-align: left;
+    width: 168px;
     border-width: 2px;
     border-color: #BEBEBE;
     color: black;
     background-color: white;
     margin-bottom: 15px;
+    margin-left: -1px;
 }
 
 #but-material{
