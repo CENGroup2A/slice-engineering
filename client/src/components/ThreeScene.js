@@ -26,7 +26,7 @@ var currency = "";
 var finishes = [];
 
 //Variables needed for parsing, searching, different things like that
-var supportedFileExtensions = ["stl", "obj", "fbx", "3ds"]
+var supportedFileExtensions = ["STL", "stl", "OBJ", "obj", "FBX", "fbx", "3DS", "3ds"]
 var materialObjects = [];
 var finishesObjects = [];
 var finishNames = ['please choose a material'];
@@ -641,12 +641,12 @@ class ThreeScene extends Component {
                         <div>
                             <a data-tip data-for='upload'> Upload </a>
                             <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
-                                <span>supported file types are {this.getSupportedFileString()}</span>
+                                <span>Supported Files are STL, OBJ, FBX, 3DS</span>
                             </ReactTooltip>
                             <br/>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file ({this.getSupportedFileString()})
+                                Upload a file (STL, OBJ, FBX, 3DS)
                             </Button>
 
                             <ButtonGroup>
