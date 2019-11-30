@@ -114,13 +114,10 @@ class ThreeScene extends Component {
       }
     }
 
-<<<<<<< HEAD
     dropClick = () => {
         document.getElementById("renderInstruc").textContent = this.getInstruction(false);
     }
 
-=======
->>>>>>> ea190d3b8ce2d01548eaab6521f65ac015aeb5f7
     onDrop = (files) => {
         var file = files[0];
         this.renderFile(file);
