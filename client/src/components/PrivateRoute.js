@@ -8,8 +8,7 @@ import {
     Link
   } from "react-router-dom";
 
-class PrivateRoute extends React.Component
-{
+class PrivateRoute extends React.Component {
     constructor(props)
     {
         super(props)

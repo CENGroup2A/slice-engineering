@@ -7,8 +7,7 @@ import {
     Link
   } from "react-router-dom";
 
-class NavBar extends React.Component
-{
+class NavBar extends React.Component {
     state =
     {
         auth : false
