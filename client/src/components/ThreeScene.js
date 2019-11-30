@@ -77,34 +77,59 @@ class ThreeScene extends Component {
     }
 
     getFile() {
-        document.getElementById('renderInfo').style.display = 'none';
         var file = this.refs.fileUploader.files[0];
-        if (file) {
-            this.setState({fileRendered : true});
-            this.openFile(file);
-            var text = document.getElementById('but-upload');
-            text.textContent = file.name;
-            this.setState({currentFile: file});
 
-            //axios.post("http://localhost:5000/api/getS3");
-            //S3Upload.upload(file);
+        if (file) {
+            var str = file.name.split('.').pop();
+            var ext = str.toLowerCase();
+
+            if (ext === 'stl' || ext === '3ds' || ext === 'obj' || ext === 'fbx') {
+                document.getElementById('renderInfo').style.display = 'none';
+                this.setState({fileRendered : true});
+                this.openFile(file);
+                var text = document.getElementById('but-upload');
+                text.textContent = file.name;
+                this.setState({currentFile: file});
+    
+                //axios.post("http://localhost:5000/api/getS3");
+                //S3Upload.upload(file);
+            }
+            else {
+                document.getElementById("renderInstruc").textContent = "File not accepted! Try again.";
+            }
         }
     }
 
     handleClick() {
         this.refs.fileUploader.click();
+        document.getElementById("renderInstruc").textContent = "Click me or drag a file to upload!";
+    }
+
+    dropClick = () => {
+        document.getElementById("renderInstruc").textContent = "Click me or drag a file to upload!";
     }
 
     onDrop = (files) => {
         var file = files[0];
-        this.setState({fileRendered : true});
-        this.openFile(file);
-        var text = document.getElementById('but-upload');
-        text.textContent = file.name;
-        this.setState({currentFile: file});
 
-        //axios.post("http://localhost:5000/api/getS3");
-        //S3Upload.upload(file);
+        if (file) {
+            var str = file.name.split('.').pop();
+            var ext = str.toLowerCase();
+
+            if (ext === 'stl' || ext === '3ds' || ext === 'obj' || ext === 'fbx') {
+                this.setState({fileRendered : true});
+                this.openFile(file);
+                var text = document.getElementById('but-upload');
+                text.textContent = file.name;
+                this.setState({currentFile: file});
+        
+                //axios.post("http://localhost:5000/api/getS3");
+                //S3Upload.upload(file);
+            }
+            else {
+                document.getElementById("renderInstruc").textContent = "File not accepted! Try again.";
+            }
+        }
     }
 
     onOrientation = (eventKey) => {
@@ -533,7 +558,7 @@ class ThreeScene extends Component {
                     document.getElementById('wave').style.display = 'none';
                 })
                 .catch((err) => {
-                    text.textContent = "An error has occured. Please refresh the page!";
+                    text.textContent = "Error: Please Refresh the Page!";
                     document.getElementById('wave').style.display = 'none';
                     console.log('error', err.data)
                 })
@@ -614,7 +639,7 @@ class ThreeScene extends Component {
                             <div id="ui-text">Upload</div>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file...
+                                Upload a file (STL, 3DS, OBJ, FBX)
                             </Button>
 
                             <ButtonGroup>
@@ -757,15 +782,18 @@ class ThreeScene extends Component {
                     </div>
                 </div>
 
-                <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>
-                    {({ getRootProps, getInputProps, isDragActive }) => (
-                <div style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
-                    <div
-                        id="container"
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }}
-                        {...getRootProps()}>
+                <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({getRootProps, getInputProps, isDragActive}) => (
+                <div onClick={this.dropClick} style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
+                    <div id="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
                         <input {...getInputProps()} />
-                        <div id='renderInfo'> {this.renderImage(isDragActive)} {this.renderInstruction(isDragActive)}</div>
+                        <ul>
+                            <li>
+                                <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
+                            </li>
+                            <li>
+                                <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 )}
