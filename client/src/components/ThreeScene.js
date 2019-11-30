@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ReactTooltip from 'react-tooltip';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
@@ -25,6 +26,7 @@ var currency = "";
 var finishes = [];
 
 //Variables needed for parsing, searching, different things like that
+var supportedFileExtensions = ["stl", "obj", "fbx", "3ds"]
 var materialObjects = [];
 var finishesObjects = [];
 var finishNames = ['please choose a material'];
@@ -78,58 +80,47 @@ class ThreeScene extends Component {
 
     getFile() {
         var file = this.refs.fileUploader.files[0];
-
-        if (file) {
-            var str = file.name.split('.').pop();
-            var ext = str.toLowerCase();
-
-            if (ext === 'stl' || ext === '3ds' || ext === 'obj' || ext === 'fbx') {
-                document.getElementById('renderInfo').style.display = 'none';
-                this.setState({fileRendered : true});
-                this.openFile(file);
-                var text = document.getElementById('but-upload');
-                text.textContent = file.name;
-                this.setState({currentFile: file});
-    
-                //axios.post("http://localhost:5000/api/getS3");
-                //S3Upload.upload(file);
-            }
-            else {
-                document.getElementById("renderInstruc").textContent = "File not accepted! Try again.";
-            }
-        }
+        this.renderFile(file);
     }
 
     handleClick() {
         this.refs.fileUploader.click();
-        document.getElementById("renderInstruc").textContent = "Click me or drag a file to upload!";
+        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
+    }
+
+    checkExtensionValidity(file) {
+      var fileExtension = file.name.substring(file.name.lastIndexOf('.')+1, file.name.length) || file.name;
+
+      if (supportedFileExtensions.includes(fileExtension)) return true;
+      else return false;
+    }
+
+    renderFile(file) {
+      if (file) {
+          if (this.checkExtensionValidity(file)) {
+              document.getElementById('renderInfo').style.display = 'none';
+              this.setState({fileRendered : true});
+              this.openFile(file);
+              var text = document.getElementById('but-upload');
+              text.textContent = file.name;
+              this.setState({currentFile: file});
+
+              //axios.post("http://localhost:5000/api/getS3");
+              //S3Upload.upload(file);
+          }
+          else {
+              document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
+          }
+      }
     }
 
     dropClick = () => {
-        document.getElementById("renderInstruc").textContent = "Click me or drag a file to upload!";
+        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
     }
 
     onDrop = (files) => {
         var file = files[0];
-
-        if (file) {
-            var str = file.name.split('.').pop();
-            var ext = str.toLowerCase();
-
-            if (ext === 'stl' || ext === '3ds' || ext === 'obj' || ext === 'fbx') {
-                this.setState({fileRendered : true});
-                this.openFile(file);
-                var text = document.getElementById('but-upload');
-                text.textContent = file.name;
-                this.setState({currentFile: file});
-        
-                //axios.post("http://localhost:5000/api/getS3");
-                //S3Upload.upload(file);
-            }
-            else {
-                document.getElementById("renderInstruc").textContent = "File not accepted! Try again.";
-            }
-        }
+        this.renderFile(file);
     }
 
     onOrientation = (eventKey) => {
@@ -305,7 +296,7 @@ class ThreeScene extends Component {
                 loader.load(tempURL, function(object) {
                     var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
                     g.center();
-                    make(g, doAnimate); 
+                    make(g, doAnimate);
                 });
             }
 
@@ -392,11 +383,23 @@ class ThreeScene extends Component {
         }
     }
 
-    renderInstruction(isDragActive) {
+    getSupportedFileString() {
+      return supportedFileExtensions.join(", ")
+    }
+
+    getInstruction(isDragActive) {
         if (this.state.fileRendered) {
-            return <br/>;
+            return ""
         }
         return isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'
+    }
+
+    renderInstruction(isDragActive) {
+        var instruction = this.getInstruction(isDragActive);
+        if (instruction) {
+            return instruction;
+        }
+        return <br/>
     }
 
     renderImage(isDragActive) {
@@ -535,7 +538,7 @@ class ThreeScene extends Component {
                 finish: finishID,
                 countryCode: this.state.countryCode,
                 stateCode: this.state.stateCode,
-                city: city, 
+                city: city,
                 zipcode: zipcode,
                 currency: currency,
                 scale: this.state.scale
@@ -636,10 +639,14 @@ class ThreeScene extends Component {
                 <div style={{ height: "95vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
                         <div>
-                            <div id="ui-text">Upload</div>
+                            <a data-tip data-for='upload'> Upload </a>
+                            <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
+                                <span>supported file types are {this.getSupportedFileString()}</span>
+                            </ReactTooltip>
+                            <br/>
                             <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
                             <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file (STL, 3DS, OBJ, FBX)
+                                Upload a file ({this.getSupportedFileString()})
                             </Button>
 
                             <ButtonGroup>
@@ -706,7 +713,7 @@ class ThreeScene extends Component {
                                 {this.state.finishList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
                         </DropdownButton>
-                        
+
                         <ButtonGroup>
                             <ul>
                                 <li>
