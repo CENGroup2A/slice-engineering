@@ -30,7 +30,7 @@ function FetchCartItem()
        }
     ],
     "currency":"USD"
- }
+}
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
  console.log(form)
@@ -50,7 +50,6 @@ function FetchCartItem()
   {
     console.error(error)
   })
-  
 }
 
 exports.sendCartItem = (req, res)=>

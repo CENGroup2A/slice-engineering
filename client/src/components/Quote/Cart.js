@@ -40,7 +40,7 @@ class Cart extends React.Component {
                             finishID: data.data.finishID,
                             finishingName: data.data.finishingName,
                             totalPrice: data.data.totalPrice,
-                            scale: data.data.scale})
+                            scale: data.data.scale              })
         })
         .catch(err => console.log('error', err.data))
     }
