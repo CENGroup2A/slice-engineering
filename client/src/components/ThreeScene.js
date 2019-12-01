@@ -199,13 +199,14 @@ class ThreeScene extends Component {
             }
         }
 
-        this.updateMaterial = (material) => {
+        this.updateMaterial = (material, finish) => {
             if (uploadedFile) {
                 update();
                 load(uploadedFile, false);
 
-                material = material.replace(/\s/g, '');
-                var materialPath = '/materials/' + material.toLowerCase() + '.png';
+                material = material.replace(/\s/g, '-');
+                finish = finish.replace(/\s/g, '-');
+                var materialPath = '/materials/' + material.toLowerCase() + '/' + finish.toLowerCase() + '.png';
                 console.log(materialPath);
 
                 const vs = `
@@ -442,7 +443,6 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-material');
         text.textContent = name;
         this.setState({finishState: false});
-        this.updateMaterial(name);
 
         materialzID = materialObjects[index].materialID;
         finishesObjects = materialObjects[index].finishes
@@ -458,8 +458,18 @@ class ThreeScene extends Component {
         });
 
         this.setState({finishList: finishNames, finish: this.state.finishList[0]})
-        //finishID = finishesObjects[0].finishID
+
+        this.updateMaterial(name, this.state.finishList[0]);
         document.getElementById('but-material').style.borderColor = "#BEBEBE";
+    }
+
+    checkFinish() {
+        if (this.state.finishState) {
+            return "Select";
+        }
+        else {
+            return this.state.finishList[0];
+        }
     }
 
     handleChangeFinish(eventKey) {
@@ -472,6 +482,7 @@ class ThreeScene extends Component {
 
         finishID = finishes[index].finishID;
         this.setState({finish: name})
+        this.updateMaterial(materialz, name);
         document.getElementById('but-finish').style.borderColor = "#BEBEBE";
     }
 
@@ -723,7 +734,7 @@ class ThreeScene extends Component {
                         </DropdownButton>
 
                         <div id="ui-text">Finish</div>
-                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={"Select"} onSelect={this.handleChangeFinish}>
+                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.checkFinish()} onSelect={this.handleChangeFinish}>
                             <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
                                 {this.state.finishList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                             </div>
