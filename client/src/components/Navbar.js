@@ -44,7 +44,7 @@ class NavBar extends React.Component {
                 <nav className="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
                 <ul className="site-nav list--inline " id="SiteNav">
                   <li>
-                      <a href="/" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
+                      <a href="https://www.sliceengineering.com/" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">Home</span>
                       </a>
                   </li>
@@ -151,7 +151,7 @@ class NavBar extends React.Component {
                       <nav className="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
                       <ul className="site-nav list--inline " id="SiteNav">
                         <li>
-                            <a href="/" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
+                            <a href="https://www.sliceengineering.com/" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                             <span className="site-nav__label">Home</span>
                             </a>
                         </li>
