@@ -86,7 +86,7 @@ class ThreeScene extends Component {
 
     handleClick() {
         this.refs.fileUploader.click();
-        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
+        document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
     }
 
     checkExtensionValidity(file) {
@@ -97,26 +97,23 @@ class ThreeScene extends Component {
     }
 
     renderFile(file) {
-      if (file) {
-          if (this.checkExtensionValidity(file)) {
-              document.getElementById('renderInfo').style.display = 'none';
-              this.setState({fileRendered : true});
-              this.openFile(file);
-              var text = document.getElementById('but-upload');
-              text.textContent = file.name;
-              this.setState({currentFile: file});
+        if (file) {
+            if (this.checkExtensionValidity(file)) {
+                document.getElementById('infoAndInstruc').style.visibility = 'hidden';
+                this.setState({ fileRendered: true });
+                this.openFile(file);
+                var text = document.getElementById('but-upload');
+                text.textContent = file.name;
+                this.setState({ currentFile: file });
 
-              //axios.post("http://localhost:5000/api/getS3");
-              //S3Upload.upload(file);
-          }
-          else {
-              document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
-          }
-      }
-    }
-
-    dropClick = () => {
-        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
+                //axios.post("http://localhost:5000/api/getS3");
+                //S3Upload.upload(file);
+            }
+            else {
+                document.getElementById('infoAndInstruc').style.visibility = 'visible';
+                document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
+            }
+        }
     }
 
     onDrop = (files) => {
@@ -153,6 +150,7 @@ class ThreeScene extends Component {
         var mesh, renderer, scene, camera, controls, bb, rect, uploadedFile, selectedMaterial;
         var rotate = 'Z';
         var vector = new THREE.Vector3(-1, 0, 0);
+        var pause = false;
 
         this.openFile = (file) => {
             uploadedFile = file;
@@ -362,6 +360,16 @@ class ThreeScene extends Component {
             camera.updateProjectionMatrix();
 
             window.addEventListener('resize', onWindowResize, false);
+            document.getElementById("container").addEventListener('mousedown', mousedownfunc, false);
+            document.getElementById("container").addEventListener('mouseup', mouseupfunc, false);
+        }
+
+        function mousedownfunc() {
+            pause = true;
+        }
+
+        function mouseupfunc() {
+            pause = false;
         }
 
         function onWindowResize() {
@@ -371,14 +379,16 @@ class ThreeScene extends Component {
         }
 
         function animate() {
-            if (rotate === 'X') {
-                mesh.rotation.x += 0.01;
-            }
-            else if (rotate === 'Y') {
-                mesh.rotation.y += 0.01;
-            }
-            else if (rotate === 'Z') {
-                mesh.rotation.z += 0.01;
+            if (!pause) {
+                if (rotate === 'X') {
+                    mesh.rotation.x += 0.01;
+                }
+                else if (rotate === 'Y') {
+                    mesh.rotation.y += 0.01;
+                }
+                else if (rotate === 'Z') {
+                    mesh.rotation.z += 0.01;
+                }
             }
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
@@ -387,28 +397,6 @@ class ThreeScene extends Component {
 
     getSupportedFileString() {
       return supportedFileExtensions.join(", ")
-    }
-
-    getInstruction(isDragActive) {
-        if (this.state.fileRendered) {
-            return ""
-        }
-        return isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'
-    }
-
-    renderInstruction(isDragActive) {
-        var instruction = this.getInstruction(isDragActive);
-        if (instruction) {
-            return instruction;
-        }
-        return <br/>
-    }
-
-    renderImage(isDragActive) {
-        if (this.state.fileRendered) {
-            return <br/>;
-        }
-        return <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div>
     }
 
     //<-------------------------------------------------------------------------Copied from Material.js Component------------------------------------------------------------------------->
@@ -667,20 +655,25 @@ class ThreeScene extends Component {
             <div>
                 <div id="ui-title" style={{display: "flex", justifyContent: 'center'}}>Upload 3D CAD Files</div>
                 <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
-                    <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
-                        <div id="container" style={{ marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <ul>
-                                <li>
-                                    <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
-                                </li>
-                                <li>
-                                    <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
-                                </li>
-                            </ul>
+                    <div>
+                        <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
+                            <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                <ul>
+                                    <li>
+                                        <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
+                                    </li>
+                                    <li>
+                                        <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                        </Dropzone>
+
+                        <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }}>
                         </div>
-                    )}
-                    </Dropzone>
+                    </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
