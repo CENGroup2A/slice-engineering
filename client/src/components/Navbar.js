@@ -55,7 +55,7 @@ class NavBar extends React.Component
                             <Nav className="mr-auto">
                                 <Nav.Link href="/">Home</Nav.Link>
                                 <Nav.Link href="/protected">Protected</Nav.Link>
-                                <Nav.Link href="/profile">Profile</Nav.Link>
+                                <Nav.Link href="/orders">Orders</Nav.Link>
                             </Nav>
                             
                             <Button onClick={(event) =>

@@ -7,7 +7,10 @@ const User = require('../models/user.server.model')
 
 function goodRequest(res)
 {
-    return res.json({message: {"name": "success"}})
+    return res.json({
+        message: {"name": "success"},
+        user: res.user
+    })
 }
 
 function errorRequest(res, type, message)
@@ -74,6 +77,7 @@ exports.login = function(req, res, next)
 
         req.login(user, (err) =>
         {
+            res.user = user
             goodRequest(res)
         });
     })(req, res, next);

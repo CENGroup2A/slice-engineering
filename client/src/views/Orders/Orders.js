@@ -1,6 +1,7 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 
 const axios = require('axios')
@@ -12,6 +13,7 @@ class Orders extends React.Component {
 		super(props)
 
 		this.state = {
+			user_id: localStorage.getItem('user_id') || '',
 			data: []
 		}
 
@@ -26,7 +28,7 @@ class Orders extends React.Component {
 			.then(res => {
 
 				user_orders = res.data.filter(order => {
-					return (order.user_id === this.props.user_id)
+					return (order.user_id === this.state.user_id)
 				})
 
 			})
@@ -45,18 +47,24 @@ class Orders extends React.Component {
 				return d1 < d2
 			}).map(order => {
 
-				let progressPercentage = 20
+				let progressPercentage = 0
 
-				if (order.status === 'Order in progress') {
-					progressPercentage = 40
+				if (order.status === 'Ordered') {
+					progressPercentage = 100/6
 				}
-				else if (order.status === 'Order complete') {
-					progressPercentage = 60
+				else if (order.status === 'Processing') {
+					progressPercentage = 200/6
 				}
-				else if (order.status === 'Order has shipped') {
-					progressPercentage = 80
+				else if (order.status === 'In Production') {
+					progressPercentage = 300/6
 				}
-				else if (order.status === 'Order delivered') {
+				else if (order.status === 'Ready To Ship') {
+					progressPercentage = 400/6
+				}
+				else if (order.status === 'Shipped') {
+					progressPercentage = 500/6
+				}
+				else if (order.status === 'Delivered') {
 					progressPercentage = 100
 				}
 
@@ -80,7 +88,14 @@ class Orders extends React.Component {
 
 			return (
 				<Container>
-					{orders_list}
+					<Row style={{paddingTop: '1.5em'}}>
+						<h3>Order History:</h3>
+					</Row>
+					<Row>
+						<Col>
+							{orders_list}
+						</Col>
+					</Row>
 				</Container>
 			)
 
