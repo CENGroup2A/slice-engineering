@@ -4,9 +4,6 @@ axios = require('axios');
  config = require('../config/config');
 
 var cartID="";
-
-
-
   
   async function FetchCartID(){
     let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
@@ -43,12 +40,17 @@ var cartID="";
         Company: "No company",
         Line1: "North Street",
         Line2:"",
-        CountryCode: "BE",
-        StateCode:"",
-        ZipCode: "1020",
-        City: "Brussels",
+        CountryCode: "US",
+        StateCode:"FL",
+        ZipCode: "32608",
+        City: "Gainesville",
         VatNumber: "BE0999999922"
       }
+  }, 
+  {
+    headers: {
+      "accept": "application/json",
+    }
   })
     console.log("data.data",data);
     cartID=data.data;

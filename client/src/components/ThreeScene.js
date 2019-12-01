@@ -70,6 +70,7 @@ class ThreeScene extends Component {
         this.handleChangeCity = this.handleChangeCity.bind(this)
         this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.handleChangeScale = this.handleChangeScale.bind(this)
+        this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
         this.getMats()
         this.handleChangeNext = this.handleChangeNext.bind(this)
     }
@@ -198,13 +199,14 @@ class ThreeScene extends Component {
             }
         }
 
-        this.updateMaterial = (material) => {
+        this.updateMaterial = (material, finish) => {
             if (uploadedFile) {
                 update();
                 load(uploadedFile, false);
 
-                material = material.replace(/\s/g, '');
-                var materialPath = '/materials/' + material.toLowerCase() + '.png';
+                material = material.replace(/\s/g, '-');
+                finish = finish.replace(/\s/g, '-');
+                var materialPath = '/materials/' + material.toLowerCase() + '/' + finish.toLowerCase() + '.png';
                 console.log(materialPath);
 
                 const vs = `
@@ -332,7 +334,7 @@ class ThreeScene extends Component {
             rect = container.getBoundingClientRect();
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(rect.width, rect.height);
+            renderer.setSize(rect.width - 2, rect.height - 2);
 
             container.appendChild(renderer.domElement);
 
@@ -365,7 +367,7 @@ class ThreeScene extends Component {
         function onWindowResize() {
             camera.aspect = (rect.width) / (rect.height);
             camera.updateProjectionMatrix();
-            renderer.setSize(rect.width, rect.height);
+            renderer.setSize(rect.width - 2, rect.height - 2);
         }
 
         function animate() {
@@ -441,7 +443,6 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-material');
         text.textContent = name;
         this.setState({finishState: false});
-        this.updateMaterial(name);
 
         materialzID = materialObjects[index].materialID;
         finishesObjects = materialObjects[index].finishes
@@ -457,8 +458,20 @@ class ThreeScene extends Component {
         });
 
         this.setState({finishList: finishNames, finish: this.state.finishList[0]})
-        //finishID = finishesObjects[0].finishID
-        document.getElementById('but-material').style.borderColor = "#BEBEBE";
+        finishID = finishes[0].finishID;
+
+        this.updateMaterial(name, this.state.finishList[0]);
+        document.getElementById('but-material').style.borderColor = "#949494";
+        document.getElementById('but-finish').style.borderColor = "#949494";
+    }
+
+    checkFinish() {
+        if (this.state.finishState) {
+            return "Select";
+        }
+        else {
+            return this.state.finishList[0];
+        }
     }
 
     handleChangeFinish(eventKey) {
@@ -471,7 +484,8 @@ class ThreeScene extends Component {
 
         finishID = finishes[index].finishID;
         this.setState({finish: name})
-        document.getElementById('but-finish').style.borderColor = "#BEBEBE";
+        this.updateMaterial(materialz, name);
+        document.getElementById('but-finish').style.borderColor = "#949494";
     }
 
     handleChangeState(eventKey) {
@@ -483,7 +497,14 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({stateCode: stateCodes[index]})
-        document.getElementById('but-state').style.borderColor = "#BEBEBE";
+        document.getElementById('but-state').style.borderTopColor = "#949494";
+        document.getElementById('but-state').style.borderBottomColor = "#949494";
+        if (this.state.countryCode) {
+            document.getElementById('but-country').style.borderRightColor = "#949494";
+        }
+        if (currency) {
+            document.getElementById('but-currency').style.borderLeftColor = "#949494";
+        }
     }
 
     handleChangeCountry(eventKey) {
@@ -495,32 +516,41 @@ class ThreeScene extends Component {
         text.textContent = name;
 
         this.setState({countryCode: countryCodes[index]})
-        document.getElementById('but-country').style.borderLeftColor = "#BEBEBE";
-        document.getElementById('but-country').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-country').style.borderBottomColor = "#BEBEBE";
+        if (!this.state.stateCode) {
+            document.getElementById('but-country').style.borderTopColor = "#949494";
+            document.getElementById('but-country').style.borderBottomColor = "#949494";
+            document.getElementById('but-country').style.borderLeftColor = "#949494";
+        }
+        else {
+            document.getElementById('but-country').style.borderColor = "#949494";
+        }
     }
 
     handleChangeCity(event) {
         city = event.target.value
-        document.getElementById('but-city').style.borderColor = "#BEBEBE";
+        document.getElementById('but-city').style.borderColor = "#949494";
     }
 
     handleChangeZipcode(event) {
         zipcode = event.target.value
-        document.getElementById('but-zip').style.borderColor = "#BEBEBE";
+        document.getElementById('but-zip').style.borderColor = "#949494";
     }
 
     handleChangeCurrency(eventKey) {
         var text = document.getElementById('but-currency');
         text.textContent = eventKey;
         currency = eventKey;
-
-        document.getElementById('but-currency').style.borderRightColor = "#BEBEBE";
-        document.getElementById('but-currency').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-currency').style.borderBottomColor = "#BEBEBE";
+        if (!this.state.stateCode) {
+            document.getElementById('but-currency').style.borderTopColor = "#949494";
+            document.getElementById('but-currency').style.borderBottomColor = "#949494";
+            document.getElementById('but-currency').style.borderRightColor = "#949494";
+        }
+        else {
+            document.getElementById('but-currency').style.borderColor = "#949494";
+        }
     }
 
-    onChangeFileUpload=event=> {
+    onChangeFileUpload=event=>{
         uploadedFile = event.target.files[0];
     }
 
@@ -574,12 +604,20 @@ class ThreeScene extends Component {
                 document.getElementById('but-finish').style.borderColor = "#e32c2b";
             }
             if (!this.state.countryCode) {
-                document.getElementById('but-country').style.borderLeftColor = "#e32c2b";
-                document.getElementById('but-country').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-country').style.borderBottomColor = "#e32c2b";
+                document.getElementById('but-country').style.borderColor = "#e32c2b";
             }
             if (!this.state.stateCode) {
-                document.getElementById('but-state').style.borderColor = "#e32c2b";
+                if (this.state.countryCode) {
+                    document.getElementById('but-country').style.borderRightColor = "#e32c2b";
+                }
+                if (currency) {
+                    document.getElementById('but-currency').style.borderLeftColor = "#e32c2b";
+                }
+                document.getElementById('but-state').style.borderTopColor = "#e32c2b";
+                document.getElementById('but-state').style.borderBottomColor = "#e32c2b";
+            }
+            if (!currency) {
+                document.getElementById('but-currency').style.borderColor = "#e32c2b";
             }
             if (!city) {
                 document.getElementById('but-city').style.borderColor = "#e32c2b";
@@ -587,15 +625,8 @@ class ThreeScene extends Component {
             if (!zipcode) {
                 document.getElementById('but-zip').style.borderColor = "#e32c2b";
             }
-            if (!currency) {
-                document.getElementById('but-currency').style.borderRightColor = "#e32c2b";
-                document.getElementById('but-currency').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-currency').style.borderBottomColor = "#e32c2b";
-            }
             if (!this.state.scale) {
-                document.getElementById('but-scale').style.borderRightColor = "#e32c2b";
-                document.getElementById('but-scale').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-scale').style.borderBottomColor = "#e32c2b";
+                document.getElementById('but-scale').style.borderColor = "#e32c2b";
             }
         }
     }
@@ -605,9 +636,7 @@ class ThreeScene extends Component {
         var text = document.getElementById('but-scale');
         text.textContent = eventKey + '%';
 
-        document.getElementById('but-scale').style.borderRightColor = "#BEBEBE";
-        document.getElementById('but-scale').style.borderTopColor = "#BEBEBE";
-        document.getElementById('but-scale').style.borderBottomColor = "#BEBEBE";
+        document.getElementById('but-scale').style.borderColor = "#949494";
     }
 
     render() {
@@ -635,28 +664,45 @@ class ThreeScene extends Component {
         }
 
         return (
-            <div className="dragDrop">
-                <div style={{ height: "95vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
+            <div>
+                <div id="ui-title" style={{display: "flex", justifyContent: 'center'}}>Upload 3D CAD Files</div>
+                <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
+                    <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
+                        <div id="container" style={{ marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <ul>
+                                <li>
+                                    <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
+                                </li>
+                                <li>
+                                    <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                    </Dropzone>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
-                            <a data-tip data-for='upload'> Upload </a>
-                            <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
-                                <span>supported files are {this.getSupportedFileString()}</span>
-                            </ReactTooltip>
-                            <br/>
-                            <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
-                            <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file ({this.getSupportedFileString()})
-                            </Button>
+                            <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
+                            <div>
+                                <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
+                                    <span>supported files are {this.getSupportedFileString()}</span>
+                                </ReactTooltip>
+                                <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{ display: 'none' }} />
+                                <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
+                                    Upload a file ({this.getSupportedFileString()})
+                                </Button>
+                            </div>
 
                             <ButtonGroup>
-                                <ul>
+                                <ul style={{ zIndex: 3 }}>
                                     <li>
                                         <div id="ui-text">Orientation</div>
                                     </li>
                                     <li>
                                         <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
-                                            <div style={{width: "167px"}}>
+                                            <div style={{ width: "167px" }}>
                                                 <Dropdown.Item eventKey="XYZ">XYZ</Dropdown.Item>
                                                 <Dropdown.Item eventKey="XZY">XZY</Dropdown.Item>
                                                 <Dropdown.Item eventKey="YXZ">YXZ</Dropdown.Item>
@@ -668,13 +714,13 @@ class ThreeScene extends Component {
                                     </li>
                                 </ul>
 
-                                <ul>
+                                <ul style={{ zIndex: 1 }}>
                                     <li>
                                         <div id="ui-text">Rotation</div>
                                     </li>
                                     <li>
                                         <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
-                                            <div style={{width: "166px"}}>
+                                            <div style={{ width: "166px" }}>
                                                 <Dropdown.Item eventKey="X">X</Dropdown.Item>
                                                 <Dropdown.Item eventKey="Y">Y</Dropdown.Item>
                                                 <Dropdown.Item eventKey="Z">Z</Dropdown.Item>
@@ -683,13 +729,13 @@ class ThreeScene extends Component {
                                     </li>
                                 </ul>
 
-                                <ul>
+                                <ul style={{ zIndex: 2 }}>
                                     <li>
                                         <div id="ui-text">Scale</div>
                                     </li>
                                     <li>
                                         <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
-                                            <div style={{width: "167px"}}>
+                                            <div style={{ width: "167px" }}>
                                                 <Dropdown.Item eventKey="20">20%</Dropdown.Item>
                                                 <Dropdown.Item eventKey="50">50%</Dropdown.Item>
                                                 <Dropdown.Item eventKey="70">70%</Dropdown.Item>
@@ -700,111 +746,94 @@ class ThreeScene extends Component {
                                 </ul>
                             </ButtonGroup>
 
-                        <div id="ui-text">Material</div>
-                        <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.materialsList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
+                            <div id="ui-text">Material</div>
+                            <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
+                                <div id="scroll" style={{ width: "500px", overflowY: "scroll", maxHeight: "315px" }}>
+                                    {this.state.materialsList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                </div>
+                            </DropdownButton>
 
-                        <div id="ui-text">Finish</div>
-                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={"Select"} onSelect={this.handleChangeFinish}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.finishList.map((x, y) => <Dropdown.Item style={{textTransform: "capitalize"}} eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
+                            <div id="ui-text">Finish</div>
+                            <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.checkFinish()} onSelect={this.handleChangeFinish}>
+                                <div id="scroll" style={{ width: "500px", overflowY: "scroll", maxHeight: "315px" }}>
+                                    {this.state.finishList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                </div>
+                            </DropdownButton>
 
-                        <ButtonGroup>
-                            <ul>
-                                <li>
-                                    <div id="ui-text">Country</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                                        <div style={{width: "167px"}}>
-                                            {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    <div id="ui-text">State</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
-                                        <div id="scroll" style={{width: "166px", overflowY: "scroll", maxHeight: "315px"}}>
-                                            {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    <div id="ui-text">Currency</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                                        <div style={{width: "167px"}}>
-                                            <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-                        </ButtonGroup>
-
-                        <div id="ui-text">City</div>
-                        <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity}/>
-
-                        <div id="ui-text">Zip Code</div>
-                        <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode}/>
-
-                        <ButtonGroup>
-                            <ul>
-                                <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
-                            </ul>
-
-                            <ul>
-                                <Button disabled={this.state.cartState} id="ui-price">
-                                    <ul style={{display: 'flex', justifyContent: "center", alignItems: 'center'}}>
-                                        <li id="priceText">
-                                            Add to Cart for: ${this.state.price}
-                                        </li>
-                                        <li>
-                                            <div id="wave" style={{display: "none"}}>
-                                                <span className="dot"></span>
-                                                <span className="dot"></span>
-                                                <span className="dot"></span>
+                            <ButtonGroup>
+                                <ul style={{ zIndex: 2 }}>
+                                    <li>
+                                        <div id="ui-text">Country</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
+                                            <div style={{ width: "167px" }}>
+                                                {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
                                             </div>
-                                        </li>
-                                    </ul>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
 
-                                </Button>
-                            </ul>
-                        </ButtonGroup>
+                                <ul style={{ zIndex: 1 }}>
+                                    <li>
+                                        <div id="ui-text">State</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
+                                            <div id="scroll" style={{ width: "166px", overflowY: "scroll", maxHeight: "315px" }}>
+                                                {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
+                                            </div>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
+
+                                <ul style={{ zIndex: 2 }}>
+                                    <li>
+                                        <div id="ui-text">Currency</div>
+                                    </li>
+                                    <li>
+                                        <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
+                                            <div style={{ width: "167px" }}>
+                                                <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
+                                            </div>
+                                        </DropdownButton>
+                                    </li>
+                                </ul>
+                            </ButtonGroup>
+
+                            <div id="ui-text">City</div>
+                            <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity} />
+
+                            <div id="ui-text">Zip Code</div>
+                            <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode} />
+
+                            <ButtonGroup>
+                                <ul>
+                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
+                                </ul>
+
+                                <ul>
+                                    <Button disabled={this.state.cartState} id="ui-price">
+                                        <ul style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                                            <li id="priceText">
+                                                Add to Cart for: ${this.state.price}
+                                            </li>
+                                            <li>
+                                                <div id="wave" style={{ display: "none" }}>
+                                                    <span className="dot"></span>
+                                                    <span className="dot"></span>
+                                                    <span className="dot"></span>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                    </Button>
+                                </ul>
+                            </ButtonGroup>
 
                         </div>
                     </div>
                 </div>
-
-                <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({getRootProps, getInputProps, isDragActive}) => (
-                <div style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF"}}>
-                    <div id="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <ul>
-                            <li>
-                                <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
-                            </li>
-                            <li>
-                                <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                )}
-                </Dropzone>
             </div>
         );
     }
