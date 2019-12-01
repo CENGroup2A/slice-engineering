@@ -4,10 +4,11 @@ axios = require('axios');
  config = require('../config/config');
 
 var cartItem="";
+var FormData = require('form-data');
 
-async function FetchCartItem(){
-  let data =await axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register', 
-  {
+function FetchCartItem()
+{
+  var example = {
     "cartItems":[
        {
           "toolID":"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
@@ -24,21 +25,32 @@ async function FetchCartItem(){
           "zDimMm":"12",
           "volumeCm3":"2.0",
           "surfaceCm2":"100.0",
-          "iMatAPIPrice": "14.19",
-          "mySalesPrice": "16.0",
+          "iMatAPIPrice": "25.0",
+          "mySalesPrice": "26.0",
        }
     ],
     "currency":"USD"
-  },
+ }
+ var form = new FormData()
+ form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
+ console.log(form)
+
+  return axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register', 
+  form,
   {
-    headers: {
-      "accept": "application/json",
-      "Content-Type": "multipart/form-data",
-    }
+    headers: form.getHeaders()
   })
-  console.log("data.data",data.data);
-  cartItem=data.data;
-  return(data.data.modelID)
+  .then((data) =>
+  {
+    console.log("data.data",data.data);
+    cartItem=data.data;
+    return Promise.resolve(data.data.modelID)
+  })
+  .catch((error) =>
+  {
+    console.error(error)
+  })
+  
 }
 
 exports.sendCartItem = (req, res)=>
