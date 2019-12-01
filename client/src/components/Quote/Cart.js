@@ -24,8 +24,6 @@ class Cart extends React.Component {
         };
         this.getData()
         this.getCartItem()
-        this.getCartID()
-        this.getCartCheckout()
     }
 
     getData = () =>
@@ -52,28 +50,6 @@ class Cart extends React.Component {
         {
             cartItem = data.data
             console.log('data from getCartItem', cartItem)
-        })
-        .catch(err => console.log('error', err.data))
-    }
-
-    getCartID = () =>
-    {
-        axios.get("/api/getCartID")
-        .then((data) =>
-        {
-            cartID = data.data
-            console.log('data from getCartID', cartID)
-        })
-        .catch(err => console.log('error', err.data))
-    }
-
-    getCartCheckout = () =>
-    {
-        axios.get("/api/checkout")
-        .then((data) =>
-        {
-            checkout = data.data
-            console.log('data from checkout', checkout)
         })
         .catch(err => console.log('error', err.data))
     }
