@@ -20,3 +20,26 @@
 .App-link {
     color: #000000;
 }
+
+#ui-home-welcome-box {
+    height: 50vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+}
+
+#ui-home-title {
+    text-align: center;
+    font-size: 35px;
+}
+
+#ui-home-text {
+  text-align: center;
+  font-size: 18px;
+}
+
+#ui-home-button {
+  text-align: center;
+}

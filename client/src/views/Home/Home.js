@@ -3,6 +3,7 @@ import axios from "axios"
 import Button from "react-bootstrap/Button";
 import {Redirect, Link} from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
+import style from "./Home.css"
 
 
 class Home extends React.Component {
@@ -29,15 +30,15 @@ class Home extends React.Component {
 
     render(){
       return (
-          <div style={{ height: "75vh", width: "100%", display: "flex", justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
+          <div id="ui-home-welcome-box">
               <ul>
                   <li>
-                      <p align="center" style={{fontSize: "35px"}}>
+                      <p id="ui-home-title">
                           Thank you for visiting the Slice Engineering 3D Printing Service Portal.
                       </p>
                   </li>
                   <li>
-                      <p align="center" style={{fontSize: "18px"}}>
+                      <p id="ui-home-text">
                           <br/>
                           We have a variety of printing methods, materials, and finishes available to choose from.
                           <br/>
@@ -47,7 +48,7 @@ class Home extends React.Component {
                           <br/>
                           All quotes include shipping.
                       </p>
-                      <p align="center">
+                      <p id="ui-home-button">
                           <Button variant="primary" type="customizeYourPrint" href={this.redirect()}>
                               Customize Your Print
                           </Button>
