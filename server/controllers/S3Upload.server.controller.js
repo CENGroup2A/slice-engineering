@@ -28,6 +28,7 @@ exports.sign_s3 = (req, res) => {
             return err;
         }
         else {
+            console.log(data)
             res.json({success:true, data:{data}});
             //res.json(data);
             return data;
@@ -35,7 +36,7 @@ exports.sign_s3 = (req, res) => {
     });
 };
 
-exports.get_s3 = (req, res) => {
+exports.getFileURL = (req, res) => {
     var params = {
         Bucket: BUCKET_NAME
     };
@@ -46,18 +47,20 @@ exports.get_s3 = (req, res) => {
         {
             for(var file in data.Contents)
             {
-                varFileParams = {
-                    Bucket: BUCKET_NAME,
-                    Key: data.Contents[file].Key,
-                    Expires: 180 //Set expiration time that i.materialise could use this link
+                console.log(data.Contents[file].Key)
+                console.log(req.body.key)
+                if(req.body.key === data.Contents[file].Key) {
+                    varFileParams = {
+                        Bucket: BUCKET_NAME,
+                        Key: data.Contents[file].Key,
+                        Expires: 60000 //Set expiration time that i.materialise could use this link
+                    }
+
+                    var url = s3.getSignedUrl('getObject', varFileParams);
+                    console.log('URL: ', url);
+                    res.json({success:true, 'url': url})
                 }
-                //console.log(data.Contents);
-                //console.log(data.Contents[file].Key)
-                var url = s3.getSignedUrl('getObject', varFileParams);
-                console.log('URL: ', url);
             }
         }
-      });
-
-    res.json({success:true})
+    });
 };

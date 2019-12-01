@@ -14,32 +14,32 @@ axios = require('axios');
  var currency
  var scale
  var ourprice
+ var url
 
   //Upload model via URL
   async function FetchmodelID(){
-    let data = await axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model',
-    {
+    var package = {
       //LINKS TO TRY
       // https://static.free3d.com/models/1/ej0vwvf0j8jk-lowpolycat.rar     CAT
       //https://static.free3d.com/models/1/dxmuladgj3eo-3DBenchy.stl.zip    BOAT
       //https://slice-engineering-file-test-open.s3.us-east-2.amazonaws.com/3DBenchy.stl"  BOAT FROM OUR AWS
 
-      fileUrl:"https://slice-engineering-test-bucket.s3.amazonaws.com/knot.stl",
-      fileUnits:"mm",
-      headers: {
-        "accept": "application/json",
-      }
+      fileUrl: url,
+      fileUnits:"mm"
+    }
+    console.log(package)
+    let data = await axios.post(('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model'),
+    package, {headers: {
+      "accept": "application/json",
+    }})
 
-    })
-    console.log("Hello")
     console.log("ModelID",data.data.modelID);
     return(data.data.modelID)
   }
 
   //get price from API
   async function fetchPrice(material,finish,countryCode,stateCode){
-    let data = await axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
-    {
+    var package = {
       models: [
         {
           "modelID": await FetchmodelID(),
@@ -57,7 +57,10 @@ axios = require('axios');
         zipCode : zipcode,
       },
         "currency": currency
-    },
+    }
+    console.log(package)
+    let data = await axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
+    package,
     {
       headers: {
         "accept": "application/json",
@@ -79,12 +82,13 @@ exports.sendMatFIN = (req, res)=>
   //req.body is the information after we hit "Submit" on the form
   mat = req.body.material
   finish = req.body.finish
-  countryCode = req.body.countryCode;
-  stateCode = req.body.stateCode;
-  city = req.body.city;
-  zipcode = req.body.zipcode;
+  countryCode = req.body.countryCode
+  stateCode = req.body.stateCode
+  city = req.body.city
+  zipcode = req.body.zipcode
   currency = req.body.currency
   scale = req.body.scale
+  url = req.body.url
 
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
@@ -92,6 +96,10 @@ exports.sendMatFIN = (req, res)=>
     price.scale = scale
     res.json(price)
   })
+  .catch((error) =>
+    {
+     console.error(error)
+    })
 }
 
 //Sends the Price back to Material.js
