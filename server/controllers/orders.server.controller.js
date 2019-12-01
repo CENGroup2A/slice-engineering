@@ -31,7 +31,7 @@ function sendOrderUpdate(codeData)
 		subject: 'Slice Engineering CAD Order Status Update',
 		text: "Hello, "
 		+ codeData.username +
-		"\n\nYour order status is now: \n" + codeData.status +
+		"\n\nYour order status is now \n\"" + codeData.status + "\"" +
 		"\n\nYour orderID is " + codeData.order_number
 	};
 	sgMail.send(msg);
