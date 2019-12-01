@@ -3,13 +3,14 @@ const Schema = mongoose.Schema;
 
 const OrderEmailCode = new Schema(
 	{
-	  order_number : Number,
+	  order_number : String,
+	  status: String,
 	  email : String,
 	  username : String
 	},
 	{ timestamps: true }
   );
 
-var Order = mongoose.model("OrderEmailCode", OrderEmailCode);
+var OrderCode = mongoose.model("OrderEmailCode", OrderEmailCode);
 
-module.exports = Order;
+module.exports = OrderCode;

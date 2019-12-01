@@ -1,24 +1,41 @@
 var mongoose = require('mongoose'),
 	Order = require('../models/orders.server.model');
 	OrderEmailCode = require('../models/ordercode.server.model');
+	
+	
+	
+//sends a confirmation email after an order is placed
+function sendOrderConfirmation(codeData)
+{
+	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
+	const msg = {
+		to: codeData.email,
+		from: 'noreply@slice-engineering.com',
+		subject: 'Slice Engineering CAD Upload Order Confirmation',
+		text: "Hello, "
+		+ codeData.username +
+		"\n\nThis email is to confirm that you have succesfully placed an order for a CAD upload file\n" +
+		"\nYour orderID is " + codeData.order_number
+	};
+	sgMail.send(msg);
+}
 
-	
-	
-	//sends a confirmation email after an order is placed
-	function sendOrderConfirmation(codeData)
-	{
-		sgMail.setApiKey(config.sendGrid.APIKey);
-		const msg = {
-			to: codeData.email,
-			from: 'noreply@slice-engineering.com',
-			subject: 'Slice Engineering CAD Upload Order Confirmation',
-			text: "Hello, "
-			+ codeData.username +
-			"\n\nThis email is to confirm that you have succesfully placed an order for a CAD upload file\n" +
-			"Your orderID is " + codeData.order_number
-		};
-		sgMail.send(msg);
-	}
+
+//Sends an email to notify the user of a status update on their order
+function sendOrderUpdate(codeData)
+{
+	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
+	const msg = {
+		to: codeData.email,
+		from: 'noreply@slice-engineering.com',
+		subject: 'Slice Engineering CAD Order Status Update',
+		text: "Hello, "
+		+ codeData.username +
+		"\n\nYour order status is now: \n" + codeData.status +
+		"\n\nYour orderID is " + codeData.order_number
+	};
+	sgMail.send(msg);
+}
 
 
 // Create an order
@@ -38,16 +55,29 @@ exports.create = (req, res) => {
 		}
 	});
 
-	//test to see if session user is found
-	console.log("current session username: " + req.user.username);
-	//meant to get the session's current user and send an email based on data gotten
-	var codeData = new OrderEmailCode({
-		order_number: req.body.order_number,
-		email: req.user.email,
-		username: req.user.username
+	//Gets user based on userId and sends an email
+	User.findOne({username: order.user_id}).then((currentUser) =>
+	{
+		if(currentUser)
+		{
+			var currUserName = currentUser.username;
+			var userEmail = currentUser.email;
 
+			sendOrderConfirmation(new OrderEmailCode({
+				order_number: order.order_number,
+				status: order.status,
+				email: userEmail,// email based on userID user
+				username: currUserName// username based on userID user
+		
+			}));
+		}
+		else
+		{
+			console.log("User not found");
+		}
 	});
-	sendOrderConfirmation(codeData)
+
+	
 
 }
 
@@ -70,6 +100,28 @@ exports.update = (req, res) => {
 			res.status(500).send(err);
 		} else {
 			res.json(order);
+		}
+	});
+
+	//Gets user based on userId and sends an email
+	User.findOne({username: order.user_id}).then((currentUser) =>
+	{
+		if(currentUser)
+		{
+			var currUserName = currentUser.username;
+			var userEmail = currentUser.email;
+
+			sendOrderUpdate(new OrderEmailCode({
+				order_number: order.order_number,
+				status: order.status,
+				email: userEmail,// email based on userID user
+				username: currUserName// username based on userID user
+		
+			}));
+		}
+		else
+		{
+			console.log("User not found");
 		}
 	});
 
