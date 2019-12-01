@@ -23,13 +23,8 @@ class Home extends React.Component {
     }
 
     redirect(){
-        var page = this
-        if (this.state.auth == false)
-        {
-          axios.post("/api/login").then((res) => {window.location.reload()}, err => {console.log(err)})
-        } else {
-          axios.post("/api/protected").then((res) => {console.log("render")}, err => {console.log(err)})
-        }
+        if (this.state.auth == false) return "/login"
+        else return "/protected"
     }
 
     render(){
@@ -53,10 +48,8 @@ class Home extends React.Component {
                           All quotes include shipping.
                       </p>
                       <p align="center">
-                          <Button variant="primary" type="customizeYourPrint"
-                            onClick = {(event) =>
-                                {this.redirect()}
-                            }> Customize Your Print
+                          <Button variant="primary" type="customizeYourPrint" href={this.redirect()}>
+                              Customize Your Print
                           </Button>
                       </p>
                   </li>

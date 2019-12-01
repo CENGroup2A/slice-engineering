@@ -533,7 +533,7 @@ class ThreeScene extends Component {
             document.getElementById('but-currency').style.borderRightColor = "#BEBEBE";
         }
         else {
-            document.getElementById('but-currency').style.borderColor = "#BEBEBE";   
+            document.getElementById('but-currency').style.borderColor = "#BEBEBE";
         }
     }
 
