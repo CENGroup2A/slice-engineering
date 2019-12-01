@@ -46,20 +46,16 @@ var cartID="";
         City: "Gainesville",
         VatNumber: "BE0999999922"
       }
-  }, 
-  {
-    headers: {
-      "accept": "application/json",
-    }
-  })
+    }, 
+    {
+      headers: {
+        "accept": "application/json",
+      }
+    })
     console.log("data.data",data);
     cartID=data.data;
     return(data.data.modelID)
   }
-
-
-
-
 
 exports.sendCartID = (req, res)=>
 {

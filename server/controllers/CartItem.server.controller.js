@@ -5,39 +5,38 @@ axios = require('axios');
 
 var cartItem="";
 
+// /getCartItem
 async function FetchCartItem(){
   let data =await axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register', 
   {
     "cartItems":[
-       {
-          "toolID":"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
-          "MyCartItemReference":"some reference",
-          "modelID":"8a07f8c7-eda7-4a15-a843-f7661491c2d8",
-          "modelFileName":"",
-          "fileUnits":"mm",
-          "fileScaleFactor":"1",
-          "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
-          "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
-          "quantity":"1",
-          "xDimMm":"12",
-          "yDimMm":"12",
-          "zDimMm":"12",
-          "volumeCm3":"2.0",
-          "surfaceCm2":"100.0",
-          "iMatAPIPrice": "14.19",
-          "mySalesPrice": "16.0",
-       }
+      {
+        "toolID":"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
+        "MyCartItemReference":"some reference",
+        "modelID":"8a07f8c7-eda7-4a15-a843-f7661491c2d8",
+        "modelFileName":"",
+        "fileUnits":"mm",
+        "fileScaleFactor":"1",
+        "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
+        "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
+        "quantity":"1",
+        "xDimMm":"12",
+        "yDimMm":"12",
+        "zDimMm":"12",
+        "volumeCm3":"2.0",
+        "surfaceCm2":"100.0",
+        "iMatAPIPrice": "14.19",
+        "mySalesPrice": "16.0",
+      }
     ],
-    "currency":"USD"
-  },
-  {
-    headers: {
+    "currency":"USD",
+    "headers": {
       "accept": "application/json",
-      "Content-Type": "multipart/form-data",
+      "Content-Type" : "multipart/form-data", 
     }
   })
   console.log("data.data",data.data);
-  cartItem=data.data;
+  cartItem = data.data;
   return(data.data.modelID)
 }
 
