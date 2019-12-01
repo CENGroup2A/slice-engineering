@@ -29,14 +29,8 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/verify-email" component={VerifyEmail} />
         <Route exact path="/" component={Home} />
-<<<<<<< HEAD
-        <PrivateRoute exact path="/protected" component={Quote} />
-        <PrivateRoute exact path="/accepted" component={Accepted} />
-        <PrivateRoute exact path="/status" component={Status} />
-=======
         <PrivateRoute exact path = "/protected" component={Quote} />
         <PrivateRoute exact path="/orders" component={Orders} />
->>>>>>> b62e6ddc7009cb38e9f232f9dd7ff01abf07d66a
         <Route path="*">
           <p>well this is awkward, huh?</p>
         </Route>
