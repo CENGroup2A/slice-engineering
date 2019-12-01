@@ -146,14 +146,20 @@
     margin-bottom: 5px;
 }
 
+#ui-title {
+    color: black;
+    margin-top: 35px;
+    font-size: 35px;
+}
+
 #ui-price {
-    width: 330px;
+    width: 320px;
     border-color: #14a96d;
     color: #14a96d;
     background-color:#FFFFFF;
     margin-top: 15px;
     margin-bottom: 20px;
-    margin-left: 5px;
+    margin-left: 15px;
 }
 
 div#wave {

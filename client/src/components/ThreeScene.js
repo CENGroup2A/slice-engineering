@@ -334,7 +334,7 @@ class ThreeScene extends Component {
             rect = container.getBoundingClientRect();
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(rect.width, rect.height);
+            renderer.setSize(rect.width - 2, rect.height - 2);
 
             container.appendChild(renderer.domElement);
 
@@ -367,7 +367,7 @@ class ThreeScene extends Component {
         function onWindowResize() {
             camera.aspect = (rect.width) / (rect.height);
             camera.updateProjectionMatrix();
-            renderer.setSize(rect.width, rect.height);
+            renderer.setSize(rect.width - 2, rect.height - 2);
         }
 
         function animate() {
@@ -664,21 +664,39 @@ class ThreeScene extends Component {
         }
 
         return (
-            <div className="dragDrop">
-                <div style={{ height: "95vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF" }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
+            <div>
+                <div id="ui-title" style={{display: "flex", justifyContent: 'center'}}>Upload 3D CAD Files</div>
+                <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
+                    <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
+                        <div id="container" style={{ marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <ul>
+                                <li>
+                                    <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
+                                </li>
+                                <li>
+                                    <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                    </Dropzone>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
                             <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
-                            <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
-                                <span>supported files are {this.getSupportedFileString()}</span>
-                            </ReactTooltip>
-                            <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{ display: 'none' }} />
-                            <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file ({this.getSupportedFileString()})
-                            </Button>
+                            <div>
+                                <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
+                                    <span>supported files are {this.getSupportedFileString()}</span>
+                                </ReactTooltip>
+                                <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{ display: 'none' }} />
+                                <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
+                                    Upload a file ({this.getSupportedFileString()})
+                                </Button>
+                            </div>
 
                             <ButtonGroup>
-                                <ul style={{ zIndex: 2 }}>
+                                <ul style={{ zIndex: 3 }}>
                                     <li>
                                         <div id="ui-text">Orientation</div>
                                     </li>
@@ -816,23 +834,6 @@ class ThreeScene extends Component {
                         </div>
                     </div>
                 </div>
-
-                <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
-                    <div style={{ height: "95vh", width: "50%", float: "left", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: "#FFFFFF" }}>
-                        <div id="container" style={{ borderStyle: "solid", marginLeft: "auto", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "75%", width: "75%", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <ul>
-                                <li>
-                                    <div id='renderInfo'> {this.renderImage(isDragActive)}</div>
-                                </li>
-                                <li>
-                                    <div id="renderInstruc">{this.renderInstruction(isDragActive)}</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                )}
-                </Dropzone>
             </div>
         );
     }
