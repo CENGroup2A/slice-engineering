@@ -7,38 +7,13 @@ var cartItem
 var cartCheckout
 var cartId
 var FormData = require('form-data');
+var neededData
 
 //Price Variables
-var modelID
-var materialID
-var materialName
-var finishID
-var finishingName
-var materialPrice
-var scale
 var quantity = "1"
-var surfaceCm2
-var volumeCm3
-var xDimMm
-var yDimMm
-var zDimMm
-var shippingPrice
-var shippingType
-var daysInTransit
-var countryCode
-var stateCode
-var city 
-var zipcode
-var currency
-var firstName
-var lastName
-var phoneNumber
-var email
-var address
 
 //Variables for FetchCartID
 var cartItemID
-var modelFileName
 
 function FetchCartItem()
 {
@@ -47,21 +22,21 @@ function FetchCartItem()
        {
           "toolID":config.imaterialize.toolId,
           "MyCartItemReference":"current cart item",
-          "modelID":modelID,
-          "fileScaleFactor":scale,
-          "materialID":materialID,
-          "finishID":finishID,
+          "modelID":neededData.modelID,
+          "fileScaleFactor":neededData.scale,
+          "materialID":neededData.materialID,
+          "finishID":neededData.finishID,
           "quantity":quantity,
-          "xDimMm":xDimMm,
-          "yDimMm":yDimMm,
-          "zDimMm":zDimMm,
-          "volumeCm3":volumeCm3,
-          "surfaceCm2":surfaceCm2,
-          "iMatAPIPrice": materialPrice,
-          "mySalesPrice": materialPrice,
+          "xDimMm":neededData.xDimMm,
+          "yDimMm":neededData.yDimMm,
+          "zDimMm":neededData.zDimMm,
+          "volumeCm3":neededData.volumeCm3,
+          "surfaceCm2":neededData.surfaceCm2,
+          "iMatAPIPrice": neededData.totalPrice,
+          "mySalesPrice": neededData.totalPrice,
        }
     ],
-    "currency":currency
+    "currency":neededData.currency
 }
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
@@ -88,7 +63,7 @@ async function FetchCartID(){
   let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
   {
     MyCartReference: "My cart",
-    Currency: currency,
+    Currency: neededData.currency,
     LanguageCode: "en",
     ReturnUrl: "",
     OrderConfirmationUrl: "",
@@ -99,30 +74,30 @@ async function FetchCartID(){
           CartItemID: cartItemID
        }],
     ShippingInfo: {
-      FirstName: firstName,
-      LastName: lastName,
-      Email: email,
-      Phone: phoneNumber,
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
       Company: "No company",
-      Line1: address,
+      Line1: neededData.address,
       Line2:"",
-      CountryCode: countryCode,
-      StateCode:stateCode,
-      ZipCode: zipcode,
-      City: city
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city
     },
     BillingInfo: {
-      FirstName: firstName,
-      LastName: lastName,
-      Email: email,
-      Phone: phoneNumber,
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
       Company: "No company",
-      Line1: address,
+      Line1: neededData.address,
       Line2:"",
-      CountryCode: countryCode,
-      StateCode:stateCode,
-      ZipCode: zipcode,
-      City: city,
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city,
       VatNumber: ""
     }
   }, 
@@ -142,8 +117,8 @@ function FetchCheckout()
   console.log('cartItemID', cartItemID)
   var example = {
     cartID: cartID,
-    myOrderReference:"test",
-    shipmentService:shippingType
+    myOrderReference:"My Order",
+    shipmentService:neededData.shippingType
   }
   
  var form = new FormData()
@@ -186,30 +161,6 @@ exports.sendCartItem = (req, res)=>
 
 exports.getDataFromCart = (req, res) =>
 {
-  modelID = req.body.modelID
-  materialID = req.body.materialID
-  materialName = req.body.materialName
-  finishID = req.body.finishID
-  finishingName = req.body.finishingName
-  materialPrice = req.body.totalPrice
-  scale = req.body.scale
-  shippingPrice = req.body.shippingPrice
-  shippingType = req.body.shippingType
-  daysInTransit = req.body.daysInTransit
-  countryCode = req.body.countryCode
-  stateCode = req.body.stateCode
-  city = req.body.city
-  zipcode = req.body.zipcode
-  currency = req.body.currency
-  firstName = req.body.firstName
-  lastName = req.body.lastName
-  phoneNumber = req.body.phoneNumber
-  email = req.body.email
-  address = req.body.address
-  surfaceCm2 = req.body.surfaceCm2
-  volumeCm3 = req.body.volumeCm3
-  xDimMm = req.body.xDimMm
-  yDimMm = req.body.yDimMm
-  zDimMm = req.body.zDimMm
-  console.log('data from Cart.js', modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit, countryCode, stateCode, zipcode, city, currency, firstName, lastName, phoneNumber, email, address)
+  neededData = req.body
+  console.log('data', neededData)
 }

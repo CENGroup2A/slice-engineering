@@ -79,8 +79,9 @@ class Cart extends React.Component {
         axios.get("/api/getCartItem")
         .then((data) =>
         {
-        cartItem = data.data
-        console.log('data from getCartItem', cartItem)
+            cartItem = data.data
+            this.setState({totalPrice: data.data.totalPrice})
+            console.log('data from getCartItem', cartItem)
         })
         .catch(err => console.log('error', err.data))
     }
