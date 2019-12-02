@@ -8,18 +8,22 @@ const BUCKET_NAME = process.env.S3_BUCKET_NAME || require('../config/config').bu
 
 const s3 = new AWS.S3({
     accessKeyId: ID,
-    secretAccessKey: SECRET
+    secretAccessKey: SECRET,
+    signatureVersion: 'v4'
 });
 
 exports.sign_s3 = (req, res) => {
     const fileName = req.body.filename;
     const fileType = req.body.filetype;
 
+    console.log("fileName", fileName)
+    console.log("fileType", fileType)
+
     var params = {
         Bucket: BUCKET_NAME,
         Key: fileName,
         Expires: 60,
-        ContentType: fileType
+        //ContentType: fileType
     };
 
     s3.getSignedUrl("putObject", params, function(err, data) {
@@ -28,6 +32,7 @@ exports.sign_s3 = (req, res) => {
             return err;
         }
         else {
+            console.log(data)
             res.json({success:true, data:{data}});
             //res.json(data);
             return data;
@@ -35,7 +40,7 @@ exports.sign_s3 = (req, res) => {
     });
 };
 
-exports.get_s3 = (req, res) => {
+exports.getFileURL = (req, res) => {
     var params = {
         Bucket: BUCKET_NAME
     };
@@ -46,18 +51,20 @@ exports.get_s3 = (req, res) => {
         {
             for(var file in data.Contents)
             {
-                varFileParams = {
-                    Bucket: BUCKET_NAME,
-                    Key: data.Contents[file].Key,
-                    Expires: 180 //Set expiration time that i.materialise could use this link
-                }
-                //console.log(data.Contents);
                 //console.log(data.Contents[file].Key)
-                var url = s3.getSignedUrl('getObject', varFileParams);
-                console.log('URL: ', url);
+                //console.log(req.body.key)
+                if(req.body.key === data.Contents[file].Key) {
+                    varFileParams = {
+                        Bucket: BUCKET_NAME,
+                        Key: data.Contents[file].Key,
+                        Expires: 60000 //Set expiration time that i.materialise could use this link
+                    }
+
+                    var url = s3.getSignedUrl('getObject', varFileParams);
+                    console.log('URL: ', url);
+                    res.json({success:true, 'url': url})
+                }
             }
         }
-      });
-
-    res.json({success:true})
+    });
 };

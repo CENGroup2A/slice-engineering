@@ -5,6 +5,11 @@
     border-color: #949494;
 }
 
+#infoAndInstruc {
+    border-width: 1px;
+    border-color: #949494;
+}
+
 #but-finish{
     text-align: left;
     width: 500px;

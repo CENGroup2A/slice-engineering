@@ -53,12 +53,65 @@ function FetchCartItem()
   
 }
 
+function FetchCheckout()
+{
+  console.log('cartItemID', cartItemID)
+  var example = {
+    cartID: cartItemID,
+    myOrderReference:"test",
+    shipmentService:shippingType
+  }
+  
+ var form = new FormData()
+ form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
+ console.log(form.getHeaders())
+
+  return axios.post('https://imatsandbox.materialise.net/web-api/order/post', 
+  form,
+  {
+    headers: {...form.getHeaders(), "APICode": config.imaterialize.API}
+  })
+  .then((data) =>
+  {
+    console.log("data.data in FetchCheckout",data.data);
+    cartCheckout=data.data;
+    return Promise.resolve(data.data.modelID)
+  })
+  .catch((error) =>
+  {
+    console.error(error)
+  })
+}
+
 exports.sendCartItem = (req, res)=>
 {
   FetchCartItem()
   .then(() =>
   {
-    res.json(cartItem)
+    FetchCartID()
+    .then(() =>
+    {
+      FetchCheckout()
+      .then(() =>
+      {
+        res.json(cartCheckout)
+      })
+    })
   })
 }
 
+exports.getDataFromCart = (req, res) =>
+{
+  modelID = req.body.modelID
+  materialID = req.body.materialID
+  materialName = req.body.materialName
+  finishID = req.body.finishID
+  finishingName = req.body.finishingName
+  materialPrice = req.body.totalPrice
+  scale = req.body.scale
+  shippingPrice = req.body.shippingPrice
+  shippingType = req.body.shippingType
+  daysInTransit = req.body.daysInTransit
+
+  console.log(modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit)
+}
