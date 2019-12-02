@@ -25,6 +25,15 @@ var zDimMm = "48"
 var shippingPrice = "15.50"
 var shippingType = "Express"
 var daysInTransit = "2"
+var countryCode = ""
+var stateCode = ""
+var city = ""
+var zipcode = ""
+var currency = ""
+var firstName = ""
+var lastName = ""
+var phoneNumber = ""
+var email  = "" 
 
 //Variables for FetchCartID
 var cartItemID
@@ -51,7 +60,7 @@ function FetchCartItem()
           "mySalesPrice": materialPrice,
        }
     ],
-    "currency":"USD"
+    "currency":currency
 }
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
@@ -78,7 +87,7 @@ async function FetchCartID(){
   let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
   {
     MyCartReference: "My cart",
-    Currency: "USD",
+    Currency: currency,
     LanguageCode: "en",
     ReturnUrl: "",
     OrderConfirmationUrl: "",
@@ -89,30 +98,30 @@ async function FetchCartID(){
           CartItemID: cartItemID
        }],
     ShippingInfo: {
-      FirstName: "John",
-      LastName: "Smith",
-      Email: "demo@demo.com",
-      Phone: "1234567",
+      FirstName: firstName,
+      LastName: lastName,
+      Email: email,
+      Phone: phoneNumber,
       Company: "No company",
       Line1: "North Street",
       Line2:"",
-      CountryCode: "US",
-      StateCode:"FL",
-      ZipCode: "32608",
-      City: "Gainesville"
+      CountryCode: countryCode,
+      StateCode:stateCode,
+      ZipCode: zipcode,
+      City: city
     },
     BillingInfo: {
-      FirstName: "John",
-      LastName: "Smith",
-      Email: "demo@demo.com",
-      Phone: "1234567",
+      FirstName: firstName,
+      LastName: lastName,
+      Email: email,
+      Phone: phoneNumber,
       Company: "No company",
       Line1: "North Street",
       Line2:"",
-      CountryCode: "US",
-      StateCode:"FL",
-      ZipCode: "32608",
-      City: "Gainesville",
+      CountryCode: countryCode,
+      StateCode:stateCode,
+      ZipCode: zipcode,
+      City: city,
       VatNumber: ""
     }
   }, 
@@ -122,7 +131,7 @@ async function FetchCartID(){
     }
   })
   console.log("data.data in FetchCartID",data.data);
-  cartID=data.data.cartID;
+  cartID=data.data;
   cartItemID=data.data.cartItems[0].cartItemID
   return(data.data.modelID)
 }
@@ -165,11 +174,12 @@ exports.sendCartItem = (req, res)=>
     FetchCartID()
     .then(() =>
     {
-      FetchCheckout()
-      .then(() =>
-      {
-        res.json(cartCheckout)
-      })
+      res.json(cartID)
+      // FetchCheckout()
+      // .then(() =>
+      // {
+      //   res.json(cartCheckout)
+      // })
     })
   })
 }
@@ -186,6 +196,14 @@ exports.getDataFromCart = (req, res) =>
   shippingPrice = req.body.shippingPrice
   shippingType = req.body.shippingType
   daysInTransit = req.body.daysInTransit
-
-  console.log(modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit)
+  countryCode = req.body.countryCode
+  stateCode = req.body.countryCode
+  city = req.body.city
+  zipcode = req.body.zipcode
+  currency = req.body.currency
+  firstName = req.body.firstName
+  lastName = req.body.lastName
+  phoneNumber = req.body.phoneNumber
+  email = req.body.email
+  console.log('data from Cart.js', modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit, countryCode, stateCode, zipcode, city, currency, firstName, lastName, phoneNumber, email)
 }

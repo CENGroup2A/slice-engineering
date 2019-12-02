@@ -87,7 +87,13 @@ exports.sendMatFIN = (req, res)=>
   fetchPrice(mat,finish,countryCode,stateCode)
   .then(() =>
   {
+    price.countryCode = countryCode;
+    price.stateCode = stateCode
+    price.city = city
+    price.zipcode = zipcode
+    price.currency = currency
     price.scale = scale
+    console.log('price in fetchPrice', price)
     res.json(price)
   })
 }
