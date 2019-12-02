@@ -1,6 +1,5 @@
 const User = require('../models/user.server.model')
     EmailCode = require('../models/emailcode.server.model'),
-    config = require('../config/config'),
     sgMail = require('@sendgrid/mail'),
     passport = require('passport')
 
@@ -22,7 +21,7 @@ function errorRequest(res, type, message)
 function sendVerificationEmail(codeData)
 {
     console.log("hello")
-    sgMail.setApiKey(config.sendGrid.APIKey);
+    sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
     const msg = {
         to: codeData.email,
         from: 'noreply@slice-engineering.com',

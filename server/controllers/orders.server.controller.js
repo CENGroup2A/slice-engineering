@@ -1,5 +1,42 @@
 var mongoose = require('mongoose'),
 	Order = require('../models/orders.server.model');
+	OrderEmailCode = require('../models/ordercode.server.model');
+	
+	
+	
+//sends a confirmation email after an order is placed
+function sendOrderConfirmation(codeData)
+{
+	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
+	const msg = {
+		to: codeData.email,
+		from: 'noreply@slice-engineering.com',
+		subject: 'Slice Engineering CAD Upload Order Confirmation',
+		text: "Hello, "
+		+ codeData.username +
+		"\n\nThis email is to confirm that you have succesfully placed an order for a CAD upload file\n" +
+		"\nYour orderID is " + codeData.order_number
+	};
+	sgMail.send(msg);
+}
+
+
+//Sends an email to notify the user of a status update on their order
+function sendOrderUpdate(codeData)
+{
+	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
+	const msg = {
+		to: codeData.email,
+		from: 'noreply@slice-engineering.com',
+		subject: 'Slice Engineering CAD Order Status Update',
+		text: "Hello, "
+		+ codeData.username +
+		"\n\nYour order status is now \n\"" + codeData.status + "\"" +
+		"\n\nYour orderID is " + codeData.order_number
+	};
+	sgMail.send(msg);
+}
+
 
 // Create an order
 exports.create = (req, res) => {
@@ -17,6 +54,30 @@ exports.create = (req, res) => {
 			res.json(order);
 		}
 	});
+
+	//Gets user based on userId and sends an email
+	User.findById(order.user_id).then((currentUser) =>
+	{
+		if(currentUser)
+		{
+			var currUserName = currentUser.username;
+			var userEmail = currentUser.email;
+
+			sendOrderConfirmation(new OrderEmailCode({
+				order_number: order.order_number,
+				status: order.status,
+				email: userEmail,// email based on userID user
+				username: currUserName// username based on userID user
+		
+			}));
+		}
+		else
+		{
+			console.log("User not found");
+		}
+	});
+
+	
 
 }
 
@@ -42,7 +103,30 @@ exports.update = (req, res) => {
 		}
 	});
 
+	//Gets user based on userId and sends an email
+	User.findById(order.user_id).then((currentUser) =>
+	{
+		if(currentUser)
+		{
+			var currUserName = currentUser.username;
+			var userEmail = currentUser.email;
+
+			sendOrderUpdate(new OrderEmailCode({
+				order_number: order.order_number,
+				status: order.status,
+				email: userEmail,// email based on userID user
+				username: currUserName// username based on userID user
+		
+			}));
+		}
+		else
+		{
+			console.log("User not found");
+		}
+	});
+
 }
+	
 
 // Delete an order
 exports.delete = (req, res) => {

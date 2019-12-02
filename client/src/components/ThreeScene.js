@@ -1,18 +1,30 @@
 import React, {Component} from 'react';
 import * as THREE from 'three';
 import Dropzone from 'react-dropzone'
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {STLLoader} from 'three/examples/jsm/loaders/STLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
+import {TDSLoader} from 'three/examples/jsm/loaders/TDSLoader';
+import {Redirect} from 'react-router-dom';
+import Accepted from './Accepted';
 
 class ThreeScene extends Component {
+    constructor(props) {
+        super(props);
 
-    state = {
-        fileRendered: false
+        this.state = {
+            currentFile: null,
+            link: null,
+            fileRendered: false
+        };
+    }
+
+    routeChange = () => {
+        this.setState({link: '/accepted'});
     }
 
     getFile() {
@@ -23,6 +35,7 @@ class ThreeScene extends Component {
             this.openFile(file);
             var text = document.getElementById('but-upload');
             text.textContent = file.name;
+            this.setState({currentFile: file});
         }
     }
 
@@ -36,6 +49,7 @@ class ThreeScene extends Component {
         this.openFile(file);
         var text = document.getElementById('but-upload');
         text.textContent = file.name;
+        this.setState({currentFile: file});
     }
 
     onOrientation = (eventKey) => {
@@ -158,33 +172,33 @@ class ThreeScene extends Component {
                 const vs = `
                 varying vec3 e;
                 varying vec3 n;
-    
+
                 void main() {
-    
+
                 e = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
                 n = normalize( normalMatrix * normal );
-    
+
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1. );
-    
+
                 }
                 `;
-    
+
                 const fs = `
                 uniform sampler2D tMatCap;
-    
+
                 varying vec3 e;
                 varying vec3 n;
-    
+
                 void main() {
-    
+
                 vec3 r = reflect( e, n );
                 float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
                 vec2 vN = r.xy / m + .5;
-    
+
                 vec3 base = texture2D( tMatCap, vN ).rgb;
-    
+
                 gl_FragColor = vec4( base, 1. );
-    
+
                 }
                 `;
 
@@ -237,6 +251,14 @@ class ThreeScene extends Component {
                     var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
                     g.center();
                     make(g, doAnimate);
+                });
+            }
+            else if (ext === '3ds') {
+                loader = new TDSLoader();
+                loader.load(tempURL, function(object) {
+                    var g = new THREE.Geometry().fromBufferGeometry(object.children["0"].geometry);
+                    g.center();
+                    make(g, doAnimate); 
                 });
             }
 
@@ -338,6 +360,18 @@ class ThreeScene extends Component {
       }
 
     render() {
+        const {link} = this.state;
+        if (link) {
+            const {currentFile} = this.state;
+            if (currentFile) {
+                return (
+                    <div>
+                        <Redirect to={{pathname: link, state: {file: currentFile}}} />
+                    </div>
+                );
+            }
+        }
+
         return (
             <div className="dragDrop">
                 <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#F8F9FA"}}>
@@ -362,6 +396,7 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="x">X</Dropdown.Item>
                                 <Dropdown.Item eventKey="y">Y</Dropdown.Item>
                                 <Dropdown.Item eventKey="z">Z</Dropdown.Item>
+                                <Dropdown.Item eventKey="none">NONE</Dropdown.Item>
                             </DropdownButton>
                             <div id="ui-text">Type of printing service</div>
                             <DropdownButton id="ui-dropdown" title="Select">
@@ -383,7 +418,7 @@ class ThreeScene extends Component {
                                 <Dropdown.Item eventKey="topaz">Topaz</Dropdown.Item>
                                 <Dropdown.Item eventKey="turquoise">Turquoise</Dropdown.Item>
                             </DropdownButton>
-                            <Button id="ui-submit" type="submit">Request Quote</Button>
+                            <Button id="ui-submit" type="submit" onClick={this.routeChange}>Request Quote</Button>
                         </div>
                     </div>
                 </div>
