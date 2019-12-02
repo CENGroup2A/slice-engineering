@@ -98,27 +98,24 @@ class ThreeScene extends Component {
     }
 
     renderFile(file) {
-      if (file) {
-          if (this.checkExtensionValidity(file)) {
-              document.getElementById('renderInfo').style.display = 'none';
-              this.setState({fileRendered : true});
-              this.openFile(file);
-              var text = document.getElementById('but-upload');
-              text.textContent = file.name;
-              this.setState({currentFile: file});
+        if (file) {
+            if (this.checkExtensionValidity(file)) {
+                document.getElementById('infoAndInstruc').style.visibility = 'hidden';
+                this.setState({ fileRendered: true });
+                this.openFile(file);
+                var text = document.getElementById('but-upload');
+                text.textContent = file.name;
+                this.setState({ currentFile: file });
 
-              S3Upload.upload(file, function (URL) {
-                  url = URL
-              })
-          }
-          else {
-              document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
-          }
-      }
-    }
-
-    dropClick = () => {
-        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
+                S3Upload.upload(file, function (URL) {
+                    url = URL
+                })
+            }
+            else {
+                document.getElementById('infoAndInstruc').style.visibility = 'visible';
+                document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
+            }
+        }
     }
 
     onDrop = (files) => {

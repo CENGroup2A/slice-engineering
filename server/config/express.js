@@ -59,8 +59,8 @@ module.exports.init = () => {
     app.use('/api', materialsRouter);
     app.use('/api', PriceRouter);
     app.use('/api',CartitemRouter);
-    app.use('/api',CartIDRouter);
-    app.use('/api',CheckoutRouter)
+    //app.use('/api',CartIDRouter);
+    //app.use('/api',CheckoutRouter)
     app.use('/api/', uploadRouter);
 
     if (process.env.NODE_ENV === 'production') {
