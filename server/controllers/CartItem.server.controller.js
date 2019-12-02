@@ -131,7 +131,7 @@ async function FetchCartID(){
     }
   })
   console.log("data.data in FetchCartID",data.data);
-  cartID=data.data;
+  cartID=data.data.cartID;
   cartItemID=data.data.cartItems[0].cartItemID
   return(data.data.modelID)
 }
