@@ -1,14 +1,10 @@
-/*import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { throws } from 'should';
 import ReactDOM from 'react-dom';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { link } from 'fs';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 var axios = require('axios')
 
@@ -45,13 +41,12 @@ class Material extends React.Component {
             materialsList: [''],
             finishList: ["Natural white","Polished natural white","Dyed yellow","Satin Yellow","Polished and Dyed Yellow","Dyed orange","Satin Orange","Polished and Dyed Orange","Dyed red","Satin Red","Polished and Dyed Red","Satin Green","Polished and Dyed Green","Dyed blue","Satin Blue","Polished and Dyed Blue","Dyed purple","Satin Purple","Polished and Dyed Purple","Dyed black","Satin black","Polished and Dyed Black","Dyed bordeaux","Satin Bordeaux","Polished and Dyed Bordeaux","Dyed petrol blue","Satin Petrol Blue","Polished and Dyed Petrol blue","Dyed brown","Satin Brown","Polished and Dyed Brown","Velvet yellow","Velvet ochre","Velvet pink","Velvet bordeaux","Velvet green","Velvet petrol blue","Velvet blue","Velvet black","Spray painted white","Spray painted black","Waterproof white","Dyed green","Dyed grey"],
             mats: [],
-            price: '0.00',
+            price: '',
             scale: '1',
             //Needed to send to Price.server.controller
             countryCode: 'US',
             stateCode: 'AL',
-            modelID: '',
-            finishState: true
+            modelID: ''
         };
 
         //Functions needed
@@ -91,20 +86,12 @@ class Material extends React.Component {
     }
 
     //Changes the finishes based on the material chosen
-    handleChangeMaterial(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-material');
-        text.textContent = name;
-        this.setState({finishState: false});
-
-        materialzID = materialObjects[index].materialID;
-        finishesObjects = materialObjects[index].finishes
+    handleChangeMaterial(event) {
+        materialzID = materialObjects[event.target.selectedIndex].materialID;
+        finishesObjects = materialObjects[event.target.selectedIndex].finishes
 
         finishNames = [];
-        materialz = name;
+        materialz = event.target.value;
         var materialChosen = this.state.mats.find(isMaterial);
         console.log(materialChosen)
 
@@ -117,38 +104,17 @@ class Material extends React.Component {
         finishID = finishesObjects[0].finishID
     }
 
-    handleChangeFinish(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-finish');
-        text.textContent = name;
-
-        finishID = finishes[index].finishID;
-        this.setState({finish: name})
+    handleChangeFinish(event) {
+        finishID = finishes[event.target.selectedIndex].finishID;
+        this.setState({finish: event.target.value})
     }
 
-    handleChangeState(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-state');
-        text.textContent = name;
-
-        this.setState({stateCode: stateCodes[index]})
+    handleChangeState(event) {
+        this.setState({stateCode: stateCodes[event.target.selectedIndex]})
     }
 
-    handleChangeCountry(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-country');
-        text.textContent = name;
-
-        this.setState({countryCode: countryCodes[index]})
+    handleChangeCountry(event) {
+        this.setState({countryCode: countryCodes[event.target.selectedIndex]})
     }
 
     handleChangeCity(event) {
@@ -159,20 +125,11 @@ class Material extends React.Component {
         zipcode = event.target.value
     }
 
-    handleChangeCurrency(eventKey) {
-        var text = document.getElementById('but-currency');
-        text.textContent = eventKey;
-    }
-
     onChangeFileUpload=event=>{
         uploadedFile = event.target.files[0];
     }
 
     handleSubmit(event) {
-        var text = document.getElementById('ui-price');
-        text.textContent = "Calculating";
-        document.getElementById('wave').style.display = '';
-
         event.preventDefault();
 
         const reactData = {material: materialzID, finish: finishID, countryCode: this.state.countryCode, stateCode: this.state.stateCode, city: city, zipcode: zipcode, currency: currency, scale: this.state.scale}
@@ -186,133 +143,79 @@ class Material extends React.Component {
             })
             .then((price) => //Get the price back from Price.server.controller
             {
-                console.log(price.data.totalPrice);
                 console.log('price.data', price.data)
-                this.setState({price: price.data.totalPrice})
-                this.setState({modelID: price.data.modelID})
-                text.textContent = "Total Price: $" + this.state.price;
-                document.getElementById('wave').style.display = 'none';
+                //data.data.models[0].totalPrice
+                this.setState({price: (price.data.models[0].totalPrice + price.data.shipmentCost.services[0].value).toFixed(2)})
+                this.setState({modelID: price.data.models[0].modelID})
             })
-            .catch((err) => {
-                text.textContent = "An error has occured. Please refresh the page!";
-                document.getElementById('wave').style.display = 'none';
-                console.log('error', err.data)
-            })
+            .catch(err => console.log('error', err.data))
     }
 
-    handleChangeScale(eventKey){
-        this.state.scale = eventKey/100;
-        var text = document.getElementById('but-scale');
-        text.textContent = eventKey + '%';
+    handleChangeScale(event){
+        this.state.scale = event/100
     }
 
 	render() {
 		return (
             //If the materials aren't in the array, don't render
-            <div style={{ height: "100vh", width: "50%", float: "right", display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor : "#FFFFFF"}}>
-                <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'left', height: "85%", width: "85%", backgroundColor: "#FFFFFF" }}>
-                    <div>
-                        <div id="ui-text">Material</div>
-                        <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.materialsList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
-
-                        <div id="ui-text">Finish</div>
-                        <DropdownButton disabled={this.state.finishState} id="but-finish" title={this.state.finishList[0]} onSelect={this.handleChangeFinish}>
-                            <div id="scroll" style={{width: "500px", overflowY: "scroll", maxHeight: "315px"}}>
-                                {this.state.finishList.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                            </div>
-                        </DropdownButton>
-
-                        <div id="ui-text">Scale</div>
-                        <DropdownButton id="but-scale" title="Select" onSelect={this.handleChangeScale}>
-                            <div style={{width: "500px"}}>
-                                <Dropdown.Item eventKey="20">20%</Dropdown.Item>
-                                <Dropdown.Item eventKey="50">50%</Dropdown.Item>
-                                <Dropdown.Item eventKey="70">70%</Dropdown.Item>
-                                <Dropdown.Item eventKey="100">100%</Dropdown.Item>
-                            </div>
-                        </DropdownButton>
-                        
-                        <ButtonGroup>
-                            <ul>
-                                <li>
-                                    <div id="ui-text">Country</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                                        <div style={{width: "167px"}}>
-                                            {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    <div id="ui-text">State</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
-                                        <div id="scroll" style={{width: "166px", overflowY: "scroll", maxHeight: "315px"}}>
-                                            {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    <div id="ui-text">Currency</div>
-                                </li>
-                                <li>
-                                    <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                                        <div style={{width: "167px"}}>
-                                            <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
-                                        </div>
-                                    </DropdownButton>
-                                </li>
-                            </ul>
-                        </ButtonGroup>
-
-                        <div id="ui-text">City</div>
-                        <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity}/>
-
-                        <div id="ui-text">Zip Code</div>
-                        <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode}/>
-                        
-                        <div>
-                            <ul>
-                                <li>
-                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
-                                </li>
-
-                                <li style={{float: "right"}}>
-
-                                    <ul style={{display: 'flex', alignItems: 'center'}}>
-                                        <li>
-                                            <div id="ui-price">
-                                                Total Price: ${this.state.price} 
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div style={{display: "none"}} id="wave">
-                                                <span class="dot"></span>
-                                                <span class="dot"></span>
-                                                <span class="dot"></span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+			<div>
+                <p>Scale: </p>
+                <div>
+                    <Slider min={20} defaultValue={100} marks={{ 20: 20, 50: 50, 70: 70, 100: 100 }} step={null} onAfterChange={this.handleChangeScale}/>
+                    <p></p>
                 </div>
-            </div>
+                
+                <div>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            Type of Printing Finish: 
+                            <select onChange={this.handleChangeFinish}>
+                                {this.state.finishList.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p></p>
+                            Material:
+                            <select onChange={this.handleChangeMaterial}>
+                                {this.state.materialsList.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p>Country: </p>
+                            <select onChange={this.handleChangeCountry}>
+                                {countryCodes.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p>State: </p>
+                            <select onChange={this.handleChangeState}>
+                                {stateCodes.map((x,y) => <option key={y}>{x}</option>)}
+                            </select>
+
+                            <p>City: </p>
+                            <input type="text" name="city" onChange={this.handleChangeCity}/>
+
+                            <p>Zipcode: </p>
+                            <input type="text" name="Zipcode" onChange={this.handleChangeZipcode}/>
+
+                            <p>Currency: </p>
+                            <select onChange={this.handleChangeCurrency}>
+                                <option>USD</option>
+                            </select>
+
+                            <p></p>
+                            
+                            <p>Total Price: {this.state.price} </p>
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+                </div>
+                <div>
+                    <input type="file" name="file" onChange={this.onChangeFileUpload}/>
+
+                    <button><Link to="/cart">Go to Cart</Link></button>
+                    
+                </div>
+			</div>
 		);
 	}
 }
 
-export default Material;*/
+export default Material;
