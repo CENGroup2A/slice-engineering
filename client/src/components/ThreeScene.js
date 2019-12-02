@@ -87,7 +87,7 @@ class ThreeScene extends Component {
 
     handleClick() {
         this.refs.fileUploader.click();
-        document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
+        document.getElementById("renderInstruc").textContent = 'Click me or drag a file to upload!';
     }
 
     checkExtensionValidity(file) {
@@ -450,7 +450,7 @@ class ThreeScene extends Component {
         this.setState({finishList: finishNames, finish: this.state.finishList[0]})
         finishID = finishes[0].finishID;
 
-        this.updateMaterial(name, this.state.finishList[0]);
+        this.updateMaterial(name, finishNames[0]);
         document.getElementById('but-material').style.borderColor = "#949494";
         document.getElementById('but-finish').style.borderColor = "#949494";
     }
