@@ -80,9 +80,9 @@ async function FetchCartID(){
     MyCartReference: "My cart",
     Currency: "USD",
     LanguageCode: "en",
-    ReturnUrl: "http://mysite.com/success.html",
-    OrderConfirmationUrl: "http://mysite.com/confirm.html",
-    FailureUrl: "http://mysite.com/failure.html",
+    ReturnUrl: "",
+    OrderConfirmationUrl: "",
+    FailureUrl: "",
     PromoCode:"", 
     CartItems:[
        { 
@@ -113,7 +113,7 @@ async function FetchCartID(){
       StateCode:"FL",
       ZipCode: "32608",
       City: "Gainesville",
-      VatNumber: "BE0999999922"
+      VatNumber: ""
     }
   }, 
   {
@@ -122,7 +122,7 @@ async function FetchCartID(){
     }
   })
   console.log("data.data in FetchCartID",data.data);
-  cartID=data.data;
+  cartID=data.data.cartID;
   cartItemID=data.data.cartItems[0].cartItemID
   return(data.data.modelID)
 }
@@ -131,7 +131,7 @@ function FetchCheckout()
 {
   console.log('cartItemID', cartItemID)
   var example = {
-    cartID: cartItemID,
+    cartID: cartID,
     myOrderReference:"test",
     shipmentService:shippingType
   }
