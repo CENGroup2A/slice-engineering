@@ -13,8 +13,6 @@ const session = require('express-session');
     materialsRouter = require('../routes/Materials.server.routes');
     PriceRouter = require('../routes/Price.server.routes');
     CartitemRouter = require('../routes/Cartitem.server.routes');
-    CartIDRouter= require('../routes/CartID.server.routes');
-    CheckoutRouter= require('../routes/CartCheckout.server.routes');
 
 module.exports.init = () => {
     /*

@@ -7,6 +7,8 @@ router.route('/getCartItem')
 .get(getCartIDs.sendCartItem)
 .post(getCartIDs.sendCartItem)
 
-
+router.route('/sendCartData')
+.get(getCartIDs.getDataFromCart)
+.post(getCartIDs.getDataFromCart)
   
 module.exports = router;
