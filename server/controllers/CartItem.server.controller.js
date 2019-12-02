@@ -56,7 +56,7 @@ function FetchCartItem()
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
 
-  return axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register', 
+  return axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register',
   form,
   {
     headers: form.getHeaders()
@@ -75,7 +75,7 @@ function FetchCartItem()
 }
 
 async function FetchCartID(){
-  let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
+  let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post',
   {
     MyCartReference: "My cart",
     Currency: "USD",
@@ -83,9 +83,9 @@ async function FetchCartID(){
     ReturnUrl: "http://mysite.com/success.html",
     OrderConfirmationUrl: "http://mysite.com/confirm.html",
     FailureUrl: "http://mysite.com/failure.html",
-    PromoCode:"", 
+    PromoCode:"",
     CartItems:[
-       { 
+       {
           CartItemID: cartItemID
        }],
     ShippingInfo: {
@@ -115,7 +115,7 @@ async function FetchCartID(){
       City: "Gainesville",
       VatNumber: "BE0999999922"
     }
-  }, 
+  },
   {
     headers: {
       "accept": "application/json",
@@ -135,12 +135,12 @@ function FetchCheckout()
     myOrderReference:"test",
     shipmentService:shippingType
   }
-  
+
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
  console.log(form.getHeaders())
 
-  return axios.post('https://imatsandbox.materialise.net/web-api/order/post', 
+  return axios.post('https://imatsandbox.materialise.net/web-api/order/post',
   form,
   {
     headers: {...form.getHeaders(), "APICode": config.imaterialize.API}
