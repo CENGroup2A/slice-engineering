@@ -6,7 +6,7 @@ var express = require('express');
 
 var listOfMats = [];
 
-request(config.imatsandbox.accessId,
+request(config.imaterialize.accessId,
 (error, response, body) =>
 {
   if (!error && response.statusCode == 200) {
