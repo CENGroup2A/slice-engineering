@@ -567,24 +567,17 @@ class ThreeScene extends Component {
 
             //Send the information to Price.server.controller
             axios.post("/api/sendMat", reactData)
-                .then(res => console.log('Data sent'))
-                .then(() =>
-                {
-                    return axios.get("/api/getPrice")
-                })
                 .then((price) => //Get the price back from Price.server.controller
                 {
-                    console.log(price.data.totalPrice);
-                    console.log('price.data', price.data)
-                    this.setState({price: price.data.totalPrice})
-                    this.setState({modelID: price.data.modelID})
-                    text.textContent = "Add to Cart for: $" + this.state.price;
+                    console.log(price)
+                    this.setState({price: price.data.modelPrice})
+                    text.textContent = "Add to Cart for: $" + price.data.modelPrice;
                     document.getElementById('wave').style.display = 'none';
                 })
                 .catch((err) => {
                     text.textContent = "Error: Please Refresh the Page!";
-                    document.getElementById('wave').style.display = 'none';
-                    console.log('error', err.data)
+                    //document.getElementById('wave').style.display = 'none';
+                    console.log('error', err)
                 })
         }
         else {
