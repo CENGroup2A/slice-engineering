@@ -174,12 +174,12 @@ exports.sendCartItem = (req, res)=>
     FetchCartID()
     .then(() =>
     {
-      res.json(cartID)
-      // FetchCheckout()
-      // .then(() =>
-      // {
-      //   res.json(cartCheckout)
-      // })
+      // res.json(cartID)
+      FetchCheckout()
+      .then(() =>
+      {
+        res.json(cartCheckout)
+      })
     })
   })
 }
@@ -197,7 +197,7 @@ exports.getDataFromCart = (req, res) =>
   shippingType = req.body.shippingType
   daysInTransit = req.body.daysInTransit
   countryCode = req.body.countryCode
-  stateCode = req.body.countryCode
+  stateCode = req.body.stateCode
   city = req.body.city
   zipcode = req.body.zipcode
   currency = req.body.currency
