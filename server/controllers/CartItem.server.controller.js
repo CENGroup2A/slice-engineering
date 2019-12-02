@@ -26,6 +26,10 @@ var shippingPrice = "15.50"
 var shippingType = "Express"
 var daysInTransit = "2"
 
+//Variables for FetchCartID
+var cartItemID
+var modelFileName
+
 function FetchCartItem()
 {
   var example = {
@@ -59,9 +63,10 @@ function FetchCartItem()
   })
   .then((data) =>
   {
-    console.log("data.data in FetchCartItem",data.data);
+    console.log("data.data in FetchCartItem => cartItems[0]:", data.data.cartItems[0]);
     cartItem=data.data;
-    return Promise.resolve(data.data.modelID)
+    cartItemID=data.data.cartItems[0].cartItemID
+    return Promise.resolve(data.data)
   })
   .catch((error) =>
   {
@@ -81,7 +86,7 @@ async function FetchCartID(){
     PromoCode:"", 
     CartItems:[
        { 
-          CartItemID: "3f32b116-805f-495c-9497-d70a77b68179"
+          CartItemID: cartItemID
        }],
     ShippingInfo: {
       FirstName: "John",
@@ -116,22 +121,23 @@ async function FetchCartID(){
       "accept": "application/json",
     }
   })
-  console.log("data.data in FetchCartID",data);
+  console.log("data.data in FetchCartID",data.data);
   cartID=data.data;
+  cartItemID=data.data.cartItems[0].cartItemID
   return(data.data.modelID)
 }
 
 function FetchCheckout()
 {
+  console.log('cartItemID', cartItemID)
   var example = {
-    cartID:"ec2425f8-7e23-4b96-8df8-b99e85b9caa7",
+    cartID: cartItemID,
     myOrderReference:"test",
-    shipmentService:"Express"
+    shipmentService:shippingType
   }
   
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
- //, headers: {"APICode": config.imaterialize.API}
  console.log(form.getHeaders())
 
   return axios.post('https://imatsandbox.materialise.net/web-api/order/post', 
@@ -156,16 +162,15 @@ exports.sendCartItem = (req, res)=>
   FetchCartItem()
   .then(() =>
   {
-    res.json(cartItem)
-    // FetchCartID()
-    // .then(() =>
-    // {
-    //   FetchCheckout()
-    //   .then(() =>
-    //   {
-    //     res.json(cartCheckout)
-    //   })
-    // })
+    FetchCartID()
+    .then(() =>
+    {
+      FetchCheckout()
+      .then(() =>
+      {
+        res.json(cartCheckout)
+      })
+    })
   })
 }
 
