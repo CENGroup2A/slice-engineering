@@ -8,7 +8,8 @@ const BUCKET_NAME = process.env.S3_BUCKET_NAME || require('../config/config').bu
 
 const s3 = new AWS.S3({
     accessKeyId: ID,
-    secretAccessKey: SECRET
+    secretAccessKey: SECRET,
+    signatureVersion: 'v4'
 });
 
 exports.sign_s3 = (req, res) => {

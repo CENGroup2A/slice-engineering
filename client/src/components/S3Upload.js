@@ -2,8 +2,8 @@ const axios = require('axios');
 
 module.exports.upload = (file, callback) => {
   console.log("Uploading file")
-
-  axios.post("http://localhost:5000/api/upload", {
+  console.log(file)
+  axios.post("/api/upload", {
       filename: file.name,
       filetype: file.type
   })
@@ -19,7 +19,7 @@ module.exports.upload = (file, callback) => {
         if(result.statusText === "OK") {
             console.log('File uploaded')
 
-            axios.post("http://localhost:5000/api/getFileURL", {
+            axios.post("/api/getFileURL", {
                 key: result.config.data.name
             }).then(function (URLResult) {
                 callback(URLResult.data.url)
@@ -27,7 +27,7 @@ module.exports.upload = (file, callback) => {
         }
       })
       .catch(function (err) {
-          console.log(err);
+          console.log("error uploading", err);
       })
   })
 }

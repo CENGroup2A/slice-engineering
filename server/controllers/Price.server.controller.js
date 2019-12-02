@@ -97,7 +97,16 @@ exports.sendMatFIN = (req, res)=>
   })
   .catch((error) =>
     {
-     console.error(error)
+    try{
+      console.error(error.response.data.error)
+    }
+    catch
+    {
+      console.error(error)
+    }
+     
+    
+    
     })
 }
 
