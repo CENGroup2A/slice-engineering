@@ -25,6 +25,10 @@ var orderSchema = new Schema({
 			'Delivered'
 		]
 	},
+	file: {
+		type: String,
+		unique: true
+	}
 	created_at: Date,
 	updated_at: Date
 });

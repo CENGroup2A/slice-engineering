@@ -47,6 +47,10 @@ exports.create = (req, res) => {
 		status: req.body.status
 	});
 
+	if (req.body.file) {
+		order.file = req.body.file;
+	}
+
 	order.save(err => {
 		if (err) {
 			res.status(500).send(err);
@@ -94,6 +98,10 @@ exports.update = (req, res) => {
 	order.user_id = req.body.user_id;
 	order.order_number = req.body.order_number;
 	order.status = req.body.status;
+
+	if (req.body.file) {
+		order.file = req.body.file;
+	}
 
 	order.save(err => {
 		if (err) {
