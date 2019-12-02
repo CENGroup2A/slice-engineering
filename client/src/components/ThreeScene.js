@@ -17,13 +17,14 @@ var axios = require('axios');
 const S3Upload = require('./S3Upload.js');
 
 //Variables that are sent to Price.server.controller
-var uploadedFile;
 var materialzID = "";
 var finishID = "";
 var city = ""
 var zipcode = ""
 var currency = "";
 var finishes = [];
+var uploadedFile;
+var url;
 
 //Variables needed for parsing, searching, different things like that
 var supportedFileExtensions = ["stl", "obj", "fbx", "3ds"]
@@ -97,23 +98,27 @@ class ThreeScene extends Component {
     }
 
     renderFile(file) {
-        if (file) {
-            if (this.checkExtensionValidity(file)) {
-                document.getElementById('infoAndInstruc').style.visibility = 'hidden';
-                this.setState({ fileRendered: true });
-                this.openFile(file);
-                var text = document.getElementById('but-upload');
-                text.textContent = file.name;
-                this.setState({ currentFile: file });
+      if (file) {
+          if (this.checkExtensionValidity(file)) {
+              document.getElementById('renderInfo').style.display = 'none';
+              this.setState({fileRendered : true});
+              this.openFile(file);
+              var text = document.getElementById('but-upload');
+              text.textContent = file.name;
+              this.setState({currentFile: file});
 
-                //axios.post("http://localhost:5000/api/getS3");
-                //S3Upload.upload(file);
-            }
-            else {
-                document.getElementById('infoAndInstruc').style.visibility = 'visible';
-                document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
-            }
-        }
+              S3Upload.upload(file, function (URL) {
+                  url = URL
+              })
+          }
+          else {
+              document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
+          }
+      }
+    }
+
+    dropClick = () => {
+        document.getElementById("renderInstruc").textContent = this.getInstruction(false);
     }
 
     onDrop = (files) => {
@@ -559,7 +564,8 @@ class ThreeScene extends Component {
                 city: city,
                 zipcode: zipcode,
                 currency: currency,
-                scale: this.state.scale
+                scale: this.state.scale,
+                url: url
             }
 
             //Send the information to Price.server.controller
