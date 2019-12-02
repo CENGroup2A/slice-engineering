@@ -28,7 +28,7 @@ var orderSchema = new Schema({
 	file: {
 		type: String,
 		unique: true
-	}
+	},
 	created_at: Date,
 	updated_at: Date
 });
@@ -48,41 +48,18 @@ orderSchema.pre('save', function(next) {
 
 orderSchema.pre('find', function(next) {
 
-	/*
+	/* TODO: add API key for iMaterialise to request */
 	request.post('https://i.materialise.com/web-api/order?id=' + this.order_number, function(err, res, body) {
 
 		if (err) {
 			throw err
 		}
-		
-		let statusCode = res.body.statusCode
 
-		if (statusCode === 0) {
-			this.status = 'Cancelled'
+		if (res.body.orders) {
+			this.status = res.body.orders[0].statusName
 		}
-		else if (statusCode === 2) {
-			this.status = 'Ordered'
-		}
-		else if (statusCode === 3) {
-			this.status = 'Processing'
-		}
-		else if (statusCode === 4) {
-			this.status = 'In Production'
-		}
-		else if (statusCode === 5) {
-			this.status = 'Ready To Ship'
-		}
-		else if (statusCode === 6) {
-			this.status = 'Shipped'
-		}
-		else if (statusCode === 7) {
-			this.status = 'Delivered'
-		}
-
-		next()
 
 	})
-	*/
 
 	next()
 
