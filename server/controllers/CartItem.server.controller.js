@@ -9,31 +9,32 @@ var cartId
 var FormData = require('form-data');
 
 //Price Variables
-var modelID = "a2cb5121-72cc-41e1-89e5-ca76e1999bfb"
-var materialID = "035f4772-da8a-400b-8be4-2dd344b28ddb"
-var materialName = "Polyamide (SLS)"
-var finishID =  "bba2bebb-8895-4049-aeb0-ab651cee2597"
-var finishingName = "Natural white"
-var materialPrice = "14.19"
-var scale = "1"
+var modelID
+var materialID
+var materialName
+var finishID
+var finishingName
+var materialPrice
+var scale
 var quantity = "1"
-var surfaceCm2 = "94.3109"
-var volumeCm3 = "15.5505"
-var xDimMm = "60.001"
-var yDimMm = "31.004"
-var zDimMm = "48"
-var shippingPrice = "15.50"
-var shippingType = "Express"
-var daysInTransit = "2"
-var countryCode = ""
-var stateCode = ""
-var city = ""
-var zipcode = ""
-var currency = ""
-var firstName = ""
-var lastName = ""
-var phoneNumber = ""
-var email  = "" 
+var surfaceCm2
+var volumeCm3
+var xDimMm
+var yDimMm
+var zDimMm
+var shippingPrice
+var shippingType
+var daysInTransit
+var countryCode
+var stateCode
+var city 
+var zipcode
+var currency
+var firstName
+var lastName
+var phoneNumber
+var email
+var address
 
 //Variables for FetchCartID
 var cartItemID
@@ -103,7 +104,7 @@ async function FetchCartID(){
       Email: email,
       Phone: phoneNumber,
       Company: "No company",
-      Line1: "North Street",
+      Line1: address,
       Line2:"",
       CountryCode: countryCode,
       StateCode:stateCode,
@@ -116,7 +117,7 @@ async function FetchCartID(){
       Email: email,
       Phone: phoneNumber,
       Company: "No company",
-      Line1: "North Street",
+      Line1: address,
       Line2:"",
       CountryCode: countryCode,
       StateCode:stateCode,
@@ -174,7 +175,6 @@ exports.sendCartItem = (req, res)=>
     FetchCartID()
     .then(() =>
     {
-      // res.json(cartID)
       FetchCheckout()
       .then(() =>
       {
@@ -205,5 +205,11 @@ exports.getDataFromCart = (req, res) =>
   lastName = req.body.lastName
   phoneNumber = req.body.phoneNumber
   email = req.body.email
-  console.log('data from Cart.js', modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit, countryCode, stateCode, zipcode, city, currency, firstName, lastName, phoneNumber, email)
+  address = req.body.address
+  surfaceCm2 = req.body.surfaceCm2
+  volumeCm3 = req.body.volumeCm3
+  xDimMm = req.body.xDimMm
+  yDimMm = req.body.yDimMm
+  zDimMm = req.body.zDimMm
+  console.log('data from Cart.js', modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit, countryCode, stateCode, zipcode, city, currency, firstName, lastName, phoneNumber, email, address)
 }

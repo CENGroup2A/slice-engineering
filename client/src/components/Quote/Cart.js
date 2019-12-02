@@ -32,13 +32,20 @@ class Cart extends React.Component {
             firstName: "",
             lastName: "",
             email: "",
-            phoneNumber: ""
+            phoneNumber: "",
+            address: "",
+            surfaceCm2: "",
+            volumeCm3: "",
+            xDimMm: "",
+            yDimMm: "",
+            zDimMm: ""
         };
         this.getData()
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
         this.handleChangeLastName = this.handleChangeLastName.bind(this)
         this.handleChangeEmail = this.handleChangeEmail.bind(this)
         this.handleChangephoneNumber = this.handleChangephoneNumber.bind(this)
+        this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -54,6 +61,9 @@ class Cart extends React.Component {
     handleChangephoneNumber(event) {
         this.setState({phoneNumber: event.target.value})
     }
+    handleChangeAddress(event) {
+        this.setState({address: event.target.value})
+    }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -62,7 +72,8 @@ class Cart extends React.Component {
             scale: this.state.scale, shippingPrice: this.state.shippingPrice, shippingType: this.state.shippingType, 
             daysInTransit: this.state.daysInTransit, countryCode: this.state.countryCode, stateCode: this.state.stateCode,
             city: this.state.city, zipcode: this.state.zipcode, currency: this.state.currency, firstName: this.state.firstName, lastName: this.state.lastName,
-            email: this.state.email, phoneNumber: this.state.phoneNumber})
+            email: this.state.email, phoneNumber: this.state.phoneNumber, address: this.state.address,surfaceCm2: this.state.surfaceCm2,
+            volumeCm3: this.state.volumeCm3, xDimMm: this.state.xDimMm, yDimMm: this.state.yDimMm, zDimMm: this.state.zDimMm})
         .then(console.log('Data sent to sendCartData'))
 
         axios.get("/api/getCartItem")
@@ -95,7 +106,12 @@ class Cart extends React.Component {
                             stateCode: data.data.stateCode,
                             city: data.data.city,
                             zipcode: data.data.zipcode,
-                            currency: data.data.currency})
+                            currency: data.data.currency,
+                            surfaceCm2: data.data.models[0].surfaceCm2,
+                            volumeCm3: data.data.models[0].volumeCm3,
+                            xDimMm: data.data.models[0].xDimMm,
+                            yDimMm: data.data.models[0].yDimMm,
+                            zDimMm: data.data.models[0].zDimMm})
         })
         .catch(err => console.log('error', err.data))
     }
@@ -118,6 +134,9 @@ class Cart extends React.Component {
                         <p></p>
                         <p>Email: </p>
                         <input type="text" name="Email" onChange={this.handleChangeEmail}/>
+                        <p></p>
+                        <p>Address: </p>
+                        <input type="text" name="Email" onChange={this.handleChangeAddress}/>
                         <p></p>
                     </label>
                 <input type="submit" value="Submit" />
