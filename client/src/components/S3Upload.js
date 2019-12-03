@@ -27,7 +27,7 @@ module.exports.upload = (file, callback) => {
         }
       })
       .catch(function (err) {
-          console.log("error uploading\n", err);
+          console.log("Error uploading", err);
       })
   })
 }
