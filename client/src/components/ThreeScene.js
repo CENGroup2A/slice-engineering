@@ -60,7 +60,7 @@ class ThreeScene extends Component {
             modelID: '',
             finishState: true,
             cartState: true,
-            error: ''
+            error: ' '
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
@@ -485,7 +485,7 @@ class ThreeScene extends Component {
             text.textContent = "Calculating";
             document.getElementById('wave').style.display = '';
             this.setState({cartState: false});
-            this.setState({error: ''});
+            this.setState({error: ' '});
             event.preventDefault();
 
             const reactData = {
@@ -507,7 +507,7 @@ class ThreeScene extends Component {
                     console.log(price)
                     this.setState({price: price.data.modelPrice})
                     if (this.state.price == '0') {
-                        this.setState({error: "This error will be the error that we will return if the price returned is $0."})
+                        this.setState({error: "The dimensions of the model are too large or too small."})
                         text.textContent = "Error";
                         document.getElementById('wave').style.display = 'none';
                     } else {
@@ -604,6 +604,7 @@ class ThreeScene extends Component {
                                 <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
                                     Upload a file ({this.getSupportedFileString()})
                                 </Button>
+                                    <div id="ui-error-statement"> {this.state.error} </div>
                             </div>
 
                             <ButtonGroup id ="ui-dropdown">
@@ -701,7 +702,6 @@ class ThreeScene extends Component {
                         </div>
                     </div>
                 </div>
-                <div id="ui-error-statement"> {this.state.error} </div>
                 <div id="ui-footnote">*The renders are approximations of actual material finishes.</div>
             </div>
         );
