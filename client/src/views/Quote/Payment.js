@@ -15,7 +15,7 @@ class Payment extends React.Component
         var locationSate = this.props.location.state
         if (locationSate)
         {
-            this.changeState({shippingPrice: locationSate.shippingPrice, modelPrice: locationSate.modelPrice})
+            this.setState({shippingPrice: locationSate.shippingPrice, modelPrice: locationSate.modelPrice})
         }
     }
 
