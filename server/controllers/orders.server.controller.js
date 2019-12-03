@@ -166,3 +166,10 @@ exports.orderByID = (req, res, next, id) => {
 	});
 
 };
+
+//Pass the file name into function and update the order_number with the imaterialise order ID
+exports.updateOrderID = (fileName, orderID) => {
+    Order.findOne({file_name: fileName}).then((order) => {
+        order.order_number = orderID
+	});
+}

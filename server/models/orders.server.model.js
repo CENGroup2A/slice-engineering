@@ -8,8 +8,7 @@ var orderSchema = new Schema({
 		required: true
 	},
 	order_number: {
-		type: String,
-		unique: true
+		type: String
 	},
 	status: {
 		type: String,
@@ -54,7 +53,7 @@ orderSchema.pre('find', function(next) {
 			'Content-Type': 'multipart/form-data',
 			'APICode': require('../config/config').imaterialize.API
 		},
-		uri: 'https://imatsandbox.materialise.net/web-api/order?id=' + this.order_number,
+		uri: 'https://imatsandbox.materialise.net/web-api/order?number=' + this.order_number,
 		method: 'POST'
 	}, function(err, res, body) {
 
