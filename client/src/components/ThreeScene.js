@@ -60,13 +60,9 @@ class ThreeScene extends Component {
             modelID: '',
             finishState: true,
             cartState: true,
-<<<<<<< HEAD
-            error: ' '
-=======
             error: '',
             token: '',
             buttonDisabledState: true
->>>>>>> fee85c9754beefcef871e4745cfbb67fee170788
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
