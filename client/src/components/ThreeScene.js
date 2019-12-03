@@ -19,9 +19,9 @@ const S3Upload = require('./S3Upload.js');
 //Variables that are sent to Price.server.controller
 var materialzID = "";
 var finishID = "";
-var city = ""
-var zipcode = ""
-var currency = "";
+var city = "Gainesville"
+var zipcode = "32601"
+var currency = "USD";
 var finishes = [];
 var uploadedFile;
 var url;
@@ -55,8 +55,8 @@ class ThreeScene extends Component {
             price: '0.00',
             scale: '',
             //Needed to send to Price.server.controller
-            coutryCode: '',
-            stateCode: '',
+            coutryCode: 'US',
+            stateCode: 'FL',
             modelID: '',
             finishState: true,
             cartState: true,
@@ -67,12 +67,7 @@ class ThreeScene extends Component {
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeFileUpload = this.onChangeFileUpload.bind(this)
-        this.handleChangeState = this.handleChangeState.bind(this)
-        this.handleChangeCountry = this.handleChangeCountry.bind(this)
-        this.handleChangeCity = this.handleChangeCity.bind(this)
-        this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.handleChangeScale = this.handleChangeScale.bind(this)
-        this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
         this.getMats()
         this.handleChangeNext = this.handleChangeNext.bind(this)
     }
@@ -480,74 +475,12 @@ class ThreeScene extends Component {
         document.getElementById('but-finish').style.borderColor = "#949494";
     }
 
-    handleChangeState(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-state');
-        text.textContent = name;
-
-        this.setState({stateCode: stateCodes[index]})
-        document.getElementById('but-state').style.borderTopColor = "#949494";
-        document.getElementById('but-state').style.borderBottomColor = "#949494";
-        if (this.state.countryCode) {
-            document.getElementById('but-country').style.borderRightColor = "#949494";
-        }
-        if (currency) {
-            document.getElementById('but-currency').style.borderLeftColor = "#949494";
-        }
-    }
-
-    handleChangeCountry(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-country');
-        text.textContent = name;
-
-        this.setState({countryCode: countryCodes[index]})
-        if (!this.state.stateCode) {
-            document.getElementById('but-country').style.borderTopColor = "#949494";
-            document.getElementById('but-country').style.borderBottomColor = "#949494";
-            document.getElementById('but-country').style.borderLeftColor = "#949494";
-        }
-        else {
-            document.getElementById('but-country').style.borderColor = "#949494";
-        }
-    }
-
-    handleChangeCity(event) {
-        city = event.target.value
-        document.getElementById('but-city').style.borderColor = "#949494";
-    }
-
-    handleChangeZipcode(event) {
-        zipcode = event.target.value
-        document.getElementById('but-zip').style.borderColor = "#949494";
-    }
-
-    handleChangeCurrency(eventKey) {
-        var text = document.getElementById('but-currency');
-        text.textContent = eventKey;
-        currency = eventKey;
-        if (!this.state.stateCode) {
-            document.getElementById('but-currency').style.borderTopColor = "#949494";
-            document.getElementById('but-currency').style.borderBottomColor = "#949494";
-            document.getElementById('but-currency').style.borderRightColor = "#949494";
-        }
-        else {
-            document.getElementById('but-currency').style.borderColor = "#949494";
-        }
-    }
-
     onChangeFileUpload=event=>{
         uploadedFile = event.target.files[0];
     }
 
     handleSubmit(event) {
-        if (materialzID && finishID && this.state.countryCode && this.state.stateCode && city && zipcode && currency && this.state.scale) {
+        if (materialzID && finishID && this.state.scale) {
             var text = document.getElementById('priceText');
             text.textContent = "Calculating";
             document.getElementById('wave').style.display = '';
@@ -594,28 +527,6 @@ class ThreeScene extends Component {
             }
             if (!finishID) {
                 document.getElementById('but-finish').style.borderColor = "#e32c2b";
-            }
-            if (!this.state.countryCode) {
-                document.getElementById('but-country').style.borderColor = "#e32c2b";
-            }
-            if (!this.state.stateCode) {
-                if (this.state.countryCode) {
-                    document.getElementById('but-country').style.borderRightColor = "#e32c2b";
-                }
-                if (currency) {
-                    document.getElementById('but-currency').style.borderLeftColor = "#e32c2b";
-                }
-                document.getElementById('but-state').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-state').style.borderBottomColor = "#e32c2b";
-            }
-            if (!currency) {
-                document.getElementById('but-currency').style.borderColor = "#e32c2b";
-            }
-            if (!city) {
-                document.getElementById('but-city').style.borderColor = "#e32c2b";
-            }
-            if (!zipcode) {
-                document.getElementById('but-zip').style.borderColor = "#e32c2b";
             }
             if (!this.state.scale) {
                 document.getElementById('but-scale').style.borderColor = "#e32c2b";
@@ -682,10 +593,10 @@ class ThreeScene extends Component {
                         </Dropzone>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
+                    <div style={{justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
                             <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
-                            <div>
+                            <div id ="ui-dropdown">
                                 <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
                                     <span>supported files are {this.getSupportedFileString()}</span>
                                 </ReactTooltip>
@@ -695,8 +606,8 @@ class ThreeScene extends Component {
                                 </Button>
                             </div>
 
-                            <ButtonGroup>
-                                <ul style={{ zIndex: 3 }}>
+                            <ButtonGroup id ="ui-dropdown">
+                                <ul style={{ zIndex: 3}}>
                                     <li>
                                         <div id="ui-text">Orientation</div>
                                     </li>
@@ -759,7 +670,7 @@ class ThreeScene extends Component {
                                     {this.state.finishList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                                 </div>
                             </DropdownButton>
-                            
+
                             <ButtonGroup>
                                 <ul>
                                     <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
