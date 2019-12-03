@@ -16,12 +16,9 @@ exports.sign_s3 = (req, res) => {
     const fileName = req.body.filename;
     const fileType = req.body.filetype;
 
-    console.log("fileName", fileName)
-    console.log("fileType", fileType)
-
     var params = {
         Bucket: BUCKET_NAME,
-        Key: fileName,
+        Key: req.user.username + "/" + fileName,
         Expires: 60,
         //ContentType: fileType
     };
@@ -61,7 +58,7 @@ exports.getFileURL = (req, res) => {
                     }
 
                     var url = s3.getSignedUrl('getObject', varFileParams);
-                    console.log('URL: ', url);
+                    //console.log('URL: ', url);
                     res.json({success:true, 'url': url})
                 }
             }

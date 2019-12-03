@@ -14,7 +14,7 @@ module.exports.upload = (file, callback) => {
           'Content-Type': file.type
           }
       };
-      axios.put(signedUrl.data, file, options).then(function (result) 
+      axios.put(signedUrl.data, file, options).then(function (result)
       {
         if(result.statusText === "OK") {
             console.log('File uploaded')
@@ -27,7 +27,7 @@ module.exports.upload = (file, callback) => {
         }
       })
       .catch(function (err) {
-          console.log("error uploading", err);
+          console.log("Error uploading", err);
       })
   })
 }
