@@ -56,7 +56,8 @@ exports.create = (req, res) => {
 			res.json(order);
 	
 	//Gets user based on userId and sends an email
-		User.findById(order.user_id).then((currentUser) =>
+		//User.findById(order.user_id).then((currentUser) =>
+		User.findOne({username: order.username}).then((currentUser) =>
 		{
 			if(currentUser)
 			{
@@ -105,7 +106,8 @@ exports.update = (req, res) => {
 		
 
 		//Gets user based on userId and sends an email
-		User.findById(order.user_id).then((currentUser) =>
+		//User.findById(order.user_id).then((currentUser) =>
+		User.findOne({username: order.username}).then((currentUser) =>
 		{
 			if(currentUser)
 			{
