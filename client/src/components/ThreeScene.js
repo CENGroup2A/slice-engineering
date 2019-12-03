@@ -657,7 +657,11 @@ class ThreeScene extends Component {
                                 </ul>
                             </ButtonGroup>
 
-                            <div id="ui-text">Material</div>
+                            <div id="ui-text"><a data-tip data-for='drop-mat'>Material*</a>
+                                <ReactTooltip id='drop-mat' type='warning' effect='solid' place={'right'}>
+                                    <span>The renders are approximations of actual material finishes.</span>
+                                </ReactTooltip>
+                            </div>
                             <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
                                 <div id="scroll" style={{ width: "500px", overflowY: "scroll", maxHeight: "315px" }}>
                                     {this.state.materialsList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
@@ -697,9 +701,8 @@ class ThreeScene extends Component {
                         </div>
                     </div>
                 </div>
-                <div id="ui-error-statement">
-                    {this.state.error}
-                </div>
+                <div id="ui-error-statement"> {this.state.error} </div>
+                <div id="ui-footnote">*The renders are approximations of actual material finishes.</div>
             </div>
         );
     }
