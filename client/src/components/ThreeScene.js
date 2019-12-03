@@ -682,7 +682,7 @@ class ThreeScene extends Component {
 
                             <ButtonGroup>
                                 <ul>
-                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
+                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Get Quote </Button>
                                 </ul>
 
                                 <ul>
