@@ -2,7 +2,7 @@ var express = require('express');
 axios = require('axios');
  router = express.Router();
  const stripe = require("stripe")("sk_test_vrSlShE1472LRsD5AKWdfE8x00LfJAbOgu");
-
+ const orders = require('../controllers/orders.server.controller')
 var cartItem="";
 var FormData = require('form-data');
 var neededData = {
@@ -240,7 +240,7 @@ exports.sendCartItem = (req, res)=>
           source: req.body.stripeToken.token.id
           })
           res.json(cartCheckout)
-          orders.create(req.user.username, "", "Ordered", req.user.username + "/" + fileName)
+          orders.create(req.user.username, cartCheckout.orderID, "Ordered", req.user.username + "/" + cartCheckout.orderID)
         })
       })
     })

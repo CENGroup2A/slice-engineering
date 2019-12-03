@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const orders = require('../controllers/orders.server.controller')
 
 const ID = process.env.S3_KEY_ID || require('../config/config').key.keyID;
 const SECRET = process.env.S3_SECRETE_KEY || require('../config/config').key.secretKey;

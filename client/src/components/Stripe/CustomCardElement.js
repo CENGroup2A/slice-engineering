@@ -1,19 +1,26 @@
 import React, {Component} from 'react';
 import {CardElement, injectStripe} from 'react-stripe-elements';
 import axios from 'axios'
+import {Redirect} from "react-router-dom";
 
 class CustomCardElement extends Component
 {
+  state = 
+  {
+    redirect : false
+  }
   render()
   {
     var page = this
-    console.log(page.props)
+    if (this.state.redirect)
+      return <Redirect to="/orders" />
     return (
       <form onSubmit={(event) =>
         {
             event.preventDefault()
             if (page.props.stripe)
             {
+              page.setState({enabled:true})
                 page.props.stripe.createToken()
                 .then(this.props.handleResult)
                 .then((token) => {
@@ -27,7 +34,9 @@ class CustomCardElement extends Component
                       token: this.props.token,
                       stripeToken: token
                     })
-                    .then((response) => console.log(response))
+                    .then((response) => {
+                      page.setState({redirect:true})
+                    })
                   
                 })
             }
