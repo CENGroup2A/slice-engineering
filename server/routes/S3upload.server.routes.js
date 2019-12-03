@@ -1,6 +1,6 @@
 const server = require('../controllers/S3Upload.server.controller.js'),
     express = require('express'),
-    router = express.Router()
+    router = express.Router(),
     isAuth = require('../middleware/isAuth')
 
 router.route('/upload')

@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import axios from "axios"
+import logo from "../assets/logo.png"
+
 import {
     Link
   } from "react-router-dom";
@@ -35,10 +37,10 @@ class NavBar extends React.Component {
                 <div className="grid grid--no-gutters grid--table site-header__mobile-nav">
                 <div className="grid__item medium-up--one-quarter logo-align--left">
                 <div className="h2 site-header__logo">
-                <a href="https://www.sliceengineering.com/" className="site-header__logo-image">
-                  <img src="https://cdn.shopify.com/s/files/1/0252/5285/5880/files/sliceEngineeringLogo_Horizontal_Master_GrayText_360x.png?v=1565120836"
+                <Link to="/" className="site-header__logo-image">
+                  <img src={logo}
                   style={{maxWidth: "250px"}}/>
-                </a>
+                </Link>
                 </div>
                 </div>
                 <nav className="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
@@ -49,56 +51,56 @@ class NavBar extends React.Component {
                       </a>
                   </li>
 
-                  <li className="site-nav--has-dropdown" data-has-dropdowns="">
+                  {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                       <button className="site-nav__link site-nav__link--main site-nav__link--button">
                           <span className="site-nav__label">Shop</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                       </button>
-                  </li>
+                  </li> */}
 
-                  <li>
+                  {/* <li>
                       <a href="https://www.sliceengineering.com/pages/partner" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">Partner</span>
                       </a>
-                  </li>
+                  </li> */}
 
-                  <li>
+                  {/* <li>
                       <a href="https://www.sliceengineering.com/pages/about-us" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">About Us</span>
                       </a>
-                  </li>
+                  </li> */}
 
                   <li>
-                      <a href="/" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                      <Link to="/" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">3D Printing Service Portal</span>
-                      </a>
+                      </Link>
                   </li>
 
-                  <li className="site-nav--has-dropdown" data-has-dropdowns="">
+                  {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                       <button className="site-nav__link site-nav__link--main site-nav__link--button">
                           <span className="site-nav__label">Resources</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                       </button>
-                  </li>
+                  </li> */}
                 </ul>
                 </nav>
 
                 <div className="grid__item medium-up--one-quarter text-right site-header__icons site-header__icons--plus">
                 <div className="site-header__icons-wrapper">
 
-                  <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
+                  {/* <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
                       <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-login" viewBox="0 0 28.33 37.68"><path d="M14.17 14.9a7.45 7.45 0 1 0-7.5-7.45 7.46 7.46 0 0 0 7.5 7.45zm0-10.91a3.45 3.45 0 1 1-3.5 3.46A3.46 3.46 0 0 1 14.17 4zM14.17 16.47A14.18 14.18 0 0 0 0 30.68c0 1.41.66 4 5.11 5.66a27.17 27.17 0 0 0 9.06 1.34c6.54 0 14.17-1.84 14.17-7a14.18 14.18 0 0 0-14.17-14.21zm0 17.21c-6.3 0-10.17-1.77-10.17-3a10.17 10.17 0 1 1 20.33 0c.01 1.23-3.86 3-10.16 3z"></path></svg>
                       <span className="icon__fallback-text">Log in</span>
-                  </a>
+                  </a> */}
 
-                  <a href="https://www.sliceengineering.com/cart" className="site-header__icon site-header__cart">
+                  {/* <a href="https://www.sliceengineering.com/cart" className="site-header__icon site-header__cart">
                       <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-cart" viewBox="0 0 37 40"><path d="M36.5 34.8L33.3 8h-5.9C26.7 3.9 23 .8 18.5.8S10.3 3.9 9.6 8H3.7L.5 34.8c-.2 1.5.4 2.4.9 3 .5.5 1.4 1.2 3.1 1.2h28c1.3 0 2.4-.4 3.1-1.3.7-.7 1-1.8.9-2.9zm-18-30c2.2 0 4.1 1.4 4.7 3.2h-9.5c.7-1.9 2.6-3.2 4.8-3.2zM4.5 35l2.8-23h2.2v3c0 1.1.9 2 2 2s2-.9 2-2v-3h10v3c0 1.1.9 2 2 2s2-.9 2-2v-3h2.2l2.8 23h-28z"></path></svg>
                       <span className="icon__fallback-text">Cart</span>
                       <div id="CartCount" className="site-header__cart-count hide" data-cart-count-bubble="">
                           <span data-cart-count="">0</span>
                           <span className="icon__fallback-text medium-up--hide">items</span>
                       </div>
-                  </a>
+                  </a> */}
 
-                  <form method="post" action="https://www.sliceengineering.com/cart/update" id="currency_form" acceptCharset="UTF-8" className="currency-selector small--hide" encType="multipart/form-data">
+                  {/* <form method="post" action="https://www.sliceengineering.com/cart/update" id="currency_form" acceptCharset="UTF-8" className="currency-selector small--hide" encType="multipart/form-data">
                       <label htmlFor="CurrencySelector" className="visually-hidden">Currency</label>
                       <div className="currency-selector__input-wrapper select-group">
                       <select defaultValue={'USD'} name="currency" id="CurrencySelector" className="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message a11y-selection-message" data-currency-selector="">
@@ -122,7 +124,7 @@ class NavBar extends React.Component {
                       </select>
                       <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                       </div>
-                  </form>
+                  </form> */}
 
                   <Link to="/login"><Button style={{marginLeft: "15px"}} variant="outline-success">Login</Button></Link>
                   <Link to="/sign-up"><Button className="ml-3" variant="outline-success">Signup</Button></Link>
@@ -142,10 +144,10 @@ class NavBar extends React.Component {
                       <div className="grid grid--no-gutters grid--table site-header__mobile-nav">
                       <div className="grid__item medium-up--one-quarter logo-align--left">
                       <div className="h2 site-header__logo">
-                      <a href="https://www.sliceengineering.com/" className="site-header__logo-image">
-                        <img src="https://cdn.shopify.com/s/files/1/0252/5285/5880/files/sliceEngineeringLogo_Horizontal_Master_GrayText_360x.png?v=1565120836"
+                      <Link to="/" className="site-header__logo-image">
+                        <img src={logo}
                         style={{maxWidth: "250px"}}/>
-                      </a>
+                      </Link>
                       </div>
                       </div>
                       <nav className="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
@@ -156,56 +158,62 @@ class NavBar extends React.Component {
                             </a>
                         </li>
 
-                        <li className="site-nav--has-dropdown" data-has-dropdowns="">
+                        {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                             <button className="site-nav__link site-nav__link--main site-nav__link--button">
                                 <span className="site-nav__label">Shop</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                             </button>
-                        </li>
+                        </li> */}
 
-                        <li>
+                        {/* <li>
                             <a href="https://www.sliceengineering.com/pages/partner" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                             <span className="site-nav__label">Partner</span>
                             </a>
-                        </li>
+                        </li> */}
 
-                        <li>
+                        {/* <li>
                             <a href="https://www.sliceengineering.com/pages/about-us" className="site-nav__link site-nav__link--main" style={{textDecoration: "none"}}>
                             <span className="site-nav__label">About Us</span>
                             </a>
+                        </li> */}
+
+                        <li>
+                            <Link to="/protected" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                            <span className="site-nav__label">3D Printing Service Portal</span>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="/protected" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
-                            <span className="site-nav__label">3D Printing Service Portal</span>
-                            </a>
+                            <Link to="/FAQ" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                            <span className="site-nav__label">FAQ</span>
+                            </Link>
                         </li>
 
-                        <li className="site-nav--has-dropdown" data-has-dropdowns="">
+                        {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                             <button className="site-nav__link site-nav__link--main site-nav__link--button">
                                 <span className="site-nav__label">Resources</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                             </button>
-                        </li>
+                        </li> */}
                       </ul>
                       </nav>
 
                       <div className="grid__item medium-up--one-quarter text-right site-header__icons site-header__icons--plus">
                       <div className="site-header__icons-wrapper">
 
-                        <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
+                        {/* <a href="https://www.sliceengineering.com/account/login" className="site-header__icon site-header__account">
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-login" viewBox="0 0 28.33 37.68"><path d="M14.17 14.9a7.45 7.45 0 1 0-7.5-7.45 7.46 7.46 0 0 0 7.5 7.45zm0-10.91a3.45 3.45 0 1 1-3.5 3.46A3.46 3.46 0 0 1 14.17 4zM14.17 16.47A14.18 14.18 0 0 0 0 30.68c0 1.41.66 4 5.11 5.66a27.17 27.17 0 0 0 9.06 1.34c6.54 0 14.17-1.84 14.17-7a14.18 14.18 0 0 0-14.17-14.21zm0 17.21c-6.3 0-10.17-1.77-10.17-3a10.17 10.17 0 1 1 20.33 0c.01 1.23-3.86 3-10.16 3z"></path></svg>
                             <span className="icon__fallback-text">Log in</span>
-                        </a>
+                        </a> */}
 
-                        <a href="https://www.sliceengineering.com/cart" className="site-header__icon site-header__cart">
+                        {/* <a href="https://www.sliceengineering.com/cart" className="site-header__icon site-header__cart">
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon-cart" viewBox="0 0 37 40"><path d="M36.5 34.8L33.3 8h-5.9C26.7 3.9 23 .8 18.5.8S10.3 3.9 9.6 8H3.7L.5 34.8c-.2 1.5.4 2.4.9 3 .5.5 1.4 1.2 3.1 1.2h28c1.3 0 2.4-.4 3.1-1.3.7-.7 1-1.8.9-2.9zm-18-30c2.2 0 4.1 1.4 4.7 3.2h-9.5c.7-1.9 2.6-3.2 4.8-3.2zM4.5 35l2.8-23h2.2v3c0 1.1.9 2 2 2s2-.9 2-2v-3h10v3c0 1.1.9 2 2 2s2-.9 2-2v-3h2.2l2.8 23h-28z"></path></svg>
                             <span className="icon__fallback-text">Cart</span>
                             <div id="CartCount" className="site-header__cart-count hide" data-cart-count-bubble="">
                                 <span data-cart-count="">0</span>
                                 <span className="icon__fallback-text medium-up--hide">items</span>
                             </div>
-                        </a>
+                        </a> */}
 
-                        <form method="post" action="https://www.sliceengineering.com/cart/update" id="currency_form" acceptCharset="UTF-8" className="currency-selector small--hide" encType="multipart/form-data">
+                        {/* <form method="post" action="https://www.sliceengineering.com/cart/update" id="currency_form" acceptCharset="UTF-8" className="currency-selector small--hide" encType="multipart/form-data">
                             <label htmlFor="CurrencySelector" className="visually-hidden">Currency</label>
                             <div className="currency-selector__input-wrapper select-group">
                             <select defaultValue={'USD'} name="currency" id="CurrencySelector" className="currency-selector__dropdown" aria-describedby="a11y-refresh-page-message a11y-selection-message" data-currency-selector="">
@@ -229,7 +237,7 @@ class NavBar extends React.Component {
                             </select>
                             <svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
                             </div>
-                        </form>
+                        </form> */}
 
                         <Button style={{marginLeft: "15px"}} onClick={(event) =>
                             {

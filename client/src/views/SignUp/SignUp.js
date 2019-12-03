@@ -47,6 +47,7 @@ class SignUp extends React.Component
 
     return (
         <Container className="p-3" id="ui-signup">
+        <div id="ui-title">Sign Up</div>
         <div>
           <Formik
                 initialValues={{

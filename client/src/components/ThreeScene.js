@@ -19,9 +19,9 @@ const S3Upload = require('./S3Upload.js');
 //Variables that are sent to Price.server.controller
 var materialzID = "";
 var finishID = "";
-var city = ""
-var zipcode = ""
-var currency = "";
+var city = "Gainesville"
+var zipcode = "32601"
+var currency = "USD";
 var finishes = [];
 var uploadedFile;
 var url;
@@ -55,30 +55,27 @@ class ThreeScene extends Component {
             price: '0.00',
             scale: '',
             //Needed to send to Price.server.controller
-            coutryCode: '',
-            stateCode: '',
+            coutryCode: 'US',
+            stateCode: 'FL',
             modelID: '',
             finishState: true,
             cartState: true,
-            error: ''
+            error: '',
+            token: '',
+            buttonDisabledState: true
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
         this.handleChangeFinish = this.handleChangeFinish.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeFileUpload = this.onChangeFileUpload.bind(this)
-        this.handleChangeState = this.handleChangeState.bind(this)
-        this.handleChangeCountry = this.handleChangeCountry.bind(this)
-        this.handleChangeCity = this.handleChangeCity.bind(this)
-        this.handleChangeZipcode = this.handleChangeZipcode.bind(this)
         this.handleChangeScale = this.handleChangeScale.bind(this)
-        this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
         this.getMats()
         this.handleChangeNext = this.handleChangeNext.bind(this)
     }
 
     routeChange = () => {
-        this.setState({link: '/material'});
+        this.setState({link: '/payment'});
     }
 
     getFile() {
@@ -113,6 +110,7 @@ class ThreeScene extends Component {
                 })
             }
             else {
+                this.setState({ fileRendered: false });
                 document.getElementById('infoAndInstruc').style.visibility = 'visible';
                 document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
             }
@@ -479,79 +477,17 @@ class ThreeScene extends Component {
         document.getElementById('but-finish').style.borderColor = "#949494";
     }
 
-    handleChangeState(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-state');
-        text.textContent = name;
-
-        this.setState({stateCode: stateCodes[index]})
-        document.getElementById('but-state').style.borderTopColor = "#949494";
-        document.getElementById('but-state').style.borderBottomColor = "#949494";
-        if (this.state.countryCode) {
-            document.getElementById('but-country').style.borderRightColor = "#949494";
-        }
-        if (currency) {
-            document.getElementById('but-currency').style.borderLeftColor = "#949494";
-        }
-    }
-
-    handleChangeCountry(eventKey) {
-        var string = eventKey.toString();
-        var array = string.split(',');
-        var index = array[0];
-        var name = array[1];
-        var text = document.getElementById('but-country');
-        text.textContent = name;
-
-        this.setState({countryCode: countryCodes[index]})
-        if (!this.state.stateCode) {
-            document.getElementById('but-country').style.borderTopColor = "#949494";
-            document.getElementById('but-country').style.borderBottomColor = "#949494";
-            document.getElementById('but-country').style.borderLeftColor = "#949494";
-        }
-        else {
-            document.getElementById('but-country').style.borderColor = "#949494";
-        }
-    }
-
-    handleChangeCity(event) {
-        city = event.target.value
-        document.getElementById('but-city').style.borderColor = "#949494";
-    }
-
-    handleChangeZipcode(event) {
-        zipcode = event.target.value
-        document.getElementById('but-zip').style.borderColor = "#949494";
-    }
-
-    handleChangeCurrency(eventKey) {
-        var text = document.getElementById('but-currency');
-        text.textContent = eventKey;
-        currency = eventKey;
-        if (!this.state.stateCode) {
-            document.getElementById('but-currency').style.borderTopColor = "#949494";
-            document.getElementById('but-currency').style.borderBottomColor = "#949494";
-            document.getElementById('but-currency').style.borderRightColor = "#949494";
-        }
-        else {
-            document.getElementById('but-currency').style.borderColor = "#949494";
-        }
-    }
-
     onChangeFileUpload=event=>{
         uploadedFile = event.target.files[0];
     }
 
     handleSubmit(event) {
-        if (materialzID && finishID && this.state.countryCode && this.state.stateCode && city && zipcode && currency && this.state.scale) {
+        if (materialzID && finishID && this.state.scale) {
             var text = document.getElementById('priceText');
             text.textContent = "Calculating";
             document.getElementById('wave').style.display = '';
             this.setState({cartState: false});
-            this.setState({error: ''});
+            this.setState({error: ' '});
             event.preventDefault();
 
             const reactData = {
@@ -572,11 +508,13 @@ class ThreeScene extends Component {
                 {
                     console.log(price)
                     this.setState({price: price.data.modelPrice})
+                    this.setState({token: price.data.token})
                     if (this.state.price == '0') {
-                        this.setState({error: "This error will be the error that we will return if the price returned is $0."})
+                        this.setState({error: "The dimensions of the model are too large or too small."})
                         text.textContent = "Error";
                         document.getElementById('wave').style.display = 'none';
                     } else {
+                        this.setState({buttonDisabledState: false});
                       text.textContent = "Add to Cart for: $" + price.data.modelPrice;
                       document.getElementById('wave').style.display = 'none';
                     }
@@ -594,28 +532,6 @@ class ThreeScene extends Component {
             if (!finishID) {
                 document.getElementById('but-finish').style.borderColor = "#e32c2b";
             }
-            if (!this.state.countryCode) {
-                document.getElementById('but-country').style.borderColor = "#e32c2b";
-            }
-            if (!this.state.stateCode) {
-                if (this.state.countryCode) {
-                    document.getElementById('but-country').style.borderRightColor = "#e32c2b";
-                }
-                if (currency) {
-                    document.getElementById('but-currency').style.borderLeftColor = "#e32c2b";
-                }
-                document.getElementById('but-state').style.borderTopColor = "#e32c2b";
-                document.getElementById('but-state').style.borderBottomColor = "#e32c2b";
-            }
-            if (!currency) {
-                document.getElementById('but-currency').style.borderColor = "#e32c2b";
-            }
-            if (!city) {
-                document.getElementById('but-city').style.borderColor = "#e32c2b";
-            }
-            if (!zipcode) {
-                document.getElementById('but-zip').style.borderColor = "#e32c2b";
-            }
             if (!this.state.scale) {
                 document.getElementById('but-scale').style.borderColor = "#e32c2b";
             }
@@ -630,18 +546,6 @@ class ThreeScene extends Component {
         document.getElementById('but-scale').style.borderColor = "#949494";
     }
 
-    getError() {
-
-    }
-
-    /*buttonDisabledState() {
-        return this.state.cartState && this.state.validPrint
-    }*/
-
-    renderError() {
-      return
-    }
-
     render() {
         const {link} = this.state;
         if (link) {
@@ -649,7 +553,7 @@ class ThreeScene extends Component {
             if (currentFile) {
                 return (
                     <div>
-                        <Redirect to={{pathname: link, state: {file: currentFile}}} />
+                        <Redirect to={{pathname: link, state: {modelPrice: this.state.price, token: this.state.token}}} />
                     </div>
                 );
             }
@@ -672,28 +576,31 @@ class ThreeScene extends Component {
                 <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
                     <div>
                         <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
-                            <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <ul>
-                                    <li>
-                                        <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
-                                    </li>
-                                    <li>
-                                        <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
-                                    </li>
-                                </ul>
+                            <div>
+                                <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <ul>
+                                        <li>
+                                            <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
+                                        </li>
+                                        <li>
+                                            <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                </div>
                             </div>
                         )}
                         </Dropzone>
-
-                        <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }}>
-                        </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
+                    <div style={{justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
                             <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
-                            <div>
+                            <div id ="ui-dropdown">
                                 <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
                                     <span>supported files are {this.getSupportedFileString()}</span>
                                 </ReactTooltip>
@@ -701,10 +608,11 @@ class ThreeScene extends Component {
                                 <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
                                     Upload a file ({this.getSupportedFileString()})
                                 </Button>
+                                    <div id="ui-error-statement"> {this.state.error} </div>
                             </div>
 
-                            <ButtonGroup>
-                                <ul style={{ zIndex: 3 }}>
+                            <ButtonGroup id ="ui-dropdown">
+                                <ul style={{ zIndex: 3}}>
                                     <li>
                                         <div id="ui-text">Orientation</div>
                                     </li>
@@ -754,7 +662,11 @@ class ThreeScene extends Component {
                                 </ul>
                             </ButtonGroup>
 
-                            <div id="ui-text">Material</div>
+                            <div id="ui-text"><a data-tip data-for='drop-mat'>Material*</a>
+                                <ReactTooltip id='drop-mat' type='warning' effect='solid' place={'right'}>
+                                    <span>The renders are approximations of actual material finishes.</span>
+                                </ReactTooltip>
+                            </div>
                             <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
                                 <div id="scroll" style={{ width: "500px", overflowY: "scroll", maxHeight: "315px" }}>
                                     {this.state.materialsList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
@@ -769,59 +681,12 @@ class ThreeScene extends Component {
                             </DropdownButton>
 
                             <ButtonGroup>
-                                <ul style={{ zIndex: 2 }}>
-                                    <li>
-                                        <div id="ui-text">Country</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                                            <div style={{ width: "167px" }}>
-                                                {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-
-                                <ul style={{ zIndex: 1 }}>
-                                    <li>
-                                        <div id="ui-text">State</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
-                                            <div id="scroll" style={{ width: "166px", overflowY: "scroll", maxHeight: "315px" }}>
-                                                {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-
-                                <ul style={{ zIndex: 2 }}>
-                                    <li>
-                                        <div id="ui-text">Currency</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                                            <div style={{ width: "167px" }}>
-                                                <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-                            </ButtonGroup>
-
-                            <div id="ui-text">City</div>
-                            <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity} />
-
-                            <div id="ui-text">Zip Code</div>
-                            <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode} />
-
-                            <ButtonGroup>
                                 <ul>
-                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
+                                    <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Get Quote </Button>
                                 </ul>
 
                                 <ul>
-                                    <Button disabled={this.buttonDisabledState} id="ui-price">
+                                    <Button onClick={this.routeChange} disabled={this.state.buttonDisabledState} id="ui-price">
                                         <ul style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
                                             <li id="priceText">
                                                 Add to Cart for: ${this.state.price}
@@ -841,9 +706,7 @@ class ThreeScene extends Component {
                         </div>
                     </div>
                 </div>
-                <div id="ui-error-statement">
-                    {this.state.error}
-                </div>
+                <div id="ui-footnote">*The renders are approximations of actual material finishes.</div>
             </div>
         );
     }

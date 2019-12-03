@@ -13,6 +13,7 @@ const s3 = new AWS.S3({
 
 exports.sign_s3 = (req, res) => {
     const fileName = req.body.filename;
+    const fileType = req.body.filetype;
 
     var params = {
         Bucket: BUCKET_NAME,
@@ -58,7 +59,7 @@ exports.getFileURL = (req, res) => {
                     }
 
                     var url = s3.getSignedUrl('getObject', varFileParams);
-                    console.log('URL: ', url);
+                    //console.log('URL: ', url);
                     res.json({success:true, 'url': url})
                 }
             }
