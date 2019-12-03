@@ -45,8 +45,6 @@ class Home extends React.Component {
                           Receive a real time quote by simply uploading your CAD file, selecting the desired 3D printing method,
                           <br/>
                           material, surface finish, and inputting a shipping address.
-                          <br/>
-                          All quotes include shipping.
                       </p>
                       <p id="ui-home-button">
                           <Button variant="primary" type="customizeYourPrint" href={this.redirect()}>

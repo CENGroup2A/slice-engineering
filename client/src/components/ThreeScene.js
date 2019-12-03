@@ -630,18 +630,6 @@ class ThreeScene extends Component {
         document.getElementById('but-scale').style.borderColor = "#949494";
     }
 
-    getError() {
-
-    }
-
-    /*buttonDisabledState() {
-        return this.state.cartState && this.state.validPrint
-    }*/
-
-    renderError() {
-      return
-    }
-
     render() {
         const {link} = this.state;
         if (link) {
