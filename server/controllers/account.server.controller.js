@@ -20,7 +20,6 @@ function errorRequest(res, type, message)
 
 function sendVerificationEmail(codeData)
 {
-    console.log("hello")
     sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
     const msg = {
         to: codeData.email,

@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 //sends a confirmation email after an order is placed
 function sendOrderConfirmation(codeData)
 {
-	console.log("sending email");
+	console.log("sending email to " + codeData.email);
 	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
 	const msg = {
 		to: codeData.email,
@@ -57,19 +57,15 @@ exports.create = (username, order_number, status, file_name) => {
 	})
 
 	//Gets user based on userId and sends an email
-	User.findById(order.username).then((currentUser) =>
+	User.findOne({username: username}).then((currentUser) =>
 	{
 		if(currentUser)
 		{
-			var currUserName = currentUser.username;
-			var userEmail = currentUser.email;
-
-			sendOrderConfirmation(new OrderEmailCode({
-				order_number: order.order_number,
-				status: order.status,
-				email: userEmail,// email based on userID user
-				username: currUserName// username based on userID user
-		
+			sendOrderUpdate(new OrderEmailCode({
+				order_number: order_number,
+				status: status,
+				email: currentUser.email,// email based on userID user
+				username: username// username based on userID user
 			}));
 		}
 		else
@@ -77,7 +73,6 @@ exports.create = (username, order_number, status, file_name) => {
 			console.log("User not found");
 		}
 	});
-
 }
 
 exports.update = (order, username, order_number, status, file_name) => {
@@ -92,22 +87,18 @@ exports.update = (order, username, order_number, status, file_name) => {
 			console.error(err);
 		}
 	})
-  
+    
 	//Gets user based on userId and sends an email
-	//User.findById(order.user_id).then((currentUser) =>
-	User.findOne({username: order.username}).then((currentUser) =>
+    //User.findById(order.user_id).then((currentUser) =>
+	User.findOne({username: username}).then((currentUser) =>
 	{
 		if(currentUser)
 		{
-			var currUserName = currentUser.username;
-			var userEmail = currentUser.email;
-
 			sendOrderUpdate(new OrderEmailCode({
-				order_number: order.order_number,
-				status: order.status,
-				email: userEmail,// email based on userID user
-				username: currUserName// username based on userID user
-		
+				order_number: order_number,
+				status: status,
+				email: currentUser.email,// email based on userID user
+				username: currentUser.username// username based on userID user
 			}));
 		}
 		else
