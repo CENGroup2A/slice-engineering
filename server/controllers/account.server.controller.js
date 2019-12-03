@@ -2,7 +2,6 @@ const User = require('../models/user.server.model')
       EmailCode = require('../models/emailcode.server.model'),
       sgMail = require('@sendgrid/mail'),
       passport = require('passport')
-      config = require('../config/config')
       AWS = require('aws-sdk');
 
 
