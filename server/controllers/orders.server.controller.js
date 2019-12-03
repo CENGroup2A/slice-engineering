@@ -41,75 +41,58 @@ function sendOrderUpdate(codeData)
 
 
 // Create an order
-exports.create = (req, res) => {
-    var oNumber = 0;
+exports.create = (username, order_number, status, file_name) => {
 
-    Order.countDocuments({}, function(err, count){
-        console.log( "Number of docs: ", count );
-
-        oNumber = count;
-
-        var order = new Order({
-            username: req.body.username,
-            file_name: req.body.file_name,
-            order_number: count+1,
-            status: 'Ordered'
-        });
-    
-        order.save(err => {
-            if (err)
-                res.status(500).send(err);
-            else
-                res.json(order);
-        });
-    }).then({}, function(err, count) {
-	    //Gets user based on userId and sends an email
-        //User.findById(order.user_id).then((currentUser) =>
-        User.findOne({username: order.username}).then((currentUser) =>
-        {
-            if(currentUser)
-            {
-                var currUserName = currentUser.username;
-                var userEmail = currentUser.email;
-
-                sendOrderConfirmation(new OrderEmailCode({
-                    order_number: oNumber,
-                    status:'Ordered',
-                    email: userEmail,// email based on userID user
-                    username: currUserName// username based on userID user
-            
-                }));
-            }
-            else
-            {
-                console.log("User not found");
-            }
-        });
-    });
-}
-
-// Get an order
-exports.read = (req, res) => {
-	res.json(req.order);
-}
-
-// Update an order
-exports.update = (req, res) => {
-	
-	var order = req.order;
-
-    order.username = req.body.username;
-    order.file_name = req.body.file_name;
-	order.order_number = req.body.order_number;
-	order.status = req.body.status;
+	var order = new Order({
+		username: username,
+		order_number: order_number,
+		status: status,
+		file_name: file_name
+	});
 
 	order.save(err => {
 		if (err) {
-			res.status(500).send(err);
-		} else {
-			res.json(order);
-		
+			console.error(err);
+		}
+	})
 
+	//Gets user based on userId and sends an email
+	User.findById(order.username).then((currentUser) =>
+	{
+		if(currentUser)
+		{
+			var currUserName = currentUser.username;
+			var userEmail = currentUser.email;
+
+			sendOrderConfirmation(new OrderEmailCode({
+				order_number: order.order_number,
+				status: order.status,
+				email: userEmail,// email based on userID user
+				username: currUserName// username based on userID user
+		
+			}));
+		}
+		else
+		{
+			console.log("User not found");
+		}
+	});
+
+}
+
+exports.update = (order, username, order_number, status, file_name) => {
+
+	order.username = username;
+	order.order_number = order_number;
+	order.status = status;
+	order.file_name = file_name;
+
+	order.save(err => {
+		if (err) {
+			console.error(err);
+		}
+	})
+  
 		//Gets user based on userId and sends an email
 		//User.findById(order.user_id).then((currentUser) =>
 		User.findOne({username: order.username}).then((currentUser) =>
@@ -135,25 +118,31 @@ exports.update = (req, res) => {
 	}
 });
 }
-	
 
-// Delete an order
-exports.delete = (req, res) => {
+exports.delete = (order_number) => {
 
-	var order = req.order;
-
-	Order.findOneAndDelete({ order_number: order.order_number }, err => {
+	Order.findOneAndDelete({ order_number: order_number }, err => {
 		if (err) {
-			res.status(500).send(err);
-		} else {
-			res.json(order);
+			console.error(err)
 		}
-	});
+	})
 
 }
 
-// Retrieve all orders
-exports.list = (req, res) => {
+exports.list = () => {
+
+	Order.find().exec((err, orders) => {
+		if (err) {
+			console.error(err)
+		}
+		else {
+			return orders
+		}
+	})
+
+}
+
+exports.get = (req, res) => {
 
 	Order.find().exec((err, orders) => {
 		if (err) {
