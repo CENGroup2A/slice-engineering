@@ -2,36 +2,33 @@ var express = require('express');
 axios = require('axios');
  router = express.Router();
  config = require('../config/config');
+ const stripe = require("stripe")("sk_test_vrSlShE1472LRsD5AKWdfE8x00LfJAbOgu");
 
 var cartItem="";
 var FormData = require('form-data');
 var neededData = {
   modelID : "",
   materialID : "",
-  materialName : "",
   finishID : "",
-  finishingName : "",
   materialPrice : "",
   scale : "",
   quantity : "1",
-  surfaceCm2 : "",
-  volumeCm3 : "",
-  xDimMm : "",
-  yDimMm : "",
-  zDimMm : "",
-  shippingPrice : "",
-  shippingType : "",
-  daysInTransit : "",
-  countryCode : "",
+  surfaceCm2 : "1",
+  volumeCm3 : "1",
+  xDimMm : "1",
+  yDimMm : "1",
+  zDimMm : "1",
+  countryCode : "US",
   stateCode : "",
   city : "",
   zipcode : "",
-  currency : "",
+  currency : "USD",
   firstName : "",
   lastName : "",
   phoneNumber : "",
   email : "",
-  address : ""
+  address : "",
+  totalPrice : ""
 }
 
 //Price Variables
@@ -51,21 +48,22 @@ function FetchCartItem()
           "fileScaleFactor":neededData.scale,
           "materialID":neededData.materialID,
           "finishID":neededData.finishID,
-          "quantity":quantity,
+          "quantity":neededData.quantity,
           "xDimMm":neededData.xDimMm,
           "yDimMm":neededData.yDimMm,
           "zDimMm":neededData.zDimMm,
           "volumeCm3":neededData.volumeCm3,
           "surfaceCm2":neededData.surfaceCm2,
           "iMatAPIPrice": neededData.totalPrice,
-          "mySalesPrice": neededData.totalPrice,
+          "mySalesPrice": neededData.totalPrice
        }
     ],
     "currency":neededData.currency
 }
+console.log(example)
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
- console.log(form)
+ //console.log(form)
 
   return axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register',
   form,
@@ -74,8 +72,9 @@ function FetchCartItem()
   })
   .then((data) =>
   {
-    console.log("data.data",data.data);
+    console.log("data.data",data.data.cartItems);
     cartItem=data.data;
+    cartItemID=data.data.cartItems[0].cartItemID
     return Promise.resolve(data.data.modelID)
   })
   .catch((error) =>
@@ -85,6 +84,45 @@ function FetchCartItem()
 }
 
 async function FetchCartID(){
+  console.log({
+    MyCartReference: "My cart",
+    Currency: neededData.currency,
+    LanguageCode: "en",
+    ReturnUrl: "",
+    OrderConfirmationUrl: "",
+    FailureUrl: "",
+    PromoCode:"", 
+    CartItems:[
+       {
+          CartItemID: cartItemID
+       }],
+    ShippingInfo: {
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
+      Company: "No company",
+      Line1: neededData.address,
+      Line2:"",
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city
+    },
+    BillingInfo: {
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
+      Company: "No company",
+      Line1: neededData.address,
+      Line2:"",
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city,
+      VatNumber: ""
+    }})
   let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post',
   {
     MyCartReference: "My cart",
@@ -143,12 +181,11 @@ function FetchCheckout()
   var example = {
     cartID: cartID,
     myOrderReference:"My Order",
-    shipmentService:neededData.shippingType
+    shipmentService: "Express"
   }
 
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
- console.log(form.getHeaders())
 
   return axios.post('https://imatsandbox.materialise.net/web-api/order/post',
   form,
@@ -169,19 +206,46 @@ function FetchCheckout()
 
 exports.sendCartItem = (req, res)=>
 {
-  FetchCartItem()
-  .then(() =>
+  Estimate.findOne({"_id": req.body.token})
+  .then((estimate) =>
   {
-    FetchCartID()
+    var shippment = req.body.shippment
+    neededData.modelID = estimate.modelID
+    neededData.materialID = estimate.materialID
+    neededData.finishID = estimate.finishID
+    neededData.scale = estimate.scale
+    neededData.totalPrice = estimate.totalPrice
+    neededData.firstName = shippment.firstname
+    neededData.lastName = shippment.lastname
+    neededData.address = shippment.address
+    neededData.city = shippment.city
+    neededData.zipcode = shippment.zipcode
+    neededData.stateCode = shippment.state
+    neededData.email = "rbernardo@ufl.edu"
+    neededData.phoneNumber = "0000000000"
+    console.log(neededData)
+    FetchCartItem()
     .then(() =>
     {
-      FetchCheckout()
+      FetchCartID()
       .then(() =>
       {
-        res.json(cartCheckout)
+        FetchCheckout()
+        .then(() =>
+        {
+          console.log(req.body.stripeToken)
+          stripe.charges.create({
+            amount: cartCheckout.totalPrice*100,
+            currency: "usd",
+            description: "",
+          source: req.body.stripeToken.token.id
+          })
+          res.json(cartCheckout)
+        })
       })
     })
   })
+  
 }
 
 exports.getDataFromCart = (req, res) =>

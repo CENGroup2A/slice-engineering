@@ -27,9 +27,20 @@ class Payment extends React.Component
 {
     state = 
     {
-        shippingPrice : 0,
-        modelPrice : 0,
-        token : ""
+        "shippingPrice" : 0,
+        "modelPrice"  : 0,
+        "token"       : "",
+        "enabled"     : false,
+        "shippment": 
+        {   
+            "firstname" : "",
+            "lastname"  : "",
+            "address"   : "",
+            "city"      : "",
+            "zipcode"   : "",
+            "state"     : "",
+            "country"   : ""
+        }
     }
 
     constructor(props)
@@ -40,60 +51,18 @@ class Payment extends React.Component
         {
             this.state = {
                 shippingPrice : 0,
+                "enabled"     : false,
                 modelPrice    : locationState.modelPrice,
                 token         : locationState.token
             }
         }
     }
 
-    getCart = () =>
-    {
-
-    }
-
-    updateShipment = () =>
-    {
-
-    }
-
     render()
     {
         var {shippingPrice, modelPrice} = this.state
-
+        var page = this
         return (
-            <Formik
-                initialValues={{
-                    firstname : '',
-                    lastname : '',
-                    address : '',
-                    city : '',
-                    zipcode : '',
-                    country : '',
-                    state : ''
-                }}
-                validationSchema={PaymentSchema}
-                onSubmit={(values, actions) =>
-                {
-                    // axios.post("/api/submit-cart", 
-                    // {
-                    //     "token" : this.state.token,
-                    //     "firstname" : values.firstname,
-                    //     "lastname" : values.firstname,
-                    //     "address"  : values.firstname,
-                    //     "country" : this.state.country
-                    // }) 
-                    console.log(values)              
-                }}
-                >
-                    {({
-                          values,
-                          errors,
-                          touched,
-                          handleChange,
-                          handleBlur,
-                          handleSubmit,
-                          isSubmitting
-                        }) => (
             <div className="container">
                 <div className="row mt-4">
                     <div className="col-md-4 order-md-2 mb-4">
@@ -117,12 +86,69 @@ class Payment extends React.Component
                             </li>
                             <li className="list-group-item d-flex justify-content-between">
                                 <span>Total (USD)</span>
-                                <strong>${ shippingPrice + modelPrice }</strong>
+                                <strong>${ (shippingPrice + modelPrice).toFixed(2) }</strong>
                             </li>
                         </ul>
+                        <h4 className="mb-3">Payment</h4>
+                        
+                        <CreditCard {...this.state} />
                     </div>
                     <div className="col-md-8 order-md-1">
                         <h4 className="mb-3">Shipping address</h4>
+                        <Formik
+                initialValues={{
+                    firstname : '',
+                    lastname : '',
+                    address : '',
+                    city : '',
+                    zipcode : '',
+                    country : '',
+                    state : ''
+                }}
+                validationSchema={PaymentSchema}
+                onSubmit={(values, actions) =>
+                {
+                    document.getElementById("shipping-add-btn").style.display = "none";
+                    document.getElementById("wave").style.display = "inline";
+                    var shipping = {
+                        "firstname" : values.firstname,
+                        "lastname" : values.lastname,
+                        "address"  : values.address,
+                        "city"  : values.city,
+                        "zipcode"  : values.zipcode,
+                        "state"  : values.state,
+                        "country" : values.country
+                    }
+                    axios.post("/api/getShipping", 
+                    {
+                        "token" : this.state.token,
+                        ...shipping
+                    })
+                    .then((data) => 
+                    {
+                        data = data.data
+                        console.log(data)
+                        page.setState({
+                                        shippingPrice : data.shipmentCost.services[0].value,
+                                        modelPrice    : data.modelPrice,
+                                        "enabled"     : true,
+                                        "shippment"   : { ...shipping }
+                                    })
+                        
+                        document.getElementById("shipping-add-btn").style.display = "inline";
+                        document.getElementById("wave").style.display = "none";
+                    })
+                }}
+                >
+                    {({
+                          values,
+                          errors,
+                          touched,
+                          handleChange,
+                          handleBlur,
+                          handleSubmit,
+                          isSubmitting
+                        }) => (
                         <form onSubmit={handleSubmit} className="needs-validation" noValidate>
                             <div className="row">
                             <div className="col-md-6 mb-3">
@@ -212,14 +238,26 @@ class Payment extends React.Component
                                     <ErrorMessage name="zipcode" />
                                 </div>
                             </div>
-                            <h4 className="mb-3">Payment</h4>
-                            <CreditCard />
-                            <button className="btn btn-primary btn-lg btn-block" type="submit">Buy Now</button>
+                            <button className="btn btn-primary btn-lg btn-block">
+                                    <ul style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                                        <li id="shipping-add-btn">
+                                            Add Shipping Address
+                                        </li>
+                                        <li>
+                                            <div  id="wave" style={{ display: "none"}}>
+                                                <span style={{ backgroundColor: "white" }} className="dot"></span>
+                                                <span style={{ backgroundColor: "white" }} className="dot"></span>
+                                                <span style={{ backgroundColor: "white" }} className="dot"></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </button>
                         </form>
+                        )}</Formik>
                     </div>
                 </div>
-            </div>)}
-        </Formik>
+            </div>
         )
     }
 }

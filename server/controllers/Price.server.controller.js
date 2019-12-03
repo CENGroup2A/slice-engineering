@@ -26,7 +26,7 @@ function getEstimate(model, shipment)
         model
       ],
       shipmentInfo: shipment,
-        "currency": req.body.currency
+        "currency": "USD"
     },
     {
       headers: {
@@ -58,8 +58,7 @@ exports.sendMatFIN = (req, res)=>
     })
     .then((price) =>
     {
-      var model = price.data.models[0]
-      var estimate = new Estimate({ ...model, 'totalPrice': model.totalPrice })
+      var estimate = new Estimate({ ...model,  totalPrice: price.data.models[0].totalPrice })
       return estimate.save()
       .then(() =>
       {
@@ -91,12 +90,25 @@ exports.sendMatFIN = (req, res)=>
 
 exports.getShipping = (req, res) =>
 {
-  Estimate.findOne({"_id": req.token})
+  Estimate.findOne({"_id": req.body.token})
   .then((estimate) =>
   {
-    getEstimate(estimate, {
-      countryCode : req.body.countryCode,
-      stateCode   : req.body.stateCode,
+    console.log({
+      countryCode : "US",
+      stateCode   : req.body.state,
+      city        : req.body.city,
+      zipCode     : req.body.zipcode
+    })
+    getEstimate({
+      "modelID"    : estimate.modelID,
+      "materialID" : estimate.materialID,
+      "finishID"   : estimate.finishID,
+      "quantity"   : "1",
+      "scale"      : estimate.scale
+    },
+    {
+      countryCode : "US",
+      stateCode   : req.body.state,
       city        : req.body.city,
       zipCode     : req.body.zipcode
     })

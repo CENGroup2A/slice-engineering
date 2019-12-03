@@ -19,7 +19,7 @@ exports.sign_s3 = (req, res) => {
     var params = {
         Bucket: BUCKET_NAME,
         Key: req.user.username + "/" + fileName,
-        Expires: 60,
+        Expires: 6000,
         //ContentType: fileType
     };
 
