@@ -576,7 +576,7 @@ class ThreeScene extends Component {
                 })
                 .catch((err) => {
                     text.textContent = "Error: Please Refresh the Page!";
-                    //document.getElementById('wave').style.display = 'none';
+                    document.getElementById('wave').style.display = 'none';
                     console.log('error', err)
                 })
         }
