@@ -121,10 +121,9 @@
     margin-left: 20px;
 }
 
-#ui-error-statement {
-    text-align: center;
-    margin-top: 20px;
-    color: red;
+#ui-footnote {
+  text-align: center;
+  margin-top: 20px;
 }
 
 div#wave {
