@@ -60,7 +60,6 @@ module.exports.init = () => {
     //app.use('/api',CartIDRouter);
     //app.use('/api',CheckoutRouter)
     app.use('/api/', uploadRouter);
-    app.use('/api/', ordersRouter)
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
