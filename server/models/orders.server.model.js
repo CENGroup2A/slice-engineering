@@ -52,7 +52,7 @@ orderSchema.pre('find', function(next) {
 	request({
 		headers: {
 			'Content-Type': 'multipart/form-data',
-			'APICode': require('../config/config').imaterialise.APICode
+			'APICode': require('../config/config').imaterialise.API
 		},
 		uri: 'https://imatsandbox.materialise.net/web-api/order?id=' + this.order_number,
 		method: 'POST'
