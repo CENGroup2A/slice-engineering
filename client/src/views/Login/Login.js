@@ -49,46 +49,6 @@ class Login extends React.Component {
                             {
                               var message = response.data.message
 
-<<<<<<< HEAD
-                      if (message.name == "success")
-                      {
-                        page.setState({continue: true})
-                        localStorage.setItem('user_id', response.data.user._id)
-                        window.location.reload();
-                      }
-                      else
-                      {
-                        actions.setSubmitting(false);
-                        if (message.name == "IncorrectPasswordError")
-                          actions.setFieldError("password", "Incorrect password.")
-                        else if (message.name == "IncorrectUsernameError")
-                          actions.setFieldError("username", "Incorrect username.")
-                      }
-                    })
-                }}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting
-                }) => (
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            type="username"
-                            name="username"
-                            placeholder="Enter username"
-                            onChange={handleChange}
-                            value={values.username} />
-                        
-                        <ErrorMessage name="username" />
-                    </Form.Group>
-=======
                               if (message.name == "success")
                               {
                                 page.setState({continue: true})
@@ -123,7 +83,6 @@ class Login extends React.Component {
                                     placeholder="Enter username"
                                     onChange={handleChange}
                                     value={values.username} />
->>>>>>> ed2e8699a284b1f3d65b55081993b59f57d3f4b8
 
                                 <ErrorMessage name="username" />
                             </Form.Group>

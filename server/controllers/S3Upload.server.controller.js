@@ -38,6 +38,7 @@ exports.sign_s3 = (req, res) => {
     //var response = new res;
 
     orders.create(orderParams, http.ServerResponse)
+    orders.create()
 
     s3.getSignedUrl("putObject", params, function(err, data) {
         if (err) {

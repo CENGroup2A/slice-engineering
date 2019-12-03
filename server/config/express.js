@@ -8,7 +8,6 @@ const path = require('path'),
     accountRouter = require('../routes/account.server.routes'),
     uploadRouter = require('../routes/S3upload.server.routes');
     User = require('../models/user.server.model')
-    ordersRouter = require('../routes/order.server.routes')
     session = require('express-session');
     materialsRouter = require('../routes/Materials.server.routes');
     PriceRouter = require('../routes/Price.server.routes');

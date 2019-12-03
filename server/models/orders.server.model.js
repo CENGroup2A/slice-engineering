@@ -8,8 +8,7 @@ var orderSchema = new Schema({
 		required: true
 	},
 	order_number: {
-		type: Number,
-		required: true,
+		type: String,
 		unique: true
 	},
 	status: {

@@ -692,35 +692,6 @@ class ThreeScene extends Component {
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
                         <div>
-<<<<<<< HEAD
-                            <div id="ui-text">Upload file</div>
-                            <input type="file" ref="fileUploader" onChange={this.getFile.bind(this)} style={{display: 'none'}}/>
-                            <Button id="but-upload" type="file" onClick={this.handleClick.bind(this)}>
-                                Upload a file...
-                            </Button>
-                            <div id="ui-text">Fix orientation</div>
-                            <DropdownButton id="but-orientate" title="Select" onSelect={this.onOrientation}>
-                                <Dropdown.Item eventKey="xyz">XYZ</Dropdown.Item>
-                                <Dropdown.Item eventKey="xzy">XZY</Dropdown.Item>
-                                <Dropdown.Item eventKey="yxz">YXZ</Dropdown.Item>
-                                <Dropdown.Item eventKey="yzx">YZX</Dropdown.Item>
-                                <Dropdown.Item eventKey="zxy">ZXY</Dropdown.Item>
-                                <Dropdown.Item eventKey="zyx">ZYX</Dropdown.Item>
-                            </DropdownButton>
-                            <div id="ui-text">Fix rotation</div>
-                            <DropdownButton id="but-rotate" title="Select" onSelect={this.onRotation}>
-                                <Dropdown.Item eventKey="x">X</Dropdown.Item>
-                                <Dropdown.Item eventKey="y">Y</Dropdown.Item>
-                                <Dropdown.Item eventKey="z">Z</Dropdown.Item>
-                                <Dropdown.Item eventKey="none">NONE</Dropdown.Item>
-                            </DropdownButton>
-                            <div id="ui-text">Type of printing service</div>
-                            <DropdownButton id="ui-dropdown" title="Select">
-                                <Dropdown.Item eventKey="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item eventKey="#/action-2">Another action</Dropdown.Item>
-                                <Dropdown.Item eventKey="#/action-3">Something else</Dropdown.Item>
-                            </DropdownButton>
-=======
                             <div id="ui-text"><a data-tip data-for='upload'> Upload </a></div>
                             <div>
                                 <ReactTooltip id='upload' type='warning' effect='solid' place={'right'}>
@@ -783,7 +754,6 @@ class ThreeScene extends Component {
                                 </ul>
                             </ButtonGroup>
 
->>>>>>> ed2e8699a284b1f3d65b55081993b59f57d3f4b8
                             <div id="ui-text">Material</div>
                             <DropdownButton id="but-material" title="Select" onSelect={this.handleChangeMaterial}>
                                 <div id="scroll" style={{ width: "500px", overflowY: "scroll", maxHeight: "315px" }}>

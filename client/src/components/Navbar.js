@@ -137,19 +137,6 @@ class NavBar extends React.Component {
         else
         {
             return (
-<<<<<<< HEAD
-                <Navbar bg="light" expand="lg">
-                        <Navbar.Brand href="#home">Slice Engineering</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="mr-auto">
-                                <Nav.Link href="/">Home</Nav.Link>
-                                <Nav.Link href="/protected">Protected</Nav.Link>
-                                <Nav.Link href="/orders">Orders</Nav.Link>
-                            </Nav>
-                            
-                            <Button onClick={(event) =>
-=======
                 <div data-section-id="header" data-section-type="header-section">
                       <header className="site-header border-bottom logo--left" role="banner">
                       <div className="grid grid--no-gutters grid--table site-header__mobile-nav">
@@ -245,7 +232,6 @@ class NavBar extends React.Component {
                         </form>
 
                         <Button style={{marginLeft: "15px"}} onClick={(event) =>
->>>>>>> ed2e8699a284b1f3d65b55081993b59f57d3f4b8
                             {
                                 axios.post("/api/logout")
                                 localStorage.removeItem('user_id')
