@@ -3,8 +3,13 @@ var Schema = mongoose.Schema;
 var request = require('request');
 
 var orderSchema = new Schema({
-	user_id: {
-		type: Schema.Types.ObjectId,
+    file_name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+	username: {
+		type: String,
 		required: true
 	},
 	order_number: {
@@ -46,13 +51,11 @@ orderSchema.pre('find', function(next) {
 
 	/*
 	request.post('https://i.materialise.com/web-api/order?id=' + this.order_number, function(err, res, body) {
-
 		if (err) {
 			throw err
 		}
 		
 		let statusCode = res.body.statusCode
-
 		if (statusCode === 0) {
 			this.status = 'Cancelled'
 		}
@@ -74,9 +77,7 @@ orderSchema.pre('find', function(next) {
 		else if (statusCode === 7) {
 			this.status = 'Delivered'
 		}
-
 		next()
-
 	})
 	*/
 
