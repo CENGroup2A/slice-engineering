@@ -1,8 +1,10 @@
 #ui-title {
   color: black;
   justify-content: center;
+  margin-top: 35px;
   margin-bottom: 8px;
   font-size: 35px;
+  display: flex;
 }
 
 #ui-signup {

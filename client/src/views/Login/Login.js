@@ -33,7 +33,9 @@ class Login extends React.Component {
         }
 
         return (
-            <div id="ui-login">
+          <div>
+                <div id="ui-title">Login</div>
+                <div id="ui-login">
                 <div id="ui-login-boxes">
                     <Container className="p-3">
                         <Formik
@@ -106,6 +108,7 @@ class Login extends React.Component {
                     </Container>
                 </div>
             </div>
+          </div>
         )
     }
 }
