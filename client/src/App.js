@@ -15,6 +15,7 @@ import PrivateRoute from './components/PrivateRoute';
 import styles from './assets/theme.scss.css';
 import Accepted from './components/Accepted';
 import Status from './components/Status';
+import Payment from './views/Quote/Payment';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <PrivateRoute exact path="/accepted" component={Accepted} />
         <PrivateRoute exact path="/status" component={Status} />
         <PrivateRoute exact path="/material" component={MaterialView} />
+        <PrivateRoute exact path="/payment" component={Payment} />
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>
