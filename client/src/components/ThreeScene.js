@@ -60,7 +60,9 @@ class ThreeScene extends Component {
             modelID: '',
             finishState: true,
             cartState: true,
-            error: ''
+            error: '',
+            token: '',
+            buttonDisabledState: true
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
@@ -73,7 +75,7 @@ class ThreeScene extends Component {
     }
 
     routeChange = () => {
-        this.setState({link: '/material'});
+        this.setState({link: '/payment'});
     }
 
     getFile() {
@@ -506,11 +508,13 @@ class ThreeScene extends Component {
                 {
                     console.log(price)
                     this.setState({price: price.data.modelPrice})
+                    this.setState({token: price.data.token})
                     if (this.state.price == '0') {
                         this.setState({error: "This error will be the error that we will return if the price returned is $0."})
                         text.textContent = "Error";
                         document.getElementById('wave').style.display = 'none';
                     } else {
+                        this.setState({buttonDisabledState: false});
                       text.textContent = "Add to Cart for: $" + price.data.modelPrice;
                       document.getElementById('wave').style.display = 'none';
                     }
@@ -549,7 +553,7 @@ class ThreeScene extends Component {
             if (currentFile) {
                 return (
                     <div>
-                        <Redirect to={{pathname: link, state: {file: currentFile}}} />
+                        <Redirect to={{pathname: link, state: {modelPrice: this.state.price, token: this.state.token}}} />
                     </div>
                 );
             }
@@ -677,7 +681,7 @@ class ThreeScene extends Component {
                                 </ul>
 
                                 <ul>
-                                    <Button disabled={this.buttonDisabledState} id="ui-price">
+                                    <Button onClick={this.routeChange} disabled={this.state.buttonDisabledState} id="ui-price">
                                         <ul style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
                                             <li id="priceText">
                                                 Add to Cart for: ${this.state.price}
