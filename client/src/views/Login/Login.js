@@ -52,6 +52,7 @@ class Login extends React.Component {
                               if (message.name == "success")
                               {
                                 page.setState({continue: true})
+                                localStorage.setItem('user_id', values.username)
                                 window.location.reload();
                               }
                               else

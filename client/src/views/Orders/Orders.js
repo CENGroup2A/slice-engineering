@@ -28,7 +28,7 @@ class Orders extends React.Component {
 			.then(res => {
 
 				user_orders = res.data.filter(order => {
-					return (order.username === this.state.username)
+					return (order.username === this.state.user_id)
 				})
 
 			})
