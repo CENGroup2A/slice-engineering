@@ -14,9 +14,9 @@ class App extends Component
   render()
   {
     return (
-      <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+      <StripeProvider apiKey="pk_test_6ZfuD9E3V6pDLKolucwjTBiN00WGoKTEqD">
           <Elements>
-            <CustomCardElement />
+            <CustomCardElement {...this.props} />
           </Elements>
       </StripeProvider>
     );

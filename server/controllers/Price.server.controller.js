@@ -4,39 +4,29 @@ var express = require('express')
   Estimate = require('../models/estimate.server.model')
   config = require('../config/config');
 
-//Receives the information from Material.js
-exports.sendMatFIN = (req, res)=>
+
+function getModel(url)
 {
-  axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model',
+  return axios.post('https://imatsandbox.materialise.net/web-api/tool/2efbcc6f-fe98-406f-8cd1-92b133aae7c3/model',
   {
-    fileUrl: req.body.url,
+    fileUrl: url,
     fileUnits:"mm"
   },
   {
     headers: {
       "accept": "application/json",
     }})
-  .then((data) =>
-  {
-    return axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
+}
+
+function getEstimate(model, shipment)
+{
+  return axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
     {
       models: [
-        {
-          "modelID": data.data.modelID,
-          "materialID": req.body.material,
-          "finishID": req.body.finish,
-          "quantity":"1",
-          "scale": req.body.scale
-        }
+        model
       ],
-      shipmentInfo:
-      {
-        countryCode: req.body.countryCode,
-        stateCode: req.body.stateCode,
-        city : req.body.city,
-        zipCode : req.body.zipcode,
-      },
-        "currency": req.body.currency
+      shipmentInfo: shipment,
+        "currency": "USD"
     },
     {
       headers: {
@@ -44,10 +34,31 @@ exports.sendMatFIN = (req, res)=>
         "APICode": config.imaterialize.API
       }
     })
+}
+
+//Receives the information from Material.js
+exports.sendMatFIN = (req, res)=>
+{
+  getModel(req.body.url)
+  .then((data) =>
+  {
+    var model = {
+      "modelID"    : data.data.modelID,
+      "materialID" : req.body.material,
+      "finishID"   : req.body.finish,
+      "quantity"   : "1",
+      "scale"      : req.body.scale
+    }
+    return getEstimate(model,
+    {
+      countryCode : '',
+      stateCode   : '',
+      city        : '',
+      zipCode     : ''
+    })
     .then((price) =>
     {
-      var model = price.data.models[0]
-      var estimate = new Estimate({ 'modelID': model.modelID, 'totalPrice': model.totalPrice })
+      var estimate = new Estimate({ ...model,  totalPrice: price.data.models[0].totalPrice })
       return estimate.save()
       .then(() =>
       {
@@ -62,7 +73,6 @@ exports.sendMatFIN = (req, res)=>
     var model = price.data.models[0]
     res.json({
       "modelPrice" : model.totalPrice,
-      "shipmentCost" : price.data.shipmentCost,
       "token" : estimate._id
     })
   })
@@ -78,8 +88,39 @@ exports.sendMatFIN = (req, res)=>
     })
 }
 
-//Sends the Price back to Material.js
-exports.getPrice= (req, res)=>
+exports.getShipping = (req, res) =>
 {
-  res.json(price)
+  Estimate.findOne({"_id": req.body.token})
+  .then((estimate) =>
+  {
+    console.log({
+      countryCode : "US",
+      stateCode   : req.body.state,
+      city        : req.body.city,
+      zipCode     : req.body.zipcode
+    })
+    getEstimate({
+      "modelID"    : estimate.modelID,
+      "materialID" : estimate.materialID,
+      "finishID"   : estimate.finishID,
+      "quantity"   : "1",
+      "scale"      : estimate.scale
+    },
+    {
+      countryCode : "US",
+      stateCode   : req.body.state,
+      city        : req.body.city,
+      zipCode     : req.body.zipcode
+    })
+    .then((price) =>
+    {
+      var model = price.data.models[0]
+      res.json({
+        "modelPrice" : model.totalPrice,
+        "shipmentCost" : price.data.shipmentCost,
+        "token" : estimate._id
+      })
+    })
+  })
+  
 }

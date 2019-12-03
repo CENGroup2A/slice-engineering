@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 const Estimate = new Schema(
   {
     modelID : String,
+    materialID : String,
+    finishID : String,
+    scale : String,
     totalPrice : Number,
     shipmentCost : Number
   },
