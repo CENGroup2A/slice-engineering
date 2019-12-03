@@ -37,10 +37,10 @@ class NavBar extends React.Component {
                 <div className="grid grid--no-gutters grid--table site-header__mobile-nav">
                 <div className="grid__item medium-up--one-quarter logo-align--left">
                 <div className="h2 site-header__logo">
-                <a href="https://www.sliceengineering.com/" className="site-header__logo-image">
+                <Link to="/" className="site-header__logo-image">
                   <img src={logo}
                   style={{maxWidth: "250px"}}/>
-                </a>
+                </Link>
                 </div>
                 </div>
                 <nav className="grid__item medium-up--one-half small--hide" id="AccessibleNav" role="navigation">
@@ -70,9 +70,9 @@ class NavBar extends React.Component {
                   </li> */}
 
                   <li>
-                      <a href="/" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                      <Link to="/" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
                       <span className="site-nav__label">3D Printing Service Portal</span>
-                      </a>
+                      </Link>
                   </li>
 
                   {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
