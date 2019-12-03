@@ -28,7 +28,7 @@ class Orders extends React.Component {
 			.then(res => {
 
 				user_orders = res.data.filter(order => {
-					return (order.user_id === this.state.user_id)
+					return (order.username === this.state.username)
 				})
 
 			})
@@ -103,7 +103,14 @@ class Orders extends React.Component {
 		else {
 			return (
 				<Container>
-					<h4 style={{paddingTop: '1.5em'}}>No orders!</h4>
+					<Row style={{paddingTop: '1.5em'}}>
+						<h3>Order History:</h3>
+					</Row>
+					<Row>
+						<Col>
+							<h4 style={{paddingTop: '1.5em'}}>You have not placed any orders yet.</h4>
+						</Col>
+					</Row>
 				</Container>
 			)
 		}
