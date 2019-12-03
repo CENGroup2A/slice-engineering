@@ -17,35 +17,7 @@
     border-color: #949494;
     color: black;
     background-color: white;
-    margin-bottom: 15px;
-}
-
-#but-city{
-    text-align: left;
-    width: 500px;
-    border-width: 1px;
-    border-color: #949494;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-    font-size: 14px;
-    letter-spacing: 1px;
-    line-height: 21px;
-    text-transform: uppercase;
-}
-
-#but-zip{
-    text-align: left;
-    width: 500px;
-    border-width: 1px;
-    border-color: #949494;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-    font-size: 14px;
-    letter-spacing: 1px;
-    line-height: 21px;
-    text-transform: uppercase;
+    margin-bottom: 25px;
 }
 
 #but-upload{
@@ -66,31 +38,6 @@
     color: black;
     background-color: white;
     margin-bottom: 15px;
-}
-
-#but-state{
-    text-align: left;
-    width: 167px;
-    border-width: 1px;
-    border-left-color: #94949400;
-    border-top-color: #949494;
-    border-bottom-color: #949494;
-    border-right-color: #94949400;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-    margin-left: -1px;
-}
-
-#but-currency{
-    text-align: left;
-    width: 168px;
-    border-width: 1px;
-    border-color: #949494;
-    color: black;
-    background-color: white;
-    margin-bottom: 15px;
-    margin-left: -1px;
 }
 
 #but-orientate{
@@ -135,7 +82,7 @@
     border-color: #949494;
     color: black;
     background-color: white;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 #ui-submit{
@@ -149,6 +96,10 @@
 #ui-text {
     color: black;
     margin-bottom: 5px;
+}
+
+#ui-dropdown {
+    margin-bottom: 15px;
 }
 
 #ui-title {
@@ -167,13 +118,12 @@
     background-color:#FFFFFF;
     margin-top: 15px;
     margin-bottom: 20px;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
-#ui-error-statement {
-    text-align: center;
-    margin-top: 20px;
-    color: red;
+#ui-footnote {
+  text-align: center;
+  margin-top: 20px;
 }
 
 div#wave {
