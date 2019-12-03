@@ -30,7 +30,7 @@ const App = () => {
         <PrivateRoute exact path="/accepted" component={Accepted} />
         <PrivateRoute exact path="/status" component={Status} />
         <PrivateRoute exact path="/material" component={MaterialView} />
-        <PrivateRoute exact path="/payment" component={Payment} />
+        <Route exact path="/payment" component={Payment} />
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>
