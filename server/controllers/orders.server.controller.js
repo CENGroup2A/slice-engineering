@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 //sends a confirmation email after an order is placed
 function sendOrderConfirmation(codeData)
 {
+	console.log("sending email");
 	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
 	const msg = {
 		to: codeData.email,
@@ -24,6 +25,7 @@ function sendOrderConfirmation(codeData)
 //Sends an email to notify the user of a status update on their order
 function sendOrderUpdate(codeData)
 {
+	
 	sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
 	const msg = {
 		to: codeData.email,
@@ -52,32 +54,32 @@ exports.create = (req, res) => {
 			res.status(500).send(err);
 		} else {
 			res.json(order);
-		}
-	});
-
-	//Gets user based on userId and sends an email
-	User.findById(order.user_id).then((currentUser) =>
-	{
-		if(currentUser)
-		{
-			var currUserName = currentUser.username;
-			var userEmail = currentUser.email;
-
-			sendOrderConfirmation(new OrderEmailCode({
-				order_number: order.order_number,
-				status: order.status,
-				email: userEmail,// email based on userID user
-				username: currUserName// username based on userID user
-		
-			}));
-		}
-		else
-		{
-			console.log("User not found");
-		}
-	});
-
 	
+	//Gets user based on userId and sends an email
+		User.findById(order.user_id).then((currentUser) =>
+		{
+			if(currentUser)
+			{
+				var currUserName = currentUser.username;
+				var userEmail = currentUser.email;
+
+				sendOrderConfirmation(new OrderEmailCode({
+					order_number: order.order_number,
+					status: order.status,
+					email: userEmail,// email based on userID user
+					username: currUserName// username based on userID user
+			
+				}));
+			}
+			else
+			{
+				console.log("User not found");
+			}
+		});
+
+		}
+	});
+
 
 }
 
@@ -100,31 +102,31 @@ exports.update = (req, res) => {
 			res.status(500).send(err);
 		} else {
 			res.json(order);
-		}
-	});
-
-	//Gets user based on userId and sends an email
-	User.findById(order.user_id).then((currentUser) =>
-	{
-		if(currentUser)
-		{
-			var currUserName = currentUser.username;
-			var userEmail = currentUser.email;
-
-			sendOrderUpdate(new OrderEmailCode({
-				order_number: order.order_number,
-				status: order.status,
-				email: userEmail,// email based on userID user
-				username: currUserName// username based on userID user
 		
-			}));
-		}
-		else
-		{
-			console.log("User not found");
-		}
-	});
 
+		//Gets user based on userId and sends an email
+		User.findById(order.user_id).then((currentUser) =>
+		{
+			if(currentUser)
+			{
+				var currUserName = currentUser.username;
+				var userEmail = currentUser.email;
+
+				sendOrderUpdate(new OrderEmailCode({
+					order_number: order.order_number,
+					status: order.status,
+					email: userEmail,// email based on userID user
+					username: currUserName// username based on userID user
+			
+				}));
+			}
+			else
+			{
+				console.log("User not found");
+			}
+		});
+	}
+});
 }
 	
 
