@@ -5,7 +5,34 @@ axios = require('axios');
 
 var cartItem="";
 var FormData = require('form-data');
-var neededData
+var neededData = {
+  modelID : "",
+  materialID : "",
+  materialName : "",
+  finishID : "",
+  finishingName : "",
+  materialPrice : "",
+  scale : "",
+  quantity : "1",
+  surfaceCm2 : "",
+  volumeCm3 : "",
+  xDimMm : "",
+  yDimMm : "",
+  zDimMm : "",
+  shippingPrice : "",
+  shippingType : "",
+  daysInTransit : "",
+  countryCode : "",
+  stateCode : "",
+  city : "",
+  zipcode : "",
+  currency : "",
+  firstName : "",
+  lastName : "",
+  phoneNumber : "",
+  email : "",
+  address : ""
+}
 
 //Price Variables
 var quantity = "1"
