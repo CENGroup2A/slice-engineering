@@ -1,3 +1,10 @@
+#ui-title {
+  color: black;
+  justify-content: center;
+  margin-bottom: 8px;
+  font-size: 35px;
+}
+
 #ui-signup {
   height: 50%;
   width: 40%;
@@ -5,7 +12,6 @@
   text-align: left;
   background-color: #FFFFFF;
   margin: 0 auto;
-  margin-top: 80px;
 }
 
 #ui-signup-boxes {

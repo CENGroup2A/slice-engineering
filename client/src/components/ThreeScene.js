@@ -113,6 +113,7 @@ class ThreeScene extends Component {
                 })
             }
             else {
+                this.setState({ fileRendered: false });
                 document.getElementById('infoAndInstruc').style.visibility = 'visible';
                 document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
             }
@@ -630,18 +631,6 @@ class ThreeScene extends Component {
         document.getElementById('but-scale').style.borderColor = "#949494";
     }
 
-    getError() {
-
-    }
-
-    /*buttonDisabledState() {
-        return this.state.cartState && this.state.validPrint
-    }*/
-
-    renderError() {
-      return
-    }
-
     render() {
         const {link} = this.state;
         if (link) {
@@ -672,22 +661,25 @@ class ThreeScene extends Component {
                 <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
                     <div>
                         <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
-                            <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <ul>
-                                    <li>
-                                        <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
-                                    </li>
-                                    <li>
-                                        <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
-                                    </li>
-                                </ul>
+                            <div>
+                                <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <ul>
+                                        <li>
+                                            <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
+                                        </li>
+                                        <li>
+                                            <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                </div>
                             </div>
                         )}
                         </Dropzone>
-
-                        <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }}>
-                        </div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>
@@ -767,54 +759,7 @@ class ThreeScene extends Component {
                                     {this.state.finishList.map((x, y) => <Dropdown.Item style={{ textTransform: "capitalize" }} eventKey={[y, x]}>{x}</Dropdown.Item>)}
                                 </div>
                             </DropdownButton>
-
-                            <ButtonGroup>
-                                <ul style={{ zIndex: 2 }}>
-                                    <li>
-                                        <div id="ui-text">Country</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-country" title="Select" onSelect={this.handleChangeCountry}>
-                                            <div style={{ width: "167px" }}>
-                                                {countryCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-
-                                <ul style={{ zIndex: 1 }}>
-                                    <li>
-                                        <div id="ui-text">State</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-state" title="Select" onSelect={this.handleChangeState}>
-                                            <div id="scroll" style={{ width: "166px", overflowY: "scroll", maxHeight: "315px" }}>
-                                                {stateCodes.map((x, y) => <Dropdown.Item eventKey={[y, x]}>{x}</Dropdown.Item>)}
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-
-                                <ul style={{ zIndex: 2 }}>
-                                    <li>
-                                        <div id="ui-text">Currency</div>
-                                    </li>
-                                    <li>
-                                        <DropdownButton id="but-currency" title="Select" onSelect={this.handleChangeCurrency}>
-                                            <div style={{ width: "167px" }}>
-                                                <Dropdown.Item eventKey={"USD"}>USD</Dropdown.Item>
-                                            </div>
-                                        </DropdownButton>
-                                    </li>
-                                </ul>
-                            </ButtonGroup>
-
-                            <div id="ui-text">City</div>
-                            <input autoComplete="off" id="but-city" type="text" name="city" placeholder="CITY" onChange={this.handleChangeCity} />
-
-                            <div id="ui-text">Zip Code</div>
-                            <input autoComplete="off" id="but-zip" type="text" name="Zipcode" placeholder="ZIP CODE" onChange={this.handleChangeZipcode} />
-
+                            
                             <ButtonGroup>
                                 <ul>
                                     <Button id="ui-submit" type="submit" onClick={this.handleSubmit}> Request Quote </Button>
