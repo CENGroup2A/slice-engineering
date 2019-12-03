@@ -23,7 +23,7 @@ const SignupSchema = Yup.object().shape({
       .max(70, "Your email is too long")
       .required('Required'),
     password: Yup.string()
-      .max(70, "Your passowrd is too long")
+      .max(70, "Your password is too long")
       .required('Required'),
     passwordConfirm: Yup.string()
       .required('Required')
@@ -54,7 +54,8 @@ class SignUp extends React.Component
                   name: '',
                   passwordConfirm: '',
                   password: '',
-                  username: ''
+                  username: '',
+                  email: ''
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={(values, actions) =>

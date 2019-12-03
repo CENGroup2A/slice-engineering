@@ -1,6 +1,5 @@
-//const Example = require('../models/examples.server.model.js')
 const AWS = require('aws-sdk');
-const fs = require('fs');
+const orders = require('../controllers/orders.server.controller')
 
 const ID = process.env.S3_KEY_ID || require('../config/config').key.keyID;
 const SECRET = process.env.S3_SECRETE_KEY || require('../config/config').key.secretKey;
@@ -22,6 +21,8 @@ exports.sign_s3 = (req, res) => {
         Expires: 6000,
         //ContentType: fileType
     };
+
+    orders.create(req.user.username, "", "Ordered", req.user.username + "/" + fileName)
 
     s3.getSignedUrl("putObject", params, function(err, data) {
         if (err) {

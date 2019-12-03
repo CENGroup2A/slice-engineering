@@ -1,0 +1,58 @@
+#ui-title {
+  color: black;
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 8px;
+  font-size: 35px;
+  display: flex;
+}
+
+#ui-h2 {
+    margin-top: 10vh;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+#ui-AboutTheProcess {
+    width: 75%;
+    justify-content: left;
+    text-align: left;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+}
+
+#ui-p1 {
+    font-size: 20px;
+    margin-bottom: 10vh;
+}
+
+#ui-bullet {
+    font-size: 20px;
+    margin-bottom: 10vh;
+}
+
+#ui-faq {
+    color: black;
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+.greenText
+{
+    color: #14A96D;
+}
+
+.orangeText
+{
+    color: #E87722;
+}
+
+.instruction
+{
+    padding-left: 30px;
+    font-weight: bold;
+    font-size: 24px;
+}

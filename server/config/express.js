@@ -3,13 +3,12 @@ const path = require('path'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     bodyParser = require('body-parser'),
+    ordersRouter = require('../routes/orders.server.routes'),
     passport = require('passport'),
     accountRouter = require('../routes/account.server.routes'),
     uploadRouter = require('../routes/S3upload.server.routes');
     User = require('../models/user.server.model')
-
-
-const session = require('express-session');
+    session = require('express-session');
     materialsRouter = require('../routes/Materials.server.routes');
     PriceRouter = require('../routes/Price.server.routes');
     CartitemRouter = require('../routes/Cartitem.server.routes');
@@ -19,12 +18,10 @@ module.exports.init = () => {
         connect to database
         - reference README for db uri
     */
-    mongoose.connect(process.env.DB_URI || require('./config').db.uri,
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        });
-
+    mongoose.connect(process.env.DB_URI || require('./config').db.uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
     mongoose.set('useCreateIndex', true);
     mongoose.set('useFindAndModify', false);
 
@@ -55,6 +52,7 @@ module.exports.init = () => {
     app.use(bodyParser.json());
 
     // add a router
+    app.use('/api/orders', ordersRouter);
     app.use('/api/', accountRouter);
     app.use('/api', materialsRouter);
     app.use('/api', PriceRouter);

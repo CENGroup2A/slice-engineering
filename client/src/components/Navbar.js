@@ -75,6 +75,18 @@ class NavBar extends React.Component {
                       </Link>
                   </li>
 
+                  <li>
+                    <Link to="/FAQ" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                    <span className="site-nav__label">FAQ</span>
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link to="/orders" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                    <span className="site-nav__label">Orders</span>
+                    </Link>
+                </li>
+
                   {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                       <button className="site-nav__link site-nav__link--main site-nav__link--button">
                           <span className="site-nav__label">Resources</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
@@ -182,6 +194,18 @@ class NavBar extends React.Component {
                             </Link>
                         </li>
 
+                        <li>
+                            <Link to="/FAQ" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                            <span className="site-nav__label">FAQ</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/orders" className="site-nav__link--active site-nav__link--main" style={{textDecoration: "none"}}>
+                            <span className="site-nav__label">Orders</span>
+                            </Link>
+                        </li>
+
                         {/* <li className="site-nav--has-dropdown" data-has-dropdowns="">
                             <button className="site-nav__link site-nav__link--main site-nav__link--button">
                                 <span className="site-nav__label">Resources</span><svg aria-hidden="true" focusable="false" role="presentation" className="icon icon--wide icon-chevron-down" viewBox="0 0 498.98 284.49"><path className="cls-1" d="M80.93 271.76A35 35 0 0 1 140.68 247l189.74 189.75L520.16 247a35 35 0 1 1 49.5 49.5L355.17 511a35 35 0 0 1-49.5 0L91.18 296.5a34.89 34.89 0 0 1-10.25-24.74z" transform="translate(-80.93 -236.76)"></path></svg>
@@ -236,6 +260,7 @@ class NavBar extends React.Component {
                         <Button style={{marginLeft: "15px"}} onClick={(event) =>
                             {
                                 axios.post("/api/logout")
+                                localStorage.removeItem('user_id')
                                 window.location.reload();
                             }} variant="outline-success">Log Out</Button>
 
