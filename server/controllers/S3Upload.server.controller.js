@@ -22,8 +22,6 @@ exports.sign_s3 = (req, res) => {
         //ContentType: fileType
     };
 
-    orders.create(req.user.username, "", "Ordered", req.user.username + "/" + fileName)
-
     s3.getSignedUrl("putObject", params, function(err, data) {
         if (err) {
             console.log(err);
