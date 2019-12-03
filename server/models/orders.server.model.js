@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 var request = require('request');
 
 var orderSchema = new Schema({
-	user_id: {
-		type: Schema.Types.ObjectId,
+	username: {
+		type: String,
 		required: true
 	},
 	order_number: {
@@ -25,9 +25,10 @@ var orderSchema = new Schema({
 			'Delivered'
 		]
 	},
-	file: {
+	file_name: {
 		type: String,
-		unique: true
+		unique: true,
+		required: true
 	},
 	created_at: Date,
 	updated_at: Date

@@ -39,28 +39,23 @@ function sendOrderUpdate(codeData)
 
 
 // Create an order
-exports.create = (req, res) => {
+exports.create = (username, order_number, status, file_name) => {
 
 	var order = new Order({
-		user_id: req.body.user_id,
-		order_number: req.body.order_number,
-		status: req.body.status
+		username: username,
+		order_number: order_number,
+		status: status,
+		file_name: file_name
 	});
-
-	if (req.body.file) {
-		order.file = req.body.file;
-	}
 
 	order.save(err => {
 		if (err) {
-			res.status(500).send(err);
-		} else {
-			res.json(order);
+			console.error(err);
 		}
-	});
+	})
 
 	//Gets user based on userId and sends an email
-	User.findById(order.user_id).then((currentUser) =>
+	User.findById(order.username).then((currentUser) =>
 	{
 		if(currentUser)
 		{
@@ -81,35 +76,20 @@ exports.create = (req, res) => {
 		}
 	});
 
-	
-
 }
 
-// Get an order
-exports.read = (req, res) => {
-	res.json(req.order);
-}
+exports.update = (order, username, order_number, status, file_name) => {
 
-// Update an order
-exports.update = (req, res) => {
-	
-	var order = req.order;
-
-	order.user_id = req.body.user_id;
-	order.order_number = req.body.order_number;
-	order.status = req.body.status;
-
-	if (req.body.file) {
-		order.file = req.body.file;
-	}
+	order.username = username;
+	order.order_number = order_number;
+	order.status = status;
+	order.file_name = file_name;
 
 	order.save(err => {
 		if (err) {
-			res.status(500).send(err);
-		} else {
-			res.json(order);
+			console.error(err);
 		}
-	});
+	})
 
 	//Gets user based on userId and sends an email
 	User.findById(order.user_id).then((currentUser) =>
@@ -134,25 +114,31 @@ exports.update = (req, res) => {
 	});
 
 }
-	
 
-// Delete an order
-exports.delete = (req, res) => {
+exports.delete = (order_number) => {
 
-	var order = req.order;
-
-	Order.findOneAndDelete({ order_number: order.order_number }, err => {
+	Order.findOneAndDelete({ order_number: order_number }, err => {
 		if (err) {
-			res.status(500).send(err);
-		} else {
-			res.json(order);
+			console.error(err)
 		}
-	});
+	})
 
 }
 
-// Retrieve all orders
-exports.list = (req, res) => {
+exports.list = () => {
+
+	Order.find().exec((err, orders) => {
+		if (err) {
+			console.error(err)
+		}
+		else {
+			return orders
+		}
+	})
+
+}
+
+exports.get = (req, res) => {
 
 	Order.find().exec((err, orders) => {
 		if (err) {
