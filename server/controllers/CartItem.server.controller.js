@@ -3,32 +3,42 @@ axios = require('axios');
  router = express.Router();
  config = require('../config/config');
 
-var cartItem
-var cartCheckout
-var cartId
+var cartItem="";
 var FormData = require('form-data');
+var neededData = {
+  modelID : "",
+  materialID : "",
+  materialName : "",
+  finishID : "",
+  finishingName : "",
+  materialPrice : "",
+  scale : "",
+  quantity : "1",
+  surfaceCm2 : "",
+  volumeCm3 : "",
+  xDimMm : "",
+  yDimMm : "",
+  zDimMm : "",
+  shippingPrice : "",
+  shippingType : "",
+  daysInTransit : "",
+  countryCode : "",
+  stateCode : "",
+  city : "",
+  zipcode : "",
+  currency : "",
+  firstName : "",
+  lastName : "",
+  phoneNumber : "",
+  email : "",
+  address : ""
+}
 
 //Price Variables
-var modelID = "a2cb5121-72cc-41e1-89e5-ca76e1999bfb"
-var materialID = "035f4772-da8a-400b-8be4-2dd344b28ddb"
-var materialName = "Polyamide (SLS)"
-var finishID =  "bba2bebb-8895-4049-aeb0-ab651cee2597"
-var finishingName = "Natural white"
-var materialPrice = "14.19"
-var scale = "1"
 var quantity = "1"
-var surfaceCm2 = "94.3109"
-var volumeCm3 = "15.5505"
-var xDimMm = "60.001"
-var yDimMm = "31.004"
-var zDimMm = "48"
-var shippingPrice = "15.50"
-var shippingType = "Express"
-var daysInTransit = "2"
 
 //Variables for FetchCartID
 var cartItemID
-var modelFileName
 
 function FetchCartItem()
 {
@@ -37,24 +47,25 @@ function FetchCartItem()
        {
           "toolID":config.imaterialize.toolId,
           "MyCartItemReference":"current cart item",
-          "modelID":modelID,
-          "fileScaleFactor":scale,
-          "materialID":materialID,
-          "finishID":finishID,
+          "modelID":neededData.modelID,
+          "fileScaleFactor":neededData.scale,
+          "materialID":neededData.materialID,
+          "finishID":neededData.finishID,
           "quantity":quantity,
-          "xDimMm":xDimMm,
-          "yDimMm":yDimMm,
-          "zDimMm":zDimMm,
-          "volumeCm3":volumeCm3,
-          "surfaceCm2":surfaceCm2,
-          "iMatAPIPrice": materialPrice,
-          "mySalesPrice": materialPrice,
+          "xDimMm":neededData.xDimMm,
+          "yDimMm":neededData.yDimMm,
+          "zDimMm":neededData.zDimMm,
+          "volumeCm3":neededData.volumeCm3,
+          "surfaceCm2":neededData.surfaceCm2,
+          "iMatAPIPrice": neededData.totalPrice,
+          "mySalesPrice": neededData.totalPrice,
        }
     ],
-    "currency":"USD"
+    "currency":neededData.currency
 }
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
+ console.log(form)
 
   return axios.post('https://imatsandbox.materialise.net/web-api/cartitems/register',
   form,
@@ -63,10 +74,9 @@ function FetchCartItem()
   })
   .then((data) =>
   {
-    console.log("data.data in FetchCartItem => cartItems[0]:", data.data.cartItems[0]);
+    console.log("data.data",data.data);
     cartItem=data.data;
-    cartItemID=data.data.cartItems[0].cartItemID
-    return Promise.resolve(data.data)
+    return Promise.resolve(data.data.modelID)
   })
   .catch((error) =>
   {
@@ -78,42 +88,42 @@ async function FetchCartID(){
   let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post',
   {
     MyCartReference: "My cart",
-    Currency: "USD",
+    Currency: neededData.currency,
     LanguageCode: "en",
-    ReturnUrl: "http://mysite.com/success.html",
-    OrderConfirmationUrl: "http://mysite.com/confirm.html",
-    FailureUrl: "http://mysite.com/failure.html",
-    PromoCode:"",
+    ReturnUrl: "",
+    OrderConfirmationUrl: "",
+    FailureUrl: "",
+    PromoCode:"", 
     CartItems:[
        {
           CartItemID: cartItemID
        }],
     ShippingInfo: {
-      FirstName: "John",
-      LastName: "Smith",
-      Email: "demo@demo.com",
-      Phone: "1234567",
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
       Company: "No company",
-      Line1: "North Street",
+      Line1: neededData.address,
       Line2:"",
-      CountryCode: "US",
-      StateCode:"FL",
-      ZipCode: "32608",
-      City: "Gainesville"
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city
     },
     BillingInfo: {
-      FirstName: "John",
-      LastName: "Smith",
-      Email: "demo@demo.com",
-      Phone: "1234567",
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
       Company: "No company",
-      Line1: "North Street",
+      Line1: neededData.address,
       Line2:"",
-      CountryCode: "US",
-      StateCode:"FL",
-      ZipCode: "32608",
-      City: "Gainesville",
-      VatNumber: "BE0999999922"
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city,
+      VatNumber: ""
     }
   },
   {
@@ -122,7 +132,7 @@ async function FetchCartID(){
     }
   })
   console.log("data.data in FetchCartID",data.data);
-  cartID=data.data;
+  cartID=data.data.cartID;
   cartItemID=data.data.cartItems[0].cartItemID
   return(data.data.modelID)
 }
@@ -131,9 +141,9 @@ function FetchCheckout()
 {
   console.log('cartItemID', cartItemID)
   var example = {
-    cartID: cartItemID,
-    myOrderReference:"test",
-    shipmentService:shippingType
+    cartID: cartID,
+    myOrderReference:"My Order",
+    shipmentService:neededData.shippingType
   }
 
  var form = new FormData()
@@ -176,16 +186,6 @@ exports.sendCartItem = (req, res)=>
 
 exports.getDataFromCart = (req, res) =>
 {
-  modelID = req.body.modelID
-  materialID = req.body.materialID
-  materialName = req.body.materialName
-  finishID = req.body.finishID
-  finishingName = req.body.finishingName
-  materialPrice = req.body.totalPrice
-  scale = req.body.scale
-  shippingPrice = req.body.shippingPrice
-  shippingType = req.body.shippingType
-  daysInTransit = req.body.daysInTransit
-
-  console.log(modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit)
+  neededData = req.body
+  console.log('data', neededData)
 }

@@ -1,7 +1,8 @@
-var express = require('express');
- axios = require('axios');
- router = express.Router();
- config = require('../config/config');
+var express = require('express')
+  axios = require('axios'),
+  router = express.Router(),
+  Estimate = require('../models/estimate.server.model')
+  config = require('../config/config');
 
 //Receives the information from Material.js
 exports.sendMatFIN = (req, res)=>
@@ -17,7 +18,6 @@ exports.sendMatFIN = (req, res)=>
     }})
   .then((data) =>
   {
-    console.log(data)
     return axios.post('https://imatsandbox.materialise.net/web-api/pricing/model',
     {
       models: [
@@ -44,12 +44,26 @@ exports.sendMatFIN = (req, res)=>
         "APICode": config.imaterialize.API
       }
     })
+    .then((price) =>
+    {
+      var model = price.data.models[0]
+      var estimate = new Estimate({ 'modelID': model.modelID, 'totalPrice': model.totalPrice })
+      return estimate.save()
+      .then(() =>
+      {
+        return Promise.resolve({'price': price, 'estimate': estimate})
+      })
+    })
   })
-  .then((price) =>
+  .then((response) =>
   {
+    var price = response.price
+    var estimate = response.estimate
+    var model = price.data.models[0]
     res.json({
-      "modelPrice" : price.data.models[0].totalPrice,
-      "shipmentCost" : price.data.shipmentCost
+      "modelPrice" : model.totalPrice,
+      "shipmentCost" : price.data.shipmentCost,
+      "token" : estimate._id
     })
   })
   .catch((error) =>
