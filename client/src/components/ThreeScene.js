@@ -55,11 +55,12 @@ class ThreeScene extends Component {
             price: '0.00',
             scale: '',
             //Needed to send to Price.server.controller
-            countryCode: '',
+            coutryCode: '',
             stateCode: '',
             modelID: '',
             finishState: true,
-            cartState: true
+            cartState: true,
+            error: ''
         };
 
         this.handleChangeMaterial = this.handleChangeMaterial.bind(this);
@@ -550,7 +551,7 @@ class ThreeScene extends Component {
             text.textContent = "Calculating";
             document.getElementById('wave').style.display = '';
             this.setState({cartState: false});
-
+            this.setState({error: ''});
             event.preventDefault();
 
             const reactData = {
@@ -571,8 +572,14 @@ class ThreeScene extends Component {
                 {
                     console.log(price)
                     this.setState({price: price.data.modelPrice})
-                    text.textContent = "Add to Cart for: $" + price.data.modelPrice;
-                    document.getElementById('wave').style.display = 'none';
+                    if (this.state.price == '0') {
+                        this.setState({error: "This error will be the error that we will return if the price returned is $0."})
+                        text.textContent = "Error";
+                        document.getElementById('wave').style.display = 'none';
+                    } else {
+                      text.textContent = "Add to Cart for: $" + price.data.modelPrice;
+                      document.getElementById('wave').style.display = 'none';
+                    }
                 })
                 .catch((err) => {
                     text.textContent = "Error: Please Refresh the Page!";
@@ -623,6 +630,18 @@ class ThreeScene extends Component {
         document.getElementById('but-scale').style.borderColor = "#949494";
     }
 
+    getError() {
+
+    }
+
+    /*buttonDisabledState() {
+        return this.state.cartState && this.state.validPrint
+    }*/
+
+    renderError() {
+      return
+    }
+
     render() {
         const {link} = this.state;
         if (link) {
@@ -649,7 +668,7 @@ class ThreeScene extends Component {
 
         return (
             <div>
-                <div id="ui-title" style={{display: "flex", justifyContent: 'center'}}>Upload 3D CAD Files</div>
+                <div id="ui-title"> Upload 3D CAD Files</div>
                 <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
                     <div>
                         <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
@@ -802,7 +821,7 @@ class ThreeScene extends Component {
                                 </ul>
 
                                 <ul>
-                                    <Button disabled={this.state.cartState} id="ui-price">
+                                    <Button disabled={this.buttonDisabledState} id="ui-price">
                                         <ul style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
                                             <li id="priceText">
                                                 Add to Cart for: ${this.state.price}
@@ -819,9 +838,11 @@ class ThreeScene extends Component {
                                     </Button>
                                 </ul>
                             </ButtonGroup>
-
                         </div>
                     </div>
+                </div>
+                <div id="ui-error-statement">
+                    {this.state.error}
                 </div>
             </div>
         );

@@ -153,8 +153,11 @@
 
 #ui-title {
     color: black;
+    justify-content: center;
     margin-top: 35px;
+    margin-bottom: 8px;
     font-size: 35px;
+    display: flex;
 }
 
 #ui-price {
@@ -165,6 +168,12 @@
     margin-top: 15px;
     margin-bottom: 20px;
     margin-left: 15px;
+}
+
+#ui-error-statement {
+    text-align: center;
+    margin-top: 20px;
+    color: red;
 }
 
 div#wave {
@@ -187,7 +196,7 @@ div#wave {
   div#wave .dot:nth-child(3) {
     animation-delay: -0.9s;
   }
-  
+
   @keyframes wave {
     0%, 60%, 100% {
       transform: initial;
