@@ -113,6 +113,7 @@ class ThreeScene extends Component {
                 })
             }
             else {
+                this.setState({ fileRendered: false });
                 document.getElementById('infoAndInstruc').style.visibility = 'visible';
                 document.getElementById("renderInstruc").textContent = "File not accepted. Try again.";
             }
@@ -660,22 +661,25 @@ class ThreeScene extends Component {
                 <div className="renderBody" style={{ marginTop: "35px", display: "flex", justifyContent: 'center'}}>
                     <div>
                         <Dropzone onDrop={this.onDrop} noClick={this.state.fileRendered}>{({ getRootProps, getInputProps, isDragActive }) => (
-                            <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <ul>
-                                    <li>
-                                        <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
-                                    </li>
-                                    <li>
-                                        <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
-                                    </li>
-                                </ul>
+                            <div>
+                                <div id="infoAndInstruc" style={{ position: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <ul>
+                                        <li>
+                                            <div> <div><center><img src="upload.png" alt="Drop Icon" width="100" height="100"/></center></div> </div>
+                                        </li>
+                                        <li>
+                                            <div id="renderInstruc">{isDragActive ? "Drop it like it's hot!" : 'Click me or drag a file to upload!'}</div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }} {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                </div>
                             </div>
                         )}
                         </Dropzone>
-
-                        <div id="container" style={{ postion: "absolute", marginRight: "70px", borderStyle: "solid", display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "700px", backgroundColor: "#F8F9FA" }}>
-                        </div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "700px", width: "500px", backgroundColor: "#FFFFFF" }}>

@@ -2,7 +2,8 @@ const User = require('../models/user.server.model')
       EmailCode = require('../models/emailcode.server.model'),
       sgMail = require('@sendgrid/mail'),
       passport = require('passport')
-
+      config = require('../config/config')
+      AWS = require('aws-sdk');
 
 
 function goodRequest(res)
@@ -17,7 +18,6 @@ function errorRequest(res, type, message)
 
 function sendVerificationEmail(codeData)
 {
-    console.log("hello")
     sgMail.setApiKey(process.env.SEND_GRID_API || require('../config/config').sendGrid.APIKey);
     const msg = {
         to: codeData.email,
@@ -26,6 +26,33 @@ function sendVerificationEmail(codeData)
         text: 'Code: ' + codeData.code + "\nhttp://localhost:3000/verify-email?code=" + codeData.code + "&username=" + codeData.username
     };
     sgMail.send(msg);
+}
+
+function createUserFolder(username)
+{
+    const ID = process.env.S3_KEY_ID || require('../config/config').key.keyID;
+    const SECRET = process.env.S3_SECRETE_KEY || require('../config/config').key.secretKey;
+    const BUCKET_NAME = process.env.S3_BUCKET_NAME || require('../config/config').bucket.bucketName;
+
+    const s3 = new AWS.S3({
+        accessKeyId: ID,
+        secretAccessKey: SECRET,
+        signatureVersion: 'v4'
+    });
+
+    var params = {
+        Bucket: BUCKET_NAME, 
+        Key: username + "/", 
+        ACL: 'public-read',
+        Body: 'body'
+    };
+
+    s3.upload(params, function (err, data) {
+        if (err)
+            console.log("Error creating the folder: ", err);
+        else
+            console.log("Successfully created a folder on S3");
+    });
 }
 
 exports.signup = function(req, res)
@@ -41,6 +68,8 @@ exports.signup = function(req, res)
         }
 
         sendVerificationEmail(codeData)
+
+        createUserFolder(user.username)
 
         var code = new EmailCode(codeData)
         return code.save()
@@ -74,6 +103,7 @@ exports.login = function(req, res, next)
 
         req.login(user, (err) =>
         {
+            //console.log(user.username)
             goodRequest(res)
         });
     })(req, res, next);
