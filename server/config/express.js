@@ -8,9 +8,11 @@ const path = require('path'),
     accountRouter = require('../routes/account.server.routes'),
     uploadRouter = require('../routes/S3upload.server.routes');
     User = require('../models/user.server.model')
-
-
-const session = require('express-session');
+    ordersRouter = require('../routes/order.server.routes')
+    session = require('express-session');
+    materialsRouter = require('../routes/Materials.server.routes');
+    PriceRouter = require('../routes/Price.server.routes');
+    CartitemRouter = require('../routes/Cartitem.server.routes');
 
 module.exports.init = () => {
     /*
@@ -53,7 +55,13 @@ module.exports.init = () => {
     // add a router
     app.use('/api/orders', ordersRouter);
     app.use('/api/', accountRouter);
-    app.use('/api/upload', uploadRouter);
+    app.use('/api', materialsRouter);
+    app.use('/api', PriceRouter);
+    app.use('/api',CartitemRouter);
+    //app.use('/api',CartIDRouter);
+    //app.use('/api',CheckoutRouter)
+    app.use('/api/', uploadRouter);
+    app.use('/api/', ordersRouter)
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files

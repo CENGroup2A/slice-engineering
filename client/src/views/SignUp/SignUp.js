@@ -2,6 +2,7 @@ import React from 'react'
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
+import style from "./SignUp.css"
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import {
@@ -32,7 +33,7 @@ const SignupSchema = Yup.object().shape({
 
 class SignUp extends React.Component
 {
-  state = 
+  state =
   {
     continue : false
   }
@@ -45,9 +46,10 @@ class SignUp extends React.Component
       )
 
     return (
-        <Container className="p-3">
+        <Container className="p-3" id="ui-signup">
+        <div>
           <Formik
-                initialValues={{      
+                initialValues={{
                   name: '',
                   passwordConfirm: '',
                   password: '',
@@ -61,7 +63,7 @@ class SignUp extends React.Component
                   .then((response) =>
                   {
                     var message = response.data.message
-                    
+
                     if (message.name == "success")
                       page.setState({"continue": true})
                     else
@@ -95,7 +97,7 @@ class SignUp extends React.Component
                         name="name"
                         onChange={handleChange}
                         value={values.name} />
-                    
+
                     <ErrorMessage name="name" />
 
                 </Form.Group>
@@ -137,7 +139,7 @@ class SignUp extends React.Component
                         name="password"
                         onChange={handleChange}
                         value={values.password} />
-                    
+
                     <ErrorMessage name="password" />
 
                 </Form.Group>
@@ -151,15 +153,16 @@ class SignUp extends React.Component
                         name="passwordConfirm"
                         onChange={handleChange}
                         value={values.passwordConfirm} />
-                    
+
                     <ErrorMessage name="passwordConfirm" />
 
                 </Form.Group>
-                
-                <Button variant="primary" type="submit">Sign Up</Button>
+
+                <p id="signup-button"><Button variant="primary" type="submit">Sign Up</Button></p>
             </Form>
             )}
             </Formik>
+        </div>
         </Container>
     )
   }
