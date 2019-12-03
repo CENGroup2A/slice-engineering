@@ -5,32 +5,37 @@ axios = require('axios');
 
 var cartItem="";
 var FormData = require('form-data');
+var neededData
+
+//Price Variables
+var quantity = "1"
+
+//Variables for FetchCartID
+var cartItemID
 
 function FetchCartItem()
 {
   var example = {
     "cartItems":[
        {
-          "toolID":"2efbcc6f-fe98-406f-8cd1-92b133aae7c3",
-          "MyCartItemReference":"some reference",
-          "modelID":"8a07f8c7-eda7-4a15-a843-f7661491c2d8",
-          "modelFileName":"",
-          "fileUnits":"mm",
-          "fileScaleFactor":"1",
-          "materialID":"035f4772-da8a-400b-8be4-2dd344b28ddb",
-          "finishID":"bba2bebb-8895-4049-aeb0-ab651cee2597",
-          "quantity":"1",
-          "xDimMm":"12",
-          "yDimMm":"12",
-          "zDimMm":"12",
-          "volumeCm3":"2.0",
-          "surfaceCm2":"100.0",
-          "iMatAPIPrice": "25.0",
-          "mySalesPrice": "26.0",
+          "toolID":config.imaterialize.toolId,
+          "MyCartItemReference":"current cart item",
+          "modelID":neededData.modelID,
+          "fileScaleFactor":neededData.scale,
+          "materialID":neededData.materialID,
+          "finishID":neededData.finishID,
+          "quantity":quantity,
+          "xDimMm":neededData.xDimMm,
+          "yDimMm":neededData.yDimMm,
+          "zDimMm":neededData.zDimMm,
+          "volumeCm3":neededData.volumeCm3,
+          "surfaceCm2":neededData.surfaceCm2,
+          "iMatAPIPrice": neededData.totalPrice,
+          "mySalesPrice": neededData.totalPrice,
        }
     ],
-    "currency":"USD"
- }
+    "currency":neededData.currency
+}
  var form = new FormData()
  form.append("data", JSON.stringify(example), {filename:"blob", contentType: 'application/json'})
  console.log(form)
@@ -50,16 +55,68 @@ function FetchCartItem()
   {
     console.error(error)
   })
-  
+}
+
+async function FetchCartID(){
+  let data =await axios.post('https://imatsandbox.materialise.net/web-api/cart/post', 
+  {
+    MyCartReference: "My cart",
+    Currency: neededData.currency,
+    LanguageCode: "en",
+    ReturnUrl: "",
+    OrderConfirmationUrl: "",
+    FailureUrl: "",
+    PromoCode:"", 
+    CartItems:[
+       { 
+          CartItemID: cartItemID
+       }],
+    ShippingInfo: {
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
+      Company: "No company",
+      Line1: neededData.address,
+      Line2:"",
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city
+    },
+    BillingInfo: {
+      FirstName: neededData.firstName,
+      LastName: neededData.lastName,
+      Email: neededData.email,
+      Phone: neededData.phoneNumber,
+      Company: "No company",
+      Line1: neededData.address,
+      Line2:"",
+      CountryCode: neededData.countryCode,
+      StateCode:neededData.stateCode,
+      ZipCode: neededData.zipcode,
+      City: neededData.city,
+      VatNumber: ""
+    }
+  }, 
+  {
+    headers: {
+      "accept": "application/json",
+    }
+  })
+  console.log("data.data in FetchCartID",data.data);
+  cartID=data.data.cartID;
+  cartItemID=data.data.cartItems[0].cartItemID
+  return(data.data.modelID)
 }
 
 function FetchCheckout()
 {
   console.log('cartItemID', cartItemID)
   var example = {
-    cartID: cartItemID,
-    myOrderReference:"test",
-    shipmentService:shippingType
+    cartID: cartID,
+    myOrderReference:"My Order",
+    shipmentService:neededData.shippingType
   }
   
  var form = new FormData()
@@ -102,16 +159,6 @@ exports.sendCartItem = (req, res)=>
 
 exports.getDataFromCart = (req, res) =>
 {
-  modelID = req.body.modelID
-  materialID = req.body.materialID
-  materialName = req.body.materialName
-  finishID = req.body.finishID
-  finishingName = req.body.finishingName
-  materialPrice = req.body.totalPrice
-  scale = req.body.scale
-  shippingPrice = req.body.shippingPrice
-  shippingType = req.body.shippingType
-  daysInTransit = req.body.daysInTransit
-
-  console.log(modelID,materialID,materialName, finishID, finishingName, materialPrice, scale, shippingPrice, shippingType, daysInTransit)
+  neededData = req.body
+  console.log('data', neededData)
 }
