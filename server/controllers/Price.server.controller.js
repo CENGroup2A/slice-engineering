@@ -30,7 +30,7 @@ function getEstimate(model, shipment)
     {
       headers: {
         "accept": "application/json",
-        "APICode": process.envimaterialize_API || require('../config/config').imaterialize.API
+        "APICode": process.envi.materialize_API || require('../config/config').imaterialize.API
       }
     })
 }
