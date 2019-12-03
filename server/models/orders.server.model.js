@@ -51,7 +51,7 @@ orderSchema.pre('find', function(next) {
 	request({
 		headers: {
 			'Content-Type': 'multipart/form-data',
-			'APICode': process.envimaterialize_API || require('../config/config').imaterialize.API
+			'APICode': process.env.imaterialize_API || require('../config/config').imaterialize.API
 		},
 		uri: 'https://imatsandbox.materialise.net/web-api/order?number=' + this.order_number,
 		method: 'POST'

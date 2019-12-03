@@ -232,7 +232,7 @@ exports.sendCartItem = (req, res)=>
         FetchCheckout()
         .then(() =>
         {
-          console.log(req.body.stripeToken)
+          console.log(cartCheckout)
           stripe.charges.create({
             amount: cartCheckout.totalPrice*100,
             currency: "usd",
@@ -240,6 +240,7 @@ exports.sendCartItem = (req, res)=>
           source: req.body.stripeToken.token.id
           })
           res.json(cartCheckout)
+          orders.create(req.user.username, "", "Ordered", req.user.username + "/" + fileName)
         })
       })
     })
