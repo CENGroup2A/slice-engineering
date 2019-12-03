@@ -1,12 +1,11 @@
 var express = require('express');
     request = require('request');
     router = express.Router();
-    config = require('../config/config');
 
 
 var listOfMats = [];
 
-request(config.imaterialize.accessId,
+request(process.env.imaterialize_ACCESSID || require('../config/config').imaterialize.accessId,
 (error, response, body) =>
 {
   if (!error && response.statusCode == 200) {

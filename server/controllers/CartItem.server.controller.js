@@ -1,7 +1,6 @@
 var express = require('express');
 axios = require('axios');
  router = express.Router();
- config = require('../config/config');
  const stripe = require("stripe")("sk_test_vrSlShE1472LRsD5AKWdfE8x00LfJAbOgu");
 
 var cartItem="";
@@ -42,7 +41,7 @@ function FetchCartItem()
   var example = {
     "cartItems":[
        {
-          "toolID":config.imaterialize.toolId,
+          "toolID":process.envimaterialize_TOOLID || require('../config/config').imaterialize.toolId,
           "MyCartItemReference":"current cart item",
           "modelID":neededData.modelID,
           "fileScaleFactor":neededData.scale,
@@ -190,7 +189,7 @@ function FetchCheckout()
   return axios.post('https://imatsandbox.materialise.net/web-api/order/post',
   form,
   {
-    headers: {...form.getHeaders(), "APICode": config.imaterialize.API}
+    headers: {...form.getHeaders(), "APICode": process.envimaterialize_API || require('../config/config').imaterialize.API}
   })
   .then((data) =>
   {

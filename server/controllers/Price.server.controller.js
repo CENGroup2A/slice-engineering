@@ -2,7 +2,6 @@ var express = require('express')
   axios = require('axios'),
   router = express.Router(),
   Estimate = require('../models/estimate.server.model')
-  config = require('../config/config');
 
 
 function getModel(url)
@@ -31,7 +30,7 @@ function getEstimate(model, shipment)
     {
       headers: {
         "accept": "application/json",
-        "APICode": config.imaterialize.API
+        "APICode": process.envimaterialize_API || require('../config/config').imaterialize.API
       }
     })
 }
