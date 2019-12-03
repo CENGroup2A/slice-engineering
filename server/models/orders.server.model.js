@@ -48,14 +48,13 @@ orderSchema.pre('save', function(next) {
 
 orderSchema.pre('find', function(next) {
 
-	/* TODO: iMaterialise responding with 'Not Authorized' */
-	/*
+	// TODO: sandbox API for now
 	request({
 		headers: {
-			'Content-Type': 'multipart/form-data'
-			'ApiCode': require('../config/config').imaterialise.ApiCode
+			'Content-Type': 'multipart/form-data',
+			'APICode': require('../config/config').imaterialise.APICode
 		},
-		uri: 'https://i.materialise.com/web-api/order?id=' + this.order_number,
+		uri: 'https://imatsandbox.materialise.net/web-api/order?id=' + this.order_number,
 		method: 'POST'
 	}, function(err, res, body) {
 
@@ -64,12 +63,11 @@ orderSchema.pre('find', function(next) {
 			return
 		}
 
-		if (req.body.orders) {
+		if (res.body.orders) {
 			this.status = res.body.orders[0].statusName
 		}
 
 	})
-	*/
 
 	next()
 
