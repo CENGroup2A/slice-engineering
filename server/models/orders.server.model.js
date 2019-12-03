@@ -48,18 +48,28 @@ orderSchema.pre('save', function(next) {
 
 orderSchema.pre('find', function(next) {
 
-	/* TODO: add API key for iMaterialise to request */
-	request.post('https://i.materialise.com/web-api/order?id=' + this.order_number, function(err, res, body) {
+	/* TODO: iMaterialise responding with 'Not Authorized' */
+	/*
+	request({
+		headers: {
+			'Content-Type': 'multipart/form-data'
+			'ApiCode': require('../config/config').imaterialise.ApiCode
+		},
+		uri: 'https://i.materialise.com/web-api/order?id=' + this.order_number,
+		method: 'POST'
+	}, function(err, res, body) {
 
 		if (err) {
-			throw err
+			console.error(err)
+			return
 		}
 
-		if (res.body.orders) {
+		if (req.body.orders) {
 			this.status = res.body.orders[0].statusName
 		}
 
 	})
+	*/
 
 	next()
 
