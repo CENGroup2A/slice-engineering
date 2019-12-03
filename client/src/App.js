@@ -16,6 +16,7 @@ import styles from './assets/theme.scss.css';
 import Accepted from './components/Accepted';
 import Status from './components/Status';
 import Payment from './views/Quote/Payment';
+import FAQ from './views/FAQ/FAQ'
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route exact path="/sign-up" component={SignUp} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/verify-email" component={VerifyEmail} />
+        <Route exact path="/FAQ" component={FAQ} />
         <Route exact path="/" component={Home} />
         <PrivateRoute exact path="/protected" component={Quote} />
         <PrivateRoute exact path="/accepted" component={Accepted} />
