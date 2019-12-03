@@ -189,7 +189,7 @@ function FetchCheckout()
   return axios.post('https://imatsandbox.materialise.net/web-api/order/post',
   form,
   {
-    headers: {...form.getHeaders(), "APICode": process.envimaterialize_API || require('../config/config').imaterialize.API}
+    headers: {...form.getHeaders(), "APICode": process.env.imaterialize_API || require('../config/config').imaterialize.API}
   })
   .then((data) =>
   {
