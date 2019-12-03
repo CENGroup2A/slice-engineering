@@ -41,7 +41,7 @@ function FetchCartItem()
   var example = {
     "cartItems":[
        {
-          "toolID":process.envimaterialize_TOOLID || require('../config/config').imaterialize.toolId,
+          "toolID":process.env.imaterialize_TOOLID || require('../config/config').imaterialize.toolId,
           "MyCartItemReference":"current cart item",
           "modelID":neededData.modelID,
           "fileScaleFactor":neededData.scale,
