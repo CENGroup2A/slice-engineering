@@ -17,7 +17,7 @@ import Accepted from './components/Accepted';
 import Status from './components/Status';
 import Orders from './views/Orders/Orders';
 import Payment from './views/Quote/Payment';
-import FAQ from './views/FAQ/FAQ'
+import FAQ from './views/FAQ/FAQ';
 
 const App = () => {
   return (

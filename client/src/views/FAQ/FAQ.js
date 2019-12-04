@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './FAQ.css';
 import Button from 'react-bootstrap/Button';
 
-const NotFound = () => {
+const FAQ = () => {
         return(
         <div>
             <p id="ui-title"> Frequently Asked Questions</p>
@@ -27,17 +27,17 @@ const NotFound = () => {
                 </p>
 
                 <p id="ui-faq">
-                   Q: How long will it be before I receive my print? <br/>
-                   A: Your print will arrive within 5-7 business days from the day your order is placed.
+                   <span class="QAtext">Q: </span>How long will it be before I receive my print? <br/>
+                   <span class="QAtext">A: </span>A: Your print will arrive within 5-7 business days from the day your order is placed.
                 </p>
 
                 <p id="ui-faq">
-                   Q: Will we get an A on this project submission? <br/>
-                   A: Yes. Yes we will.
+                   <span class="QAtext">Q: </span>Will we get an A on this project submission?<br/>
+                   <span class="QAtext">A: </span>Yes. Yes we will.
                 </p>
             </div>
         </div>
         )
 }
 
-export default NotFound;
+export default FAQ;
