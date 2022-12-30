@@ -33,7 +33,7 @@
     "dom-parser": "^0.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "mocha": "^6.2.1",
+    "mocha": "^10.2.0",
     "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
